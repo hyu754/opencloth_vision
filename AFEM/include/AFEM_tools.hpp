@@ -179,6 +179,9 @@ class Geometry{
 public:
 	Geometry();
 	~Geometry();
+
+	//This function will be responsible for reading the nodes of the geometry.
+	void read_nodes(void);
 #if 0
 	//global variables
 	//VON MISES STRESS
@@ -193,7 +196,7 @@ public:
 	double sudo_force_value4[2];
 	//SF vector values
 	//	std::vector<cv::Point2f> sudo_force_value(2);
-	void read_nodes(void);
+	
 	void read_elem(void);
 	void read_force(void);
 

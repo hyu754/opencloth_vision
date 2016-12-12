@@ -1,13 +1,14 @@
 #include <iostream>
 #include "AFEM_tools.hpp"
+#include "fstream"
 #if 0
 
 
 #include "string"
-#include "fstream"
 
 
-#include <stdio.h> 
+
+
 #include <stdlib.h>
 #include <cuda_runtime.h> 
 #include "cublas_v2.h" 
@@ -34,11 +35,57 @@
 #define nodesDisplacementX(dof,node,dimension) (dof + node*dimension)
 Geometry::Geometry(){
 	std::cout << "Geometry Object created" << std::endl;
-	cuda_use = false;
+	
 }
 
 Geometry::~Geometry(){
 }
+
+void Geometry::read_nodes(){
+
+	std::ifstream in_matrix("FEM_Nodes.txt");
+
+	if (!in_matrix){
+		std::cout << "cannot open Nodes \n";
+	}
+
+	in_matrix >> numNodes;
+
+	/*x = new double[numNodes];
+	y = new double[numNodes];
+	z = new double[numNodes];
+
+	x_init = new double[numNodes];
+	y_init = new double[numNodes];*/
+
+	if (dim == dimension::THREE_DIMENSION){
+		position_3D input_3d;
+		for (int i = 0; i < numNodes; i++){
+			in_matrix >> input_3d.x >> input_3d.y >> input_3d.z;
+		}
+
+		position_vector.push_back(input_3d);
+	}
+	else if (dim == dimension::TWO_DIMENSION){
+		for (int i = 0; i < numNodes; i++){
+			in_matrix >> x[i] >> y[i];
+			x_init[i] = x[i];
+			y_init[i] = y[i];
+			z[i] = 0;
+		}
+	}
+
+	in_matrix.close();
+
+	//u = new double[numNodes*dim];
+	//b_rhs = new float[numNodes*dim];
+
+
+
+
+
+}
+
 #if 0
 Geometry::Geometry(){
 	std::cout << "Geometry Object created" << std::endl;
@@ -111,49 +158,6 @@ Geometry::~Geometry(){
 
 }
 
-void Geometry::read_nodes(){
-
-	std::ifstream in_matrix("FEM_Nodes.txt");
-
-	if (!in_matrix){
-		std::cout << "cannot open Nodes \n";
-	}
-
-	in_matrix >> numNodes;
-
-	x = new double[numNodes];
-	y = new double[numNodes];
-	z = new double[numNodes];
-
-	x_init = new double[numNodes];
-	y_init = new double[numNodes];
-
-	if (dim == 3){
-
-		for (int i = 0; i < numNodes; i++){
-			in_matrix >> x[i] >> y[i] >> z[i];
-
-		}
-	}
-	else if (dim == 2){
-		for (int i = 0; i < numNodes; i++){
-			in_matrix >> x[i] >> y[i];
-			x_init[i] = x[i];
-			y_init[i] = y[i];
-			z[i] = 0;
-		}
-	}
-
-	in_matrix.close();
-
-	//u = new double[numNodes*dim];
-	b_rhs = new float[numNodes*dim];
-
-
-
-
-
-}
 
 
 void Geometry::read_elem(){
