@@ -38,7 +38,7 @@
 
 //#pragma comment(lib, "glew32.lib")
 
-using namespace std;  
+using namespace std;  //change
 const int width = 1024, height = 1024;
 
 #define EPSILON 0.001f
@@ -67,7 +67,7 @@ struct Tetrahedron {
 
 vector<Tetrahedron> tetrahedra;
 
-float nu = 0.33f;			//Poisson ratio
+float nu = 0.493f;			//Poisson ratio
 float Y = 500000.0f;		//Young modulus
 float density =1000.0f;
 float creep = 0.20f;

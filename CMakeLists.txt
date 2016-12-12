@@ -1,38 +1,42 @@
 cmake_minimum_required(VERSION 2.8)
-project( OpenCloth_Co_rotation)
+project(OpenCloth_Co_rotation)
 
-if(0)
-find_package(GLUT REQUIRED)
-include_directories(${GLUT_INCLUDE_DIRS})
-link_directories(${GLUT_LIBRARY_DIRS})
-add_definitions(${GLUT_DEFINITIONS})
-if(NOT GLUT_FOUND)
-    message(ERROR " GLUT not found!")
-endif(NOT GLUT_FOUND)
-endif(0)
-
-include_directories(${CMAKE_SOURCE_DIR}/include)
+#Additional libraries
+include_directories(${CMAKE_SOURCE_DIR}/include/)
+include_directories(${CMAKE_SOURCE_DIR}/AFEM/include/)
 link_directories(${CMAKE_SOURCE_DIR}/lib)
-link_libraries(freeglutd glew32d)
+#link_libraries()
+
+#cuda
+find_package(CUDA REQUIRED)
+include_directories(${CUDA_TOOLKIT_ROOT_DIR}/include/)
+link_directories(${CUDA_TOOLKIT_ROOT_DIR}/lib)
+#link_libraries(${CUDA_LIBRARIES})
+message("${CUDA_LIBRARIES}")
+add_executable(OpenCloth "OpenCloth/OpenCloth_CoRotated_Linear_FEM/main.cpp")
+
+file(GLOB SOURCES AFEM/source/*.cpp)
+#list(APPEND CUDA_NVCC_FLAGS "-arch=sm_20;-std=c++11;-O2;-DVERBOSE")
 
 
-
-#include_directories("OpenCloth/OpenCloth_CoRotated_Linear_FEM/")
-add_executable( OpenCloth "OpenCloth/OpenCloth_CoRotated_Linear_FEM/main.cpp")
-
+SET(CUDA_PROPAGATE_HOST_FLAGS OFF)
+CUDA_ADD_EXECUTABLE(AFEM ${SOURCES})
 
 
-#target_link_libraries( OpenCloth freeglutd glew32d)
-
+target_link_libraries(OpenCloth freeglutd glew32d)
+target_link_libraries( AFEM cudart cublas cuda cusparse)
+#Adding dll to the debug (assuming debug) folder
 if(1)
 add_custom_target(dll_includes
 
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/bin/freeglutd.dll            ${CMAKE_BINARY_DIR}/Debug
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/bin/glew32d.dll          ${CMAKE_BINARY_DIR}/Debug
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/bin/freeglutd.dll            ${CMAKE_BINARY_DIR}/Debug/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/bin/glew32d.dll          ${CMAKE_BINARY_DIR}/Debug/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/bin/msvcp120.dll            ${CMAKE_BINARY_DIR}/Debug/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/bin/msvcr120.dll          ${CMAKE_BINARY_DIR}/Debug/
  
 )
-
-add_dependencies(OpenCloth  dll_includes)
+#add_dependencies(OpenCloth  dll_includes)
+add_dependencies(AFEM        dll_includes)
 endif(1)
 
 

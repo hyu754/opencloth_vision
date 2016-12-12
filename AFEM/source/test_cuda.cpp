@@ -1,6 +1,7 @@
 #include <iostream>
+#include "AFEM_tools.hpp"
 
 int main(void){
-	std::cout << "hello world" << std::endl;
+	Geometry geo;
 	return 0;
 }
