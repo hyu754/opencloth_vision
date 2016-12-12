@@ -1,0 +1,4 @@
+D:/GitHub/opencloth_vision/build/CMakeFiles/OpenCloth.dir
+D:/GitHub/opencloth_vision/build/CMakeFiles/dll_includes.dir
+D:/GitHub/opencloth_vision/build/CMakeFiles/ALL_BUILD.dir
+D:/GitHub/opencloth_vision/build/CMakeFiles/ZERO_CHECK.dir
