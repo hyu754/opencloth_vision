@@ -1,6 +1,6 @@
 
-#ifndef AFEM_TOOLS
-#define AFEM_TOOLS
+#ifndef AFEM_GEOMETRY_H
+#define AFEM_GEOMETRY_H
 
 #if 0
 
@@ -34,17 +34,11 @@
 //header files
 #include <iostream>
 #include <vector>
+#include "AFEM_cuda.cuh"
 
 
 namespace AFEM{
 	enum dimension{ TWO_DIMENSION, THREE_DIMENSION };
-	class Geometry;
-	
-
-}
-
-class AFEM::Geometry{
-	//Structures to store geometry information
 	struct position_2D{
 		double x, y;
 	};
@@ -53,12 +47,20 @@ class AFEM::Geometry{
 		double x, y, z;
 		int displacement_index[3];
 	};
-	
-
 	struct element{
 		int nodes_in_elem[4]; // The node numbers that is in the geometry (currently supports only tetra)
-		//int displacement_index[4 * 3];
 	};
+	class Geometry;
+	
+
+}
+
+class AFEM::Geometry{
+	//Structures to store geometry information
+	
+	
+
+	
 
 	//Two/three dimensional vectors
 	std::vector<position_3D> position_vector_3D, position_vector_2D;
@@ -72,7 +74,8 @@ class AFEM::Geometry{
 
 
 
-
+	//cuda class with GPU functions
+	//cuda_tools cuda_tools_class;
 
 
 
@@ -250,6 +253,12 @@ public:
 
 	void make_K_matrix(void);
 
+	
+	//return position 
+	std::vector<position_3D> return_position3D(){ return position_vector_3D; }
+
+	//return element
+	std::vector<element> return_element_vector(){ return element_vector; }
 
 #if 0
 	//global variables
@@ -358,5 +367,5 @@ public:
 };
 
 
-#endif //AFEM_TOOLS
+#endif //AFEM_GEOMETRY_H
 

@@ -1,5 +1,6 @@
 #include <iostream>
-#include "AFEM_tools.hpp"
+#include "AFEM_geometry.hpp"
+
 #include "fstream"
 #if 0
 
@@ -220,10 +221,13 @@ bool AFEM::Geometry::read_elem(std::string element_file){
 
 
 void AFEM::Geometry::make_K_matrix(){
-	
-	Linear3DBarycentric_B_CUDA_host();
-		
+	//cuda_tools_class.hello();
+	//Linear3DBarycentric_B_CUDA_host();
+#if 0
+
 	ApplySudoForcesBarycentric(numNodes*dim, sudo_node_force, localcoordForce, elemForce, sudo_force_x, sudo_force_y, f, nodesInElem, thickness, x, y, displaceInElem);
+
+#endif // 0
 
 	/*for (int i = 0; i < numNodes*dim; i++){
 	std::cout << f[i] << std::endl;
@@ -232,6 +236,74 @@ void AFEM::Geometry::make_K_matrix(){
 	//std::cout << "FPS time global K matrix: " << duration_K_global << std::endl;
 	//std::cout << "sudo force x: " << sudo_force_x << " sudo_force y: " << sudo_force_y << std::endl;
 }
+#if 0
+void Geometry::Linear3DBarycentric_B_CUDA_host(){
+
+	
+	dim3 blocks(84, 196);//numE / (dim)
+	dim3 threads(12, 12);
+	
+	cudaMemcpy(d_x_dist, x, numNodes*sizeof(*d_x_dist), cudaMemcpyHostToDevice);
+	cudaMemcpy(d_y_dist, y, numNodes*sizeof(*d_x_dist), cudaMemcpyHostToDevice);
+	cudaMemcpy(d_z_dist, z, numNodes*sizeof(*d_x_dist), cudaMemcpyHostToDevice);
+	//cudaMemcpy(nodesInElem_device, nodesInElem, numE*numNodesPerElem*sizeof(int), cudaMemcpyHostToDevice);
+
+	int max_limit = (numNodesPerElem*dim*numNodesPerElem*dim*numE);
+	int threadsPerBlock = 256;
+	int blocksPerGrid = (max_limit + threadsPerBlock - 1) / threadsPerBlock;
+	/*cudaDeviceProp prop;
+	cudaGetDeviceProperties(&prop, 0);*/
+	cudaMemset(d_A_dense, 0, numNodes*dim*numNodes*dim*sizeof(*d_A_dense));
+	cudaMemcpy(dev_numNodes, &numNodes, 1 * sizeof(int), cudaMemcpyHostToDevice);
+
+	make_K_cuda3d << < 192, 128 >> >(E_vector_device, nodesInElem_device, d_x_dist, d_y_dist, d_z_dist, displaceInElem_device, d_A_dense, dev_numNodes);
+
+	
+	//cudaMemcpy(h_A_dense, d_A_dense, numNodes*dim*numNodes*dim*sizeof(*d_A_dense), cudaMemcpyDeviceToHost);
+	
+	//cudaMemcpy(E_vector_host, E_vector_device, numNodesPerElem*dim*numNodesPerElem*dim*numE*sizeof(double), cudaMemcpyDeviceToHost);
+	//cudaMemcpy(x, d_x, numNodes*sizeof(double), cudaMemcpyDeviceToHost);
+	//cudaMemcpy(nodesInElem_host, nodesInElem_device, numE*numNodesPerElem*sizeof(int), cudaMemcpyDeviceToHost);
+
+	//std::cout << " K _ CUDA " << std::endl;
+	////for (int j = 0; j < 2; j++){
+	////	for (int i = 0; i < numNodesPerElem; i++){
+	////		std::cout << nodesInElem_host[nodesinelemX(i, j, numNodesPerElem)] << "  ";
+	////	}
+	////	std::cout << std::endl;
+	////}
+	//for (int j = 0; j < 10; j++){
+	//	for (int i = 0; i < 10; i++){
+	//		std::cout << h_A_dense[IDX2C(i, j, 3000)] << "  ";
+	//	}
+	//	std::cout << std::endl;
+	//}
+
+
+
+	////Print local K matrix
+	//for (int e = 0; e < numE; e++){
+
+	//	//std::cout << "element : " << e << std::endl;
+	//	for (int i = 0; i < numNodesPerElem*dim; i++){
+	//		for (int j = 0; j < numNodesPerElem*dim; j++){
+	//			
+	//			//E[e][i][j] = E_vector_host[threeD21D(i, j, e, numNodesPerElem*dim, numNodesPerElem*dim)];
+	//			 //std::cout << E[e][i][j] << " ";
+	//		}
+	//		//std::cout << std::endl;
+	//	}
+	//	//std::cout << std::endl;
+	//}
+
+	//std::cout << std::endl << " the x value : " << x[0] << std::endl;
+	/*(cudaMemcpy(&c, dev_c, sizeof(int),
+	cudaMemcpyDeviceToHost));
+	printf("2 + 7 = %d\n", c);
+	(cudaFree(dev_c));*/
+
+}
+#endif
 #if 0
 Geometry::Geometry(){
 	std::cout << "Geometry Object created" << std::endl;
