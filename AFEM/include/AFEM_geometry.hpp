@@ -1,4 +1,6 @@
-
+#include <iostream>
+#include <vector>
+//#include "AFEM_cuda.cuh"
 #ifndef AFEM_GEOMETRY_H
 #define AFEM_GEOMETRY_H
 
@@ -32,9 +34,7 @@
 
 
 //header files
-#include <iostream>
-#include <vector>
-#include "AFEM_cuda.cuh"
+
 
 
 namespace AFEM{
@@ -50,6 +50,13 @@ namespace AFEM{
 	struct element{
 		int nodes_in_elem[4]; // The node numbers that is in the geometry (currently supports only tetra)
 		position_3D position_info[4];
+
+		//For used during simulation
+		double local_K[12 * 12];
+
+		double Jacobian;
+
+	
 	};
 	class Geometry;
 	

@@ -1,6 +1,6 @@
 #include <iostream>
 #include "AFEM_simulation.hpp"
-
+#include <ctime>
 
 
 
@@ -32,12 +32,23 @@ void AFEM::Simulation::element_std_to_array(){
 	for (int i = 0; i < element_vec.size(); i++){
 		element_array[i] = element_vec.at(i);
 	}
-
+//	cuda_tools_class.allocate_CUDA_geometry_data((void**)&element_array, element_vec.size());
+	cuda_tools_class.allocate_copy_CUDA_geometry_data(element_array, element_vec.size());
 	std::cout << "Converted std vector to array " << std::endl;
 
-
+	
 }
 
+void AFEM::Simulation::run(){
+	
+	while (1){
+		double start = std::clock();
+		cuda_tools_class.make_K(element_vec.size());
+
+		std::cout <<"TIme : "<< (std::clock() - start) / CLOCKS_PER_SEC << std::endl;
+	}
+
+}
 
 
 

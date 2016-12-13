@@ -1,4 +1,5 @@
 #include "AFEM_geometry.hpp"
+#include "AFEM_cuda.cuh"
 #ifndef AFEM_SIMULATION_H
 #define AFEM_SIMULATION_H
 
@@ -12,10 +13,12 @@ public:
 	Simulation(AFEM::Geometry geo_in);
 	~Simulation();
 	
-	//This function will change the element std::vector to an array form for CUDA
+	//This function will change the element std::vector to an array form for CUDA and then allocate device memory
 	void element_std_to_array(void);
 	
 
+	//run the loop
+	void run(void);
 	
 	
 

@@ -45,8 +45,8 @@ COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Geometry/FEM_Elem.txt      
 
 
 )
-#add_dependencies(OpenCloth  dll_includes)
-#add_dependencies(AFEM        dll_includes)
+add_dependencies(OpenCloth  dll_includes)
+add_dependencies(AFEM        dll_includes)
 endif(1)
 
 
