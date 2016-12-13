@@ -1,8 +1,0 @@
-﻿  main.cpp
-D:\GitHub\opencloth_vision\OpenCloth\OpenCloth_CoRotated_Linear_FEM\main.cpp(162): warning C4267: '=' : conversion from 'size_t' to 'int', possible loss of data
-D:\GitHub\opencloth_vision\OpenCloth\OpenCloth_CoRotated_Linear_FEM\main.cpp(363): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-D:\GitHub\opencloth_vision\OpenCloth\OpenCloth_CoRotated_Linear_FEM\main.cpp(365): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-D:\GitHub\opencloth_vision\OpenCloth\OpenCloth_CoRotated_Linear_FEM\main.cpp(367): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-D:\GitHub\opencloth_vision\OpenCloth\OpenCloth_CoRotated_Linear_FEM\main.cpp(369): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-D:\GitHub\opencloth_vision\OpenCloth\OpenCloth_CoRotated_Linear_FEM\main.cpp(430): warning C4267: '=' : conversion from 'size_t' to 'int', possible loss of data
-  OpenCloth.vcxproj -> D:\GitHub\opencloth_vision\build\Debug\OpenCloth.exe
