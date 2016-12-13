@@ -4,6 +4,7 @@ project(OpenCloth_Co_rotation)
 #Additional libraries
 include_directories(${CMAKE_SOURCE_DIR}/include/)
 include_directories(${CMAKE_SOURCE_DIR}/AFEM/include/)
+include_directories(${CMAKE_SOURCE_DIR}/Geometry)
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 #link_libraries()
 
@@ -33,7 +34,13 @@ add_custom_target(dll_includes
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/bin/glew32d.dll          ${CMAKE_BINARY_DIR}/Debug/
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/bin/msvcp120.dll            ${CMAKE_BINARY_DIR}/Debug/
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/bin/msvcr120.dll          ${CMAKE_BINARY_DIR}/Debug/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Geometry/FEM_Nodes.txt          ${CMAKE_BINARY_DIR}/Debug/
+COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Geometry/FEM_Nodes.txt          ${CMAKE_BINARY_DIR}/
+COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Geometry/FEM_Elem.txt          ${CMAKE_BINARY_DIR}/Debug/
+ COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Geometry/FEM_Elem.txt          ${CMAKE_BINARY_DIR}/
  
+
+
 )
 #add_dependencies(OpenCloth  dll_includes)
 add_dependencies(AFEM        dll_includes)

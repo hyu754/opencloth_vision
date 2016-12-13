@@ -33,58 +33,183 @@
 #define threeD21D(row_d,col_d,el_d,width_d,depth_d) (row_d+width_d*(col_d+depth_d*el_d))
 #define nodesinelemX(node,el,nodesPerElem) (node + nodesPerElem*el)
 #define nodesDisplacementX(dof,node,dimension) (dof + node*dimension)
-Geometry::Geometry(){
+
+
+
+AFEM::Geometry::Geometry(){
 	std::cout << "Geometry Object created" << std::endl;
+
+}
+
+AFEM::Geometry::~Geometry(){
+}
+
+bool AFEM::Geometry::read_nodes(std::string s_in){
 	
-}
-
-Geometry::~Geometry(){
-}
-
-void Geometry::read_nodes(){
-
-	std::ifstream in_matrix("FEM_Nodes.txt");
+	std::ifstream in_matrix(s_in);
 
 	if (!in_matrix){
 		std::cout << "cannot open Nodes \n";
+		return false;
 	}
 
 	in_matrix >> numNodes;
 
-	/*x = new double[numNodes];
-	y = new double[numNodes];
-	z = new double[numNodes];
+	//x = new double[numNodes];
+	//y = new double[numNodes];
+	//z = new double[numNodes];
 
-	x_init = new double[numNodes];
-	y_init = new double[numNodes];*/
+	//x_init = new double[numNodes];
+	//y_init = new double[numNodes];
+
 
 	if (dim == dimension::THREE_DIMENSION){
 		position_3D input_3d;
 		for (int i = 0; i < numNodes; i++){
 			in_matrix >> input_3d.x >> input_3d.y >> input_3d.z;
+			position_vector_3D.push_back(input_3d);
 		}
 
-		position_vector.push_back(input_3d);
+
 	}
-	else if (dim == dimension::TWO_DIMENSION){
+
+
+	/*else if (dim == dimension::TWO_DIMENSION){
 		for (int i = 0; i < numNodes; i++){
-			in_matrix >> x[i] >> y[i];
-			x_init[i] = x[i];
-			y_init[i] = y[i];
-			z[i] = 0;
+		in_matrix >> x[i] >> y[i];
+		x_init[i] = x[i];
+		y_init[i] = y[i];
+		z[i] = 0;
 		}
-	}
+		}*/
 
 	in_matrix.close();
 
 	//u = new double[numNodes*dim];
 	//b_rhs = new float[numNodes*dim];
 
+	return true;
+
+
+
+}
+
+
+
+
+bool AFEM::Geometry::read_elem(std::string element_file){
+
+	std::ifstream in_elem(element_file);
+	std::cout << "Reading in element files" << std::endl;
+	if (!in_elem){
+		std::cout << "cannot open Element file \n";
+		return false;
+	}
+	int a;
+	in_elem >> numE >> numNodesPerElem;
+
+	//Allocating E matrix 3x3x3 matrix
+	E = new double**[numE];
+	M = new double**[numE];
+	//nodesInElem = new int*[numE];
+	//nodesInElem_host = new int[numE*numNodesPerElem];
+	//nodesInElem_device = new int[numE*numNodesPerElem];
+
+
+	//Allocate a new vector for storing all of the stresses at an element
+	//global_stress_mises = new double[numE];
+
+
+	//cudaMalloc((void**)&nodesInElem_device, numE*numNodesPerElem*sizeof(int));
+
+	for (int e = 0; e < numE; e++){
+		//E[e] = new double*[numNodesPerElem*dim];
+		//M[e] = new double*[numNodesPerElem*dim];
+		//nodesInElem[e] = new int[numNodesPerElem];
+		//for (int i = 0; i < numNodesPerElem*dim; i++){
+		//	E[e][i] = new double[numNodesPerElem*dim];
+		//	M[e][i] = new double[numNodesPerElem*dim];
+		//}
+	
+	}
+	//E_vector_host = new double[numE*numNodesPerElem*dim*numNodesPerElem*dim];
+	//cudaMalloc((void**)&E_vector_device, numE*numNodesPerElem*dim*numNodesPerElem*dim*sizeof(*E_vector_device));
+	//Populating the nodesinelem matrix
+
+	//Populating the element_vector
+	int _displacement_index = 0;
+	for (int e = 0; e < numE; e++) {
+		element element_input;
+		
+		for (int i = 0; i < numNodesPerElem; i++){
+			in_elem >> element_input.nodes_in_elem[i];
+			element_input.displacement_index[i] = _displacement_index;
+			_displacement_index++;
+		}
+
+
+		element_vector.push_back(element_input);
+
+
+
+	}
+
+
+	in_elem.close();
+
+
+#if 0
+	for (int e = 0; e < numE; e++) {
+		for (int i = 0; i < numNodesPerElem; i++){
+			nodesInElem_host[nodesinelemX(i, e, numNodesPerElem)] = nodesInElem[e][i];
+			//std::cout << nodesInElem_host[nodesinelemX(i, e, numNodesPerElem)] << std::endl;
+		}
+		//std::cout << std::endl;
+
+	}
+
+	//cudaMemcpy(nodesInElem_device, nodesInElem_host, numE*numNodesPerElem*sizeof(int), cudaMemcpyHostToDevice);
+
+
+	std::ifstream in_disp("FEM_displacement.txt");
+
+	if (!in_disp){
+		std::cout << "cannot open displacement file \n";
+	}
+	displaceInElem = new int*[numNodes];
+	displaceInElem_host = new int[numNodes*dim];
+	displaceInElem_device = new int[numNodes*dim];
+	for (int i = 0; i < numNodes; i++){
+		displaceInElem[i] = new int[3];
+
+	}
+	//cudaMalloc((void**)&displaceInElem_device, numNodes*dim*sizeof(int));
+
+	for (int i = 0; i < numNodes; i++){
+		for (int j = 0; j < dim; j++){
+			in_disp >> displaceInElem[i][j];
+
+		}
+
+	}
+
+	for (int i = 0; i < numNodes; i++){
+		for (int j = 0; j < dim; j++){
+
+			displaceInElem_host[nodesDisplacementX(j, i, dim)] = displaceInElem[i][j];
+		}
+
+	}
+
+	cudaMemcpy(displaceInElem_device, displaceInElem_host, numNodes*dim*sizeof(int), cudaMemcpyHostToDevice);
+	in_disp.close();
+#endif // 0
 
 
 
 
 }
+
 
 #if 0
 Geometry::Geometry(){
@@ -158,101 +283,6 @@ Geometry::~Geometry(){
 
 }
 
-
-
-void Geometry::read_elem(){
-
-	std::ifstream in_elem("FEM_Elem.txt");
-	std::cout << "Reading in element files" << std::endl;
-	if (!in_elem){
-		std::cout << "cannot open Element file \n";
-	}
-	int a;
-	in_elem >> numE >> numNodesPerElem;
-
-	//Allocating E matrix 3x3x3 matrix
-	E = new double**[numE];
-	M = new double**[numE];
-	nodesInElem = new int*[numE];
-	nodesInElem_host = new int[numE*numNodesPerElem];
-	nodesInElem_device = new int[numE*numNodesPerElem];
-
-
-	//Allocate a new vector for storing all of the stresses at an element
-	global_stress_mises = new double[numE];
-
-
-	cudaMalloc((void**)&nodesInElem_device, numE*numNodesPerElem*sizeof(int));
-
-	for (int e = 0; e < numE; e++){
-		E[e] = new double*[numNodesPerElem*dim];
-		M[e] = new double*[numNodesPerElem*dim];
-		nodesInElem[e] = new int[numNodesPerElem];
-		for (int i = 0; i < numNodesPerElem*dim; i++){
-			E[e][i] = new double[numNodesPerElem*dim];
-			M[e][i] = new double[numNodesPerElem*dim];
-		}
-	}
-	E_vector_host = new double[numE*numNodesPerElem*dim*numNodesPerElem*dim];
-	cudaMalloc((void**)&E_vector_device, numE*numNodesPerElem*dim*numNodesPerElem*dim*sizeof(*E_vector_device));
-	//Populating the nodesinelem matrix
-	for (int e = 0; e < numE; e++) {
-		for (int i = 0; i < numNodesPerElem; i++)
-			in_elem >> nodesInElem[e][i];
-	}
-
-
-	in_elem.close();
-
-
-	for (int e = 0; e < numE; e++) {
-		for (int i = 0; i < numNodesPerElem; i++){
-			nodesInElem_host[nodesinelemX(i, e, numNodesPerElem)] = nodesInElem[e][i];
-			//std::cout << nodesInElem_host[nodesinelemX(i, e, numNodesPerElem)] << std::endl;
-		}
-		//std::cout << std::endl;
-
-	}
-
-	cudaMemcpy(nodesInElem_device, nodesInElem_host, numE*numNodesPerElem*sizeof(int), cudaMemcpyHostToDevice);
-
-
-	std::ifstream in_disp("FEM_displacement.txt");
-
-	if (!in_disp){
-		std::cout << "cannot open displacement file \n";
-	}
-	displaceInElem = new int*[numNodes];
-	displaceInElem_host = new int[numNodes*dim];
-	displaceInElem_device = new int[numNodes*dim];
-	for (int i = 0; i < numNodes; i++){
-		displaceInElem[i] = new int[3];
-
-	}
-	cudaMalloc((void**)&displaceInElem_device, numNodes*dim*sizeof(int));
-
-	for (int i = 0; i < numNodes; i++){
-		for (int j = 0; j < dim; j++){
-			in_disp >> displaceInElem[i][j];
-
-		}
-
-	}
-
-	for (int i = 0; i < numNodes; i++){
-		for (int j = 0; j < dim; j++){
-
-			displaceInElem_host[nodesDisplacementX(j, i, dim)] = displaceInElem[i][j];
-		}
-
-	}
-
-	cudaMemcpy(displaceInElem_device, displaceInElem_host, numNodes*dim*sizeof(int), cudaMemcpyHostToDevice);
-	in_disp.close();
-
-
-
-}
 
 
 
@@ -1000,7 +1030,7 @@ void Geometry::Linear2DBarycentric_D(double **term, double nu, double youngE){
 			//term[i][j] = (youngE / (1 - nu*nu))*term[i][j];
 			//term[i][j] = (youngE / ((1.0 - nu*nu)))*term[i][j]; I will multiply this huge number after the B^T D B
 		}
-}
+	}
 #endif
 
 }
@@ -1156,7 +1186,7 @@ void Geometry::AssembleLocalElementMatrixBarycentric2D(int elem_n, int *nodes, i
 				std::cout << DB[row][col] << "    ";
 			}
 			std::cout<<std::endl;
-	}
+		}
 #endif
 
 #if 0
@@ -1177,7 +1207,7 @@ void Geometry::AssembleLocalElementMatrixBarycentric2D(int elem_n, int *nodes, i
 			for (int k = 0; k < 2; k++){
 				std::cout << DB[row][nodes[row]] << std::endl;
 			}
-}
+		}
 #endif
 
 
@@ -1754,7 +1784,7 @@ void Geometry::set_zero_AxB(void){
 		f[row2] = 0.0;*/
 		b_rhs[row1] = 0.0;
 		b_rhs[row2] = 0.0;
-}
+	}
 #endif // 0
 
 #if 0
@@ -1774,7 +1804,7 @@ void Geometry::set_zero_AxB(void){
 #endif // 0
 
 
- }
+}
 
 void Geometry::initialize_CUDA(void){
 	Nrows = numNodes*dim;                        // --- Number of rows
@@ -2053,7 +2083,7 @@ int Geometry::tt()
 
 	//std::cout << "Duration: " << duration_K << std::endl;
 	return 0;
-	}
+}
 
 
 //int Geometry::tt()
@@ -2262,5 +2292,7 @@ int Geometry::tt()
 //}#if 0
 
 #endif // 0  
+
+
 
 

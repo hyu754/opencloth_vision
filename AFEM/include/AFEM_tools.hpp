@@ -36,12 +36,67 @@
 #include <vector>
 
 
-
-class Geometry{
-	//Dimensions
-	int dim;
-
+namespace AFEM{
+	enum dimension{ TWO_DIMENSION, THREE_DIMENSION };
+	class Geometry;
 	
+
+}
+
+class AFEM::Geometry{
+	//Structures to store geometry information
+	struct position_2D{
+		double x, y;
+	};
+
+	struct position_3D{
+		double x, y, z;
+	};
+	
+
+	struct element{
+		int nodes_in_elem[4]; // The node numbers that is in the geometry (currently supports only tetra)
+		int displacement_index[4 * 3];
+	};
+
+	//Two/three dimensional vectors
+	std::vector<position_3D> position_vector_3D, position_vector_2D;
+	
+	//Vector for storing the different elements
+	std::vector<element> element_vector;
+
+
+	//Dimensions
+	dimension dim;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	//Material properties
 	double Young, Poisson;
 	double thickness;
@@ -57,36 +112,27 @@ class Geometry{
 
 
 
-	
-	struct position_2D{
-		double x, y;
-	};
-
-	struct position_3D{
-		double x, y, z;
-	};
-
-	enum dimension{TWO_DIMENSION,THREE_DIMENSION};
 
 
-	std::vector<position_3D> position_vector;
+
+
 
 
 	//Elements
 	int numE;
 	int numNodesPerElem;
-	int **nodesInElem=NULL;
+	int **nodesInElem = NULL;
 	int *nodesInElem_host = NULL;
 	int *nodesInElem_device = NULL;
 	double ***E = NULL;					// Array of local element stiffness matrices
 	double ***M = NULL;
 	double *E_vector_host = NULL;// local elements in array form
-	double *E_vector_device = NULL;	
+	double *E_vector_device = NULL;
 	// This 2D array will have information regarding the d.o.f of each element, i.e. displaceInElem[1][0] will give us the
 	// index for displacement of the first node and its 0th d.o.f, the second entry can range from 0-dim.
-	int **displaceInElem=NULL;  
-	int *displaceInElem_host=NULL;
-	int *displaceInElem_device=NULL;
+	int **displaceInElem = NULL;
+	int *displaceInElem_host = NULL;
+	int *displaceInElem_device = NULL;
 
 #if 0
 
@@ -175,13 +221,35 @@ class Geometry{
 #endif // 0
 
 
-	
+
 public:
 	Geometry();
 	~Geometry();
 
+
+	//First set dimension of problem. The inputs is enum dimensions (3D supported only at time)
+	void set_dim(dimension dim_in){ 
+		if (dim_in == dimension::THREE_DIMENSION){
+			dim = dim_in; std::cout << "Dimension is: " << 3 << std::endl;
+		}
+		else{
+			std::cout << "Only 3D supported at time " << std::endl;
+			std::exit;
+		}
+	};
+
+
+
 	//This function will be responsible for reading the nodes of the geometry.
-	void read_nodes(void);
+	bool read_nodes(std::string s_in);
+
+
+	//Reading the elements for the geometry
+	bool read_elem(std::string s_in);
+
+
+
+
 #if 0
 	//global variables
 	//VON MISES STRESS
@@ -196,11 +264,11 @@ public:
 	double sudo_force_value4[2];
 	//SF vector values
 	//	std::vector<cv::Point2f> sudo_force_value(2);
-	
+
 	void read_elem(void);
 	void read_force(void);
 
-	void set_dim(int dim_input){ dim = dim_input; std::cout << "Dimension is: " << dim; };
+	//void set_dim(int dim_input){ dim = dim_input; std::cout << "Dimension is: " << dim; };
 	void set_YoungPoisson(double Young_input, double Poisson_input){ Young = Young_input; Poisson = Poisson_input; std::cout << "Young: " << Young << "  Poisson:" << Poisson << std::endl; };
 	void set_thickness(double thickness_input){ thickness = thickness_input; std::cout << "Thickness is: " << thickness << std::endl; };
 	void set_density(double density_input){ density = density_input; };
@@ -285,8 +353,9 @@ public:
 	//void   
 #endif // 0
 
-	
+
 };
 
 
 #endif //AFEM_TOOLS
+
