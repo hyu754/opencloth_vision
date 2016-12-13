@@ -62,15 +62,17 @@ bool AFEM::Geometry::read_nodes(std::string s_in){
 	//x_init = new double[numNodes];
 	//y_init = new double[numNodes];
 
-
+	int _displacement_index = 0;
 	if (dim == dimension::THREE_DIMENSION){
 		position_3D input_3d;
 		for (int i = 0; i < numNodes; i++){
 			in_matrix >> input_3d.x >> input_3d.y >> input_3d.z;
+			for (int k = 0; k < 3; k++){
+				input_3d.displacement_index[k] = _displacement_index;
+				_displacement_index++;
+			}		
 			position_vector_3D.push_back(input_3d);
 		}
-
-
 	}
 
 
@@ -137,14 +139,17 @@ bool AFEM::Geometry::read_elem(std::string element_file){
 	//Populating the nodesinelem matrix
 
 	//Populating the element_vector
-	int _displacement_index = 0;
+	//int _displacement_index = 0;
 	for (int e = 0; e < numE; e++) {
 		element element_input;
-		
+		int element_disp_index = 0; 
 		for (int i = 0; i < numNodesPerElem; i++){
 			in_elem >> element_input.nodes_in_elem[i];
-			element_input.displacement_index[i] = _displacement_index;
-			_displacement_index++;
+			/*for (int m = 0; m < 3; m++){
+				element_input.displacement_index[element_disp_index] = _displacement_index;
+				element_disp_index++;
+				_displacement_index++;
+			}*/
 		}
 
 
@@ -211,6 +216,22 @@ bool AFEM::Geometry::read_elem(std::string element_file){
 }
 
 
+
+
+
+void AFEM::Geometry::make_K_matrix(){
+	
+	Linear3DBarycentric_B_CUDA_host();
+		
+	ApplySudoForcesBarycentric(numNodes*dim, sudo_node_force, localcoordForce, elemForce, sudo_force_x, sudo_force_y, f, nodesInElem, thickness, x, y, displaceInElem);
+
+	/*for (int i = 0; i < numNodes*dim; i++){
+	std::cout << f[i] << std::endl;
+	}*/
+	//std::cout << "FPS time local K matrix: " << duration_K_local << std::endl;
+	//std::cout << "FPS time global K matrix: " << duration_K_global << std::endl;
+	//std::cout << "sudo force x: " << sudo_force_x << " sudo_force y: " << sudo_force_y << std::endl;
+}
 #if 0
 Geometry::Geometry(){
 	std::cout << "Geometry Object created" << std::endl;
@@ -356,62 +377,7 @@ void Geometry::initilizeMatrices(){
 	}
 
 }
-void Geometry::make_K_matrix(){
-	std::clock_t start_K_local1;
-	std::clock_t start_K_global;
-	start_K_local1 = std::clock();
-	bool cuda_use = get_cuda_use();
-	//bool cuda_use = true;
-	std::clock_t start_K_actual;
-	start_K_actual = std::clock();
 
-
-	start_K_global = std::clock();
-	if (cuda_use){
-
-		if (dim == 2){
-
-			Linear2DBarycentric_B_CUDA_host();
-		}
-		else if (dim == 3){
-			Linear3DBarycentric_B_CUDA_host();
-		}
-
-	}
-	else{
-		for (int e = 0; e < numE; e++) {
-			//cout << Linear2DJacobianDet_Barycentric(nodesInElem[e], x, y) << endl;
-
-			if (dim == 2){
-				AssembleLocalElementMatrixBarycentric2D(e, nodesInElem[e], displaceInElem, x, y, dim, E[e], M[e], Poisson, Young, thickness);
-			}
-			else if (dim == 3){
-				AssembleLocalElementMatrixBarycentric3D(nodesInElem[e], x, y, z, dim, E[e], Poisson, Young, thickness);
-
-			}
-		}
-	}
-
-
-
-	double duration_K_local = (std::clock() - start_K_local1) / (double)CLOCKS_PER_SEC;
-
-	if (!cuda_use)
-		AssembleGlobalElementMatrixBarycentric(numNodes*dim, numE, numNodesPerElem, nodesInElem, E, M, h_A_dense, h_M_dense, displaceInElem);
-	double duration_K_global = (std::clock() - start_K_global) / (double)CLOCKS_PER_SEC;
-
-	//std::cout << " CUDA K ASSEMBLE: " << duration_K_global << std::endl;
-	//ApplyEssentialBoundaryConditionsBarycentric(numNodes*dim, numForceBC, localcoordForce, elemForce, forceVec_x, forceVec_y, f, K, nodesInElem, thickness, x, y, displaceInElem);
-	//ApplyEssentialBoundaryConditionsBarycentric(numNodes*dim, sudo_node_force, localcoordForce, elemForce, sudo_force_x, sudo_force_y, f, K, nodesInElem, thickness, x, y, displaceInElem);
-	ApplySudoForcesBarycentric(numNodes*dim, sudo_node_force, localcoordForce, elemForce, sudo_force_x, sudo_force_y, f, nodesInElem, thickness, x, y, displaceInElem);
-
-	/*for (int i = 0; i < numNodes*dim; i++){
-		std::cout << f[i] << std::endl;
-		}*/
-	//std::cout << "FPS time local K matrix: " << duration_K_local << std::endl;
-	//std::cout << "FPS time global K matrix: " << duration_K_global << std::endl;
-	//std::cout << "sudo force x: " << sudo_force_x << " sudo_force y: " << sudo_force_y << std::endl;
-}
 
 //void Geometry::call_sudo_force_func(void){
 //

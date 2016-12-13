@@ -51,12 +51,13 @@ class AFEM::Geometry{
 
 	struct position_3D{
 		double x, y, z;
+		int displacement_index[3];
 	};
 	
 
 	struct element{
 		int nodes_in_elem[4]; // The node numbers that is in the geometry (currently supports only tetra)
-		int displacement_index[4 * 3];
+		//int displacement_index[4 * 3];
 	};
 
 	//Two/three dimensional vectors
@@ -247,7 +248,7 @@ public:
 	//Reading the elements for the geometry
 	bool read_elem(std::string s_in);
 
-
+	void make_K_matrix(void);
 
 
 #if 0
@@ -309,7 +310,7 @@ public:
 
 	void Linear3DBarycentric_globalK_host(void);
 
-	void make_K_matrix(void);
+
 
 	//Functions to setup f
 	void ApplySudoForcesBarycentric(int numP, int numBC, int *localcoord, int *elemForce, double force_x, double force_y, double *g, int **nodesInElem, double thickness, double *x, double *y, int **displaceInElem);

@@ -4,6 +4,7 @@ project(OpenCloth_Co_rotation)
 #Additional libraries
 include_directories(${CMAKE_SOURCE_DIR}/include/)
 include_directories(${CMAKE_SOURCE_DIR}/AFEM/include/)
+include_directories(${CMAKE_SOURCE_DIR}/AFEM/cuda/gpu_include/)
 include_directories(${CMAKE_SOURCE_DIR}/Geometry)
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 #link_libraries()
@@ -16,16 +17,18 @@ link_directories(${CUDA_TOOLKIT_ROOT_DIR}/lib)
 message("${CUDA_LIBRARIES}")
 add_executable(OpenCloth "OpenCloth/OpenCloth_CoRotated_Linear_FEM/main.cpp")
 
-file(GLOB SOURCES AFEM/source/*.cpp)
+file(GLOB SOURCES AFEM/source/*.cpp )
 #list(APPEND CUDA_NVCC_FLAGS "-arch=sm_20;-std=c++11;-O2;-DVERBOSE")
 
 
-SET(CUDA_PROPAGATE_HOST_FLAGS OFF)
-CUDA_ADD_EXECUTABLE(AFEM ${SOURCES})
+set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} --gpu-architecture sm_20)
+add_subdirectory(AFEM/cuda)
+ADD_EXECUTABLE(AFEM ${SOURCES})
 
 
 target_link_libraries(OpenCloth freeglutd glew32d)
-target_link_libraries( AFEM cudart cublas cuda cusparse)
+#target_link_libraries( AFEM cudart cublas cuda cusparse)
+target_link_libraries( AFEM AFEM_cuda_lib)
 #Adding dll to the debug (assuming debug) folder
 if(1)
 add_custom_target(dll_includes
@@ -43,7 +46,7 @@ COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Geometry/FEM_Elem.txt      
 
 )
 #add_dependencies(OpenCloth  dll_includes)
-add_dependencies(AFEM        dll_includes)
+#add_dependencies(AFEM        dll_includes)
 endif(1)
 
 
