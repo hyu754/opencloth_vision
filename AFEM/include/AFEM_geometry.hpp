@@ -49,6 +49,7 @@ namespace AFEM{
 	};
 	struct element{
 		int nodes_in_elem[4]; // The node numbers that is in the geometry (currently supports only tetra)
+		position_3D position_info[4];
 	};
 	class Geometry;
 	

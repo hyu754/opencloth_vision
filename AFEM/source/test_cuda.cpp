@@ -12,6 +12,7 @@ int main(void){
 	geo.make_K_matrix();
 
 	AFEM::Simulation sim(geo);
+	sim.element_std_to_array();
 	/*cuda_tools cc;
 	cc.hello();*/
 	//"FEM_Elem.txt"

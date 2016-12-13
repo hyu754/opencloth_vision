@@ -164,6 +164,16 @@ bool AFEM::Geometry::read_elem(std::string element_file){
 	in_elem.close();
 
 
+	//Adding node information to element vector;
+	for (auto ele_ptr = element_vector.begin(); ele_ptr != element_vector.end();++ele_ptr) {
+		for (int i = 0; i < numNodesPerElem; i++){
+			int node_idx =ele_ptr->nodes_in_elem[i];
+			position_3D pos_d = position_vector_3D.at(node_idx);
+			ele_ptr->position_info[i] = pos_d;
+		}
+	}
+
+
 #if 0
 	for (int e = 0; e < numE; e++) {
 		for (int i = 0; i < numNodesPerElem; i++){

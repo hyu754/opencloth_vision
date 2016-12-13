@@ -1,11 +1,7 @@
 #ifndef AFEM_CUDA_H
 #define AFEM_CUDA_H
 
-#include <stdio.h>
 
-
-#include <math.h>
-#include <iostream>
 
 
 //__global__ void make_K_cuda3d(double *E_vector, int *nodesInElem_device, double *x_vector, double *y_vector, double *z_vector, int *displaceInElem_device, float *d_A_dense, int *numnodes);//3D
@@ -14,6 +10,9 @@
 class cuda_tools{
 public:
 	void hello();
+
+	//place holder for host -> device
+	void host_to_device();
 };
 
 
