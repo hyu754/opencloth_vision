@@ -291,7 +291,7 @@ void cuda_tools::allocate_copy_CUDA_geometry_data(AFEM::element *in_array, int n
 
 
 	//cuda allocation of memory
-	elem_array_h = new AFEM::element[num_elem];
+	elem_array_h = in_array;
 	cudaMalloc((void**)&elem_array_d, sizeof(AFEM::element) *num_elem); //element array
 	cudaMalloc((void**)&K_d, sizeof(*K_d)*dim*num_nodes*dim*num_nodes); //final global K matrix container
 
@@ -310,6 +310,9 @@ void cuda_tools::allocate_copy_CUDA_geometry_data(AFEM::element *in_array, int n
 
 void cuda_tools::copy_data_from_cuda(){
 	cudaMemcpy(elem_array_h,elem_array_d, sizeof(AFEM::element) *Nelems, cudaMemcpyDeviceToHost);
+
+	std::cout << elem_array_h[0].position_info[0].x << std::endl;
+
 }
 
 //Host wrapper to call gpu_make_K

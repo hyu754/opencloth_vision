@@ -50,7 +50,7 @@ void AFEM::Simulation::element_std_to_array(){
 
 void AFEM::Simulation::run(){
 	
-	while (1){
+	
 		double start = std::clock();
 		cuda_tools_class.make_K(element_vec.size(),pos_vec.size());
 
@@ -72,7 +72,7 @@ void AFEM::Simulation::run(){
 
 		cuda_tools_class.reset_K(element_vec.size(), pos_vec.size());
 		std::cout <<"FPS : "<< 1.0/((std::clock() - start) / CLOCKS_PER_SEC) << std::endl;
-	}
+	
 
 }
 

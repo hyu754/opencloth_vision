@@ -139,7 +139,7 @@ void cuda_tools::cholesky()
 	float *h_x = (float *)malloc(Nrows * sizeof(float));
 	/*h_x[0] = 100.0;  h_x[1] = 200.0; h_x[2] = 400.0; h_x[3] = 500.0;*/
 	for (int i = 0; i < N; i++){
-		h_x[i] = 0;
+		h_x[i] = 0.0001;
 	}
 
 

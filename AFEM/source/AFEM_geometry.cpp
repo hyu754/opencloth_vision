@@ -226,7 +226,22 @@ bool AFEM::Geometry::read_elem(std::string element_file){
 
 }
 
+bool AFEM::Geometry::read_stationary(std::string s_in){
+	std::ifstream station_in(s_in);
+	std::cout << "Reading in stationary nodes" << std::endl;
+	if (!station_in){
+		std::cout << "cannot open stationary file \n";
+		return false;
+	}
+	int a;
+	station_in >> a;
+	for (int i = 0; i < a; i++){
+		int stat_in;
 
+		station_in >> stat_in;
+		stationary_vector.push_back(stat_in);
+	}
+}
 
 
 

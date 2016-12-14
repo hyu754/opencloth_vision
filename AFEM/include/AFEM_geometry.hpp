@@ -77,6 +77,9 @@ class AFEM::Geometry{
 	std::vector<element> element_vector;
 
 
+	//Vector of stationary nodes
+	std::vector<int> stationary_vector;
+
 	//Dimensions
 	dimension dim;
 
@@ -259,6 +262,8 @@ public:
 
 	//Reading the elements for the geometry
 	bool read_elem(std::string s_in);
+
+	bool read_stationary(std::string s_in);
 
 	void make_K_matrix(void);
 

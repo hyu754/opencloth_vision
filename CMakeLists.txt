@@ -28,7 +28,7 @@ ADD_EXECUTABLE(AFEM ${SOURCES})
 
 target_link_libraries(OpenCloth freeglutd glew32d)
 #target_link_libraries( AFEM cudart cublas cuda cusparse)
-target_link_libraries( AFEM AFEM_cuda_lib cudart )
+target_link_libraries( AFEM AFEM_cuda_lib cudart freeglutd glew32d)
 #Adding dll to the debug (assuming debug) folder
 if(1)
 add_custom_target(dll_includes
@@ -42,7 +42,7 @@ COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Geometry/FEM_Nodes.txt     
 COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Geometry/FEM_Elem.txt          ${CMAKE_BINARY_DIR}/Debug/
  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Geometry/FEM_Elem.txt          ${CMAKE_BINARY_DIR}/
  
-
+COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Geometry/FEM_Stationary.txt          ${CMAKE_BINARY_DIR}/
 
 )
 add_dependencies(OpenCloth  dll_includes)
