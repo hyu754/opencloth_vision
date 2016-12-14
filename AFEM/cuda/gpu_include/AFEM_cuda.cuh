@@ -15,11 +15,11 @@ class cuda_tools{
 
 	//Device memory pointer for the global K matrix
 	//This matrix will be numnodes*3*numNodes*3 = 9numNodes^2 
-	double *K_d;
+	float *K_d;
 
 
 	//Corresponding host memory pointers
-	double *K_h;
+	float *K_h;
 	
 public:
 	~cuda_tools();
@@ -35,7 +35,7 @@ public:
 	//Copy the data from the device memory to host
 	void copy_data_from_cuda(int numNodes, int dim);
 
-
+	
 
 	void make_K(int num_elem,int num_nodes);
 
