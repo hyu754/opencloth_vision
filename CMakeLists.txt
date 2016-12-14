@@ -28,7 +28,7 @@ ADD_EXECUTABLE(AFEM ${SOURCES})
 
 target_link_libraries(OpenCloth freeglutd glew32d)
 #target_link_libraries( AFEM cudart cublas cuda cusparse)
-target_link_libraries( AFEM AFEM_cuda_lib)
+target_link_libraries( AFEM AFEM_cuda_lib cudart )
 #Adding dll to the debug (assuming debug) folder
 if(1)
 add_custom_target(dll_includes

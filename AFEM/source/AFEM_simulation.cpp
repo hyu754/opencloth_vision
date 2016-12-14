@@ -32,10 +32,16 @@ void AFEM::Simulation::element_std_to_array(){
 	for (int i = 0; i < element_vec.size(); i++){
 		element_array[i] = element_vec.at(i);
 	}
-//	cuda_tools_class.allocate_CUDA_geometry_data((void**)&element_array, element_vec.size());
-	cuda_tools_class.allocate_copy_CUDA_geometry_data(element_array, element_vec.size());
 	std::cout << "Converted std vector to array " << std::endl;
-
+//	cuda_tools_class.allocate_CUDA_geometry_data((void**)&element_array, element_vec.size());
+	if (afem_geometry.get_dim() == AFEM::dimension::THREE_DIMENSION){
+		cuda_tools_class.allocate_copy_CUDA_geometry_data(element_array, element_vec.size(), pos_vec.size(), 3);
+	}else{
+		cuda_tools_class.allocate_copy_CUDA_geometry_data(element_array, element_vec.size(), pos_vec.size(), 2);
+	}
+	
+	
+	std::cout << "allocated data to GPU memory " << std::endl;
 	
 }
 
@@ -43,9 +49,16 @@ void AFEM::Simulation::run(){
 	
 	while (1){
 		double start = std::clock();
-		cuda_tools_class.make_K(element_vec.size());
+		cuda_tools_class.make_K(element_vec.size(),pos_vec.size());
 
-		std::cout <<"TIme : "<< (std::clock() - start) / CLOCKS_PER_SEC << std::endl;
+		if (afem_geometry.get_dim() == AFEM::dimension::THREE_DIMENSION){
+			cuda_tools_class.copy_data_from_cuda(pos_vec.size(), 3);
+		}
+		else{
+			cuda_tools_class.copy_data_from_cuda(pos_vec.size(), 2);
+		}
+		
+		std::cout <<"FPS : "<< 1.0/((std::clock() - start) / CLOCKS_PER_SEC) << std::endl;
 	}
 
 }

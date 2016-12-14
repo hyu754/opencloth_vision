@@ -48,7 +48,7 @@ namespace AFEM{
 		int displacement_index[3];
 	};
 	struct element{
-		int nodes_in_elem[4]; // The node numbers that is in the geometry (currently supports only tetra)
+		int nodes_in_elem[4]; // The node numbers that is in the geometry (currently supports only tetra elemnts)
 		position_3D position_info[4];
 
 		//For used during simulation
@@ -250,7 +250,8 @@ public:
 		}
 	};
 
-
+	//Returns dimension as AFEM::dimension enum
+	AFEM::dimension get_dim(void){ return dim; }
 
 	//This function will be responsible for reading the nodes of the geometry.
 	bool read_nodes(std::string s_in);

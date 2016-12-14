@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include "AFEM_cuda.cuh"
-#include "cuda.h"
+//#include "cuda.h"
 
 #define nodesinelemX(node,el,nodesPerElem) (node + nodesPerElem*el) //the first entry is the element # the second entry would be the element number and the last one is the number of nodes/element
 #define threeD21D(row_d,col_d,el_d,width_d,depth_d) (row_d+width_d*(col_d+depth_d*el_d)) //
@@ -206,26 +206,65 @@ __device__ void find_Jacobian_and_localK(AFEM::element *in_element){
 	//return (x14*(y24*z34 - y34*z24) - y14*(x24*z34 - z24 * x34) + z14*(x24*y34 - y24*x34));
 }
 
-__global__ void gpu_make_K(AFEM::element *in_vec){
+__global__ void gpu_make_K(
+	AFEM::element *in_vec,
+	int numElem,
+	int numNodes, 
+	double *K_d
+	)
+{
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
+	if (x < numElem){
+		find_Jacobian_and_localK(&in_vec[x]);
 
-	find_Jacobian_and_localK(&in_vec[x]);
-
+		K_d[x] = (in_vec[x]).nodes_in_elem[0];
+		//printf("hi");
+	}
 	
 }
 
 
-void cuda_tools::allocate_copy_CUDA_geometry_data(AFEM::element *in_array, int num_elem){
-	cudaMalloc((void**)&elem_array_d, sizeof(AFEM::element) *num_elem);
+void cuda_tools::allocate_copy_CUDA_geometry_data(AFEM::element *in_array, int num_elem, int num_nodes, int dim){
+	//cpu allocation of memeory
 
+	K_h = (double*)malloc( sizeof(*K_h)*dim*num_nodes*dim*num_nodes);
+
+
+	//cuda allocation of memory
+	cudaMalloc((void**)&elem_array_d, sizeof(AFEM::element) *num_elem); //element array
+	cudaMalloc((void**)&K_d, sizeof(*K_d)*dim*num_nodes*dim*num_nodes); //final global K matrix container
+
+
+	//cuda copy of memory from host to device
 	cudaMemcpy(elem_array_d, in_array, sizeof(AFEM::element) *num_elem, cudaMemcpyHostToDevice);
+	cudaMemset(K_d, 0, sizeof(*K_d)*dim*num_nodes*dim*num_nodes); //initialize the vector K_d to zero
 	
 }
 
 
-void cuda_tools::make_K(int num_elem){
+void cuda_tools::copy_data_from_cuda(int num_nodes,int dim){
 
-	gpu_make_K << <num_elem / 144, 144 >> > (elem_array_d);
+	
+	cudaMemcpy(K_h, K_d, sizeof(*K_d)*dim*num_nodes*dim*num_nodes,cudaMemcpyDeviceToHost);
+	for (int i = 0; i < num_nodes*dim; i++){
+		std::cout << K_h[i];
+	}
+	std::cout << std::endl;
+	
+}
+
+
+void cuda_tools::make_K(int num_elem,int num_nodes){
+	int blocks, threads;
+	if (num_elem <= 256){
+		blocks = 16;
+		threads = 16;
+	}
+	else {
+		blocks = (num_elem + 1) / 256;
+		threads = 256;
+	}
+	gpu_make_K << <blocks, threads >> > (elem_array_d, num_elem,num_nodes, K_d);
 
 }
 
@@ -251,6 +290,13 @@ __device__ inline float atomicAdda(float* address, double value)
 	return ret;
 
 };
+
+
+cuda_tools::~cuda_tools(){
+	free(K_h);
+	cudaFree(K_d);
+
+}
 __global__ void make_K_cuda3d(double *E_vector, int *nodesInElem, double *x_vector, double *y_vector, double *z_vector, int *displaceInElem_device, float *d_A_dense, int *numnodes) {
 	//int x = threadIdx.x + blockIdx.x*blockDim.x; //if we have a 3D problem then this will go from 0 to 11
 #if 1
@@ -481,7 +527,7 @@ __global__ void vecAdd(double *a, double *b, double *c, int n)
 		c[id] = a[id] + b[id];
 }
 
-void cuda_tools::hello(){
+void hello(){
 	// Size of vectors
 	int n = 100000;
 
