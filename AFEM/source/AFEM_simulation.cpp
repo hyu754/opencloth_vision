@@ -12,6 +12,9 @@ AFEM::Simulation::Simulation(AFEM::Geometry geo_in){
 	pos_vec = afem_geometry.return_position3D();
 	element_vec = afem_geometry.return_element_vector();
 	std::cout << "With " << element_vec.size() <<"elements"<< " and with " << pos_vec.size() <<" nodes"<<std::endl;
+
+
+	cuda_tools_class.initialize_cholesky_variables(pos_vec.size(), element_vec.size(), 3);
 	std::cout << sizeof(AFEM::Geometry) << std::endl;
 
 }
@@ -51,13 +54,23 @@ void AFEM::Simulation::run(){
 		double start = std::clock();
 		cuda_tools_class.make_K(element_vec.size(),pos_vec.size());
 
-		if (afem_geometry.get_dim() == AFEM::dimension::THREE_DIMENSION){
-			cuda_tools_class.copy_data_from_cuda(pos_vec.size(), 3);
-		}
-		else{
-			cuda_tools_class.copy_data_from_cuda(pos_vec.size(), 2);
-		}
 		
+	cuda_tools_class.cholesky();
+
+
+
+
+	if (afem_geometry.get_dim() == AFEM::dimension::THREE_DIMENSION){
+		cuda_tools_class.copy_data_from_cuda();
+
+	}
+	else{
+		cuda_tools_class.copy_data_from_cuda();
+
+	}
+	//cuda_tools_class.copy_data_from_cuda();
+
+		cuda_tools_class.reset_K(element_vec.size(), pos_vec.size());
 		std::cout <<"FPS : "<< 1.0/((std::clock() - start) / CLOCKS_PER_SEC) << std::endl;
 	}
 
