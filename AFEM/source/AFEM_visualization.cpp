@@ -293,10 +293,10 @@ void OnRender() {
 
 	for (int i = 0; i<global_ptr->element_vec.size(); i++) {
 		
-		AFEM::position_3D p1= global_ptr->element_vec.at(i).position_info[0];
-		AFEM::position_3D p2 = global_ptr->element_vec.at(i).position_info[1];
-		AFEM::position_3D p3 = global_ptr->element_vec.at(i).position_info[2];
-		AFEM::position_3D p4 = global_ptr->element_vec.at(i).position_info[3];
+		AFEM::position_3D p1= global_ptr->element_array[i].position_info[0];
+		AFEM::position_3D p2 = global_ptr->element_array[i].position_info[1];
+		AFEM::position_3D p3 = global_ptr->element_array[i].position_info[2];
+		AFEM::position_3D p4 = global_ptr->element_array[i].position_info[3];
 
 		
 
@@ -319,10 +319,10 @@ void OnRender() {
 
 	for (int i = 0; i<global_ptr->element_vec.size(); i++) {
 		glColor3f((float)!0, (float)1, (float)0);
-		AFEM::position_3D p1 = global_ptr->element_vec.at(i).position_info[0];
-		AFEM::position_3D p2 = global_ptr->element_vec.at(i).position_info[1];
-		AFEM::position_3D p3 = global_ptr->element_vec.at(i).position_info[2];
-		AFEM::position_3D p4 = global_ptr->element_vec.at(i).position_info[3];
+		AFEM::position_3D p1 = global_ptr->element_array[i].position_info[0];
+		AFEM::position_3D p2 = global_ptr->element_array[i].position_info[1];
+		AFEM::position_3D p3 = global_ptr->element_array[i].position_info[2];
+		AFEM::position_3D p4 = global_ptr->element_array[i].position_info[3];
 
 
 

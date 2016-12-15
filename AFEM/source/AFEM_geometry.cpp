@@ -53,7 +53,7 @@ bool AFEM::Geometry::read_nodes(std::string s_in){
 		std::cout << "cannot open Nodes \n";
 		return false;
 	}
-
+	int numNodes;
 	in_matrix >> numNodes;
 
 	//x = new double[numNodes];
@@ -108,49 +108,15 @@ bool AFEM::Geometry::read_elem(std::string element_file){
 		std::cout << "cannot open Element file \n";
 		return false;
 	}
-	int a;
+	int numE,numNodesPerElem;
 	in_elem >> numE >> numNodesPerElem;
 
-	//Allocating E matrix 3x3x3 matrix
-	E = new double**[numE];
-	M = new double**[numE];
-	//nodesInElem = new int*[numE];
-	//nodesInElem_host = new int[numE*numNodesPerElem];
-	//nodesInElem_device = new int[numE*numNodesPerElem];
-
-
-	//Allocate a new vector for storing all of the stresses at an element
-	//global_stress_mises = new double[numE];
-
-
-	//cudaMalloc((void**)&nodesInElem_device, numE*numNodesPerElem*sizeof(int));
-
-	for (int e = 0; e < numE; e++){
-		//E[e] = new double*[numNodesPerElem*dim];
-		//M[e] = new double*[numNodesPerElem*dim];
-		//nodesInElem[e] = new int[numNodesPerElem];
-		//for (int i = 0; i < numNodesPerElem*dim; i++){
-		//	E[e][i] = new double[numNodesPerElem*dim];
-		//	M[e][i] = new double[numNodesPerElem*dim];
-		//}
 	
-	}
-	//E_vector_host = new double[numE*numNodesPerElem*dim*numNodesPerElem*dim];
-	//cudaMalloc((void**)&E_vector_device, numE*numNodesPerElem*dim*numNodesPerElem*dim*sizeof(*E_vector_device));
-	//Populating the nodesinelem matrix
-
-	//Populating the element_vector
-	//int _displacement_index = 0;
 	for (int e = 0; e < numE; e++) {
 		element element_input;
 		int element_disp_index = 0; 
 		for (int i = 0; i < numNodesPerElem; i++){
 			in_elem >> element_input.nodes_in_elem[i];
-			/*for (int m = 0; m < 3; m++){
-				element_input.displacement_index[element_disp_index] = _displacement_index;
-				element_disp_index++;
-				_displacement_index++;
-			}*/
 		}
 
 

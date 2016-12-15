@@ -29,7 +29,10 @@ class cuda_tools{
 	//Host memory pointer for the element array
 	AFEM::element *elem_array_h;
 	
-	
+	//Host and device memory for stationary vector
+	int *stationary_array_d;
+	int *stationary_array_h;
+
 	//Device memory pointer for the global K matrix
 	//This matrix will be numnodes*3*numNodes*3 = 9numNodes^2 
 	float *K_d;
@@ -82,18 +85,20 @@ public:
 	//			numElem = number of elements	
 	//			numNodes = number of nodes
 	//			dim = dimension
-	void allocate_copy_CUDA_geometry_data(AFEM::element *,int,int,int);
+	void allocate_copy_CUDA_geometry_data(AFEM::element *, int *in_array_stationary, int numstationary,int num_elem, int num_nodes, int dim);
 
 	//Copy the data from the device memory to host
-	void copy_data_from_cuda();
+	void copy_data_from_cuda(AFEM::element *elem_array_ptr);
 
 	
-
+	//A wrapper function that makes the K matrix on the GPU
 	void make_K(int num_elem,int num_nodes);
 
+
+	//A wrapper function that resets the value of K (device) when for the next simulation
 	void reset_K(int num_elem,int num_nodes);
 
-
+	void stationary_BC(void);
 
 	
 	//place holder for host -> device

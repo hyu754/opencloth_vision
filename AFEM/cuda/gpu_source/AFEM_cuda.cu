@@ -271,9 +271,15 @@ __global__ void update_Geo_CUDA(AFEM::element *in_vec, float *x_solution,int num
 		for (int npe = 0; npe < 4; npe++){
 			//dummy_node = nodesInElem[nodesinelemX(npe, offset, 4)]; // The row of the matrix we looking at will be k_th element and npe (nodes per element) 	
 			for (int dof = 0; dof < 3; dof++){
-
-				in_vec[x].position_info[npe].displacement_index[dof] += x_solution[in_vec[x].position_info[npe].displacement_index[dof]];
-				
+				if (dof == 0){
+					in_vec[x].position_info[npe].x += x_solution[in_vec[x].position_info[npe].displacement_index[dof]];
+				}
+				else if (dof == 1){
+					in_vec[x].position_info[npe].y += x_solution[in_vec[x].position_info[npe].displacement_index[dof]];
+				}
+				else if (dof == 2){
+					in_vec[x].position_info[npe].z += x_solution[in_vec[x].position_info[npe].displacement_index[dof]];
+				}
 			}
 		}
 
@@ -284,21 +290,24 @@ __global__ void update_Geo_CUDA(AFEM::element *in_vec, float *x_solution,int num
 
 
 //Allocates the cpu and gpu memory, and then copy necessary data to them
-void cuda_tools::allocate_copy_CUDA_geometry_data(AFEM::element *in_array, int num_elem, int num_nodes, int dim){
+void cuda_tools::allocate_copy_CUDA_geometry_data(AFEM::element *in_array_elem,int *in_array_stationary,int numstationary, int num_elem, int num_nodes, int dim){
 	//cpu allocation of memeory
-
+	//K matrix
 	K_h = (float*)malloc( sizeof(*K_h)*dim*num_nodes*dim*num_nodes);
-
+	
 
 	//cuda allocation of memory
-	elem_array_h = in_array;
+	elem_array_h = in_array_elem;
 	cudaMalloc((void**)&elem_array_d, sizeof(AFEM::element) *num_elem); //element array
 	cudaMalloc((void**)&K_d, sizeof(*K_d)*dim*num_nodes*dim*num_nodes); //final global K matrix container
-
+	cudaMalloc((void**)&stationary_array_d, sizeof(*stationary_array_d)*numstationary); //stationary vector
 
 	//cuda copy of memory from host to device
-	cudaMemcpy(elem_array_d, in_array, sizeof(AFEM::element) *num_elem, cudaMemcpyHostToDevice);
-	cudaMemset(K_d, 0, sizeof(*K_d)*dim*num_nodes*dim*num_nodes); //initialize the vector K_d to zero
+	cudaMemcpy(elem_array_d, in_array_elem, sizeof(AFEM::element) *num_elem, cudaMemcpyHostToDevice);
+	cudaMemcpy(stationary_array_d, in_array_stationary, sizeof(*stationary_array_d)*numstationary, cudaMemcpyHostToDevice);
+	//initialize the vector K_d to zero
+	cudaMemset(K_d, 0, sizeof(*K_d)*dim*num_nodes*dim*num_nodes); 
+	
 
 
 	//Allocating num nodes and num elem information into the class
@@ -308,10 +317,12 @@ void cuda_tools::allocate_copy_CUDA_geometry_data(AFEM::element *in_array, int n
 }
 
 
-void cuda_tools::copy_data_from_cuda(){
+void cuda_tools::copy_data_from_cuda(AFEM::element *elem_array_ptr){
 	cudaMemcpy(elem_array_h,elem_array_d, sizeof(AFEM::element) *Nelems, cudaMemcpyDeviceToHost);
 
 	std::cout << elem_array_h[0].position_info[0].x << std::endl;
+
+	elem_array_ptr = elem_array_h;
 
 }
 
@@ -335,6 +346,12 @@ void cuda_tools::make_K(int num_elem,int num_nodes){
 
 }
 
+
+void cuda_tools::stationary_BC(){
+
+
+
+}
 void cuda_tools::reset_K(int num_elem,int num_nodes){
 	int blocks, threads;
 	if (num_elem <= 256){
