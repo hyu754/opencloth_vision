@@ -6,25 +6,9 @@
 #include "AFEM_cuda.cuh"
 #include "Utilities.cuh"
 
-
+#define IDX2C(i,j,ld) (((j)*(ld))+( i )) 
 void printMatrix(int m, int n, const double*A, int lda, const char* name) { for (int row = 0; row < m; row++){ for (int col = 0; col < n; col++){ double Areg = A[row + col*lda]; printf("%s(%d,%d) = %f\n", name, row + 1, col + 1, Areg); } } }
 
-int cuda_tools::QR_solver(void) {
-	
-		cusolverDnHandle_t cusolverH = NULL; 
-		cublasHandle_t cublasH = NULL; 
-		cublasStatus_t cublas_status = CUBLAS_STATUS_SUCCESS; 
-		cusolverStatus_t cusolver_status = CUSOLVER_STATUS_SUCCESS; 
-		cudaError_t cudaStat1 = cudaSuccess;
-		cudaError_t cudaStat2 = cudaSuccess; 
-		cudaError_t cudaStat3 = cudaSuccess; 
-		cudaError_t cudaStat4 = cudaSuccess; 
-		const int m = 3; 
-		const int lda = m; 
-		const int ldb = m; 
-		const int nrhs = 1; // number of right hand side vectors
-		return 0;
-}
 void cuda_tools::initialize_cholesky_variables(int numNodes, int numElem, int dim){
 	Nrows = numNodes*dim;                        // --- Number of rows
 	Ncols = numNodes*dim;                        // --- Number of columns
@@ -96,7 +80,7 @@ void cuda_tools::cholesky()
 
 	// --- Device side number of nonzero elements per row
 
-	cusparseSafeCall(cusparseSnnz(handle, CUSPARSE_DIRECTION_ROW, Nrows, Ncols, descrA, K_d, lda, d_nnzPerVector, &nnz));
+	cusparseSafeCall(cusparseSnnz(handle, CUSPARSE_DIRECTION_ROW, Nrows, Ncols, descrA, LHS, lda, d_nnzPerVector, &nnz));
 	// --- Host side number of nonzero elements per row
 
 
@@ -111,7 +95,7 @@ void cuda_tools::cholesky()
 	gpuErrchk(cudaMalloc(&d_A_ColIndices, nnz * sizeof(*d_A_ColIndices)));
 
 	
-	cusparseSafeCall(cusparseSdense2csr(handle, Nrows, Ncols, descrA, K_d, lda, d_nnzPerVector, d_A, d_A_RowIndices, d_A_ColIndices));
+	cusparseSafeCall(cusparseSdense2csr(handle, Nrows, Ncols, descrA, LHS, lda, d_nnzPerVector, d_A, d_A_RowIndices, d_A_ColIndices));
 	// --- Host side dense matrix
 
 	float *h_A = (float *)malloc(nnz * sizeof(*h_A));
@@ -136,15 +120,15 @@ void cuda_tools::cholesky()
 	*/
 	// --- Allocating and defining dense host and device data vectors
 
-	float *h_x = (float *)malloc(Nrows * sizeof(float));
-	/*h_x[0] = 100.0;  h_x[1] = 200.0; h_x[2] = 400.0; h_x[3] = 500.0;*/
-	for (int i = 0; i < N; i++){
-		h_x[i] = 0.0001;
-	}
+	//float *h_x = (float *)malloc(Nrows * sizeof(float));
+	///*h_x[0] = 100.0;  h_x[1] = 200.0; h_x[2] = 400.0; h_x[3] = 500.0;*/
+	//for (int i = 0; i < N; i++){
+	//	h_x[i] = 0.00001;
+	//}
 
 
 	float *d_x;        gpuErrchk(cudaMalloc(&d_x, Nrows * sizeof(float)));
-	gpuErrchk(cudaMemcpy(d_x, h_x, Nrows * sizeof(float), cudaMemcpyHostToDevice));
+	gpuErrchk(cudaMemcpy(d_x, RHS, Nrows * sizeof(float), cudaMemcpyHostToDevice));
 
 
 
@@ -197,7 +181,7 @@ void cuda_tools::cholesky()
 	for (int k = 0; k<10; k++) printf("%f\n", h_A[k]);*/
 
 
-	cusparseSafeCall(cusparseScsr2dense(handle, Nrows, Ncols, descrA, d_A, d_A_RowIndices, d_A_ColIndices, K_d, Nrows));
+	cusparseSafeCall(cusparseScsr2dense(handle, Nrows, Ncols, descrA, d_A, d_A_RowIndices, d_A_ColIndices, LHS, Nrows));
 
 
 	/*printf("\nCholesky matrix\n\n");
@@ -229,9 +213,19 @@ void cuda_tools::cholesky()
 	//cudaMemcpy(h_x, d_y, N * sizeof(float), cudaMemcpyDeviceToHost);
 	/*for (int k = 0; k<20; k++) printf("dx[%i] = %f\n", k, h_x[k]);
 	for (int k = 0; k<20; k++) printf("xs[%i] = %f\n", k, x[k]);*/
+	
+	cudaMemcpy(h_y, LHS, Ncols * sizeof(float), cudaMemcpyDeviceToHost);
 
-
-	update_geometry(d_z);
+	for (int i = 0; i < 4; i++){
+		for (int j = 0; j < 4; j++){
+			std::cout << h_y[IDX2C(j,i,Ncols)] << " ";
+		}
+		std::cout << std::endl;
+	}
+	
+	std::cout << std::endl;
+	
+	update_geometry(d_y);
 
 
 	cudaFree(d_A);
@@ -241,7 +235,7 @@ void cuda_tools::cholesky()
 	cudaFree(d_z);
 	cudaFree(d_y);
 	free(h_y);
-	free(h_x);
+	//free(h_x);
 
 
 #if 0

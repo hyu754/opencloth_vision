@@ -24,14 +24,16 @@ public:
 	//These variables will be populated when the class is initialized
 	std::vector<AFEM::position_3D> pos_vec;
 	std::vector<AFEM::element> element_vec;
-	std::vector<int> stationary_vec;
+	std::vector<AFEM::stationary> stationary_vec;
 
 
 
 	//This will be the vector that will be updated every iteration
 	element *element_array;
 	//An array to store the node positions that will be stationary
-	int *stationary_array;
+	stationary *stationary_array;
+	//An array for the pos_vec
+	position_3D *pos_array;
 private:
 	cuda_tools cuda_tools_class;
 	AFEM::Geometry afem_geometry;

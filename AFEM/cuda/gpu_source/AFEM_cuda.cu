@@ -34,18 +34,182 @@ __device__ inline float atomicAdda(float* address, double value)
 	return ret;
 
 };
+//__device__ void find_localM(AFEM::element *in_element){
+//	float det_J = in_element->Jacobian;
+//	float rho = 1000.0; //in_element->density;
+//	in_element->local_M[0] = det_J*rho / 3;
+//	in_element->local_M[1] = 0;
+//	in_element->local_M[2] = 0;
+//	in_element->local_M[3] = det_J*rho / 4;
+//	in_element->local_M[4] = 0;
+//	in_element->local_M[5] = 0;
+//	in_element->local_M[6] = det_J*rho / 4;
+//	in_element->local_M[7] = 0;
+//	in_element->local_M[8] = 0;
+//	in_element->local_M[9] = -det_J*rho / 3;
+//	in_element->local_M[10] = 0;
+//	in_element->local_M[11] = 0;
+//	in_element->local_M[12] = 0;
+//	in_element->local_M[13] = det_J*rho / 3;
+//	in_element->local_M[14] = 0;
+//	in_element->local_M[15] = 0;
+//	in_element->local_M[16] = det_J*rho / 4;
+//	in_element->local_M[17] = 0;
+//	in_element->local_M[18] = 0;
+//	in_element->local_M[19] = det_J*rho / 4;
+//	in_element->local_M[20] = 0;
+//	in_element->local_M[21] = 0;
+//	in_element->local_M[22] = -det_J*rho / 3;
+//	in_element->local_M[23] = 0;
+//	in_element->local_M[24] = 0;
+//	in_element->local_M[25] = 0;
+//	in_element->local_M[26] = det_J*rho / 3;
+//	in_element->local_M[27] = 0;
+//	in_element->local_M[28] = 0;
+//	in_element->local_M[29] = det_J*rho / 4;
+//	in_element->local_M[30] = 0;
+//	in_element->local_M[31] = 0;
+//	in_element->local_M[32] = det_J*rho / 4;
+//	in_element->local_M[33] = 0;
+//	in_element->local_M[34] = 0;
+//	in_element->local_M[35] = -det_J*rho / 3;
+//	in_element->local_M[36] = det_J*rho / 4;
+//	in_element->local_M[37] = 0;
+//	in_element->local_M[38] = 0;
+//	in_element->local_M[39] = det_J*rho / 3;
+//	in_element->local_M[40] = 0;
+//	in_element->local_M[41] = 0;
+//	in_element->local_M[42] = det_J*rho / 4;
+//	in_element->local_M[43] = 0;
+//	in_element->local_M[44] = 0;
+//	in_element->local_M[45] = -det_J*rho / 3;
+//	in_element->local_M[46] = 0;
+//	in_element->local_M[47] = 0;
+//	in_element->local_M[48] = 0;
+//	in_element->local_M[49] = det_J*rho / 4;
+//	in_element->local_M[50] = 0;
+//	in_element->local_M[51] = 0;
+//	in_element->local_M[52] = det_J*rho / 3;
+//	in_element->local_M[53] = 0;
+//	in_element->local_M[54] = 0;
+//	in_element->local_M[55] = det_J*rho / 4;
+//	in_element->local_M[56] = 0;
+//	in_element->local_M[57] = 0;
+//	in_element->local_M[58] = -det_J*rho / 3;
+//	in_element->local_M[59] = 0;
+//	in_element->local_M[60] = 0;
+//	in_element->local_M[61] = 0;
+//	in_element->local_M[62] = det_J*rho / 4;
+//	in_element->local_M[63] = 0;
+//	in_element->local_M[64] = 0;
+//	in_element->local_M[65] = det_J*rho / 3;
+//	in_element->local_M[66] = 0;
+//	in_element->local_M[67] = 0;
+//	in_element->local_M[68] = det_J*rho / 4;
+//	in_element->local_M[69] = 0;
+//	in_element->local_M[70] = 0;
+//	in_element->local_M[71] = -det_J*rho / 3;
+//	in_element->local_M[72] = det_J*rho / 4;
+//	in_element->local_M[73] = 0;
+//	in_element->local_M[74] = 0;
+//	in_element->local_M[75] = det_J*rho / 4;
+//	in_element->local_M[76] = 0;
+//	in_element->local_M[77] = 0;
+//	in_element->local_M[78] = det_J*rho / 3;
+//	in_element->local_M[79] = 0;
+//	in_element->local_M[80] = 0;
+//	in_element->local_M[81] = -det_J*rho / 3;
+//	in_element->local_M[82] = 0;
+//	in_element->local_M[83] = 0;
+//	in_element->local_M[84] = 0;
+//	in_element->local_M[85] = det_J*rho / 4;
+//	in_element->local_M[86] = 0;
+//	in_element->local_M[87] = 0;
+//	in_element->local_M[88] = det_J*rho / 4;
+//	in_element->local_M[89] = 0;
+//	in_element->local_M[90] = 0;
+//	in_element->local_M[91] = det_J*rho / 3;
+//	in_element->local_M[92] = 0;
+//	in_element->local_M[93] = 0;
+//	in_element->local_M[94] = -det_J*rho / 3;
+//	in_element->local_M[95] = 0;
+//	in_element->local_M[96] = 0;
+//	in_element->local_M[97] = 0;
+//	in_element->local_M[98] = det_J*rho / 4;
+//	in_element->local_M[99] = 0;
+//	in_element->local_M[100] = 0;
+//	in_element->local_M[101] = det_J*rho / 4;
+//	in_element->local_M[102] = 0;
+//	in_element->local_M[103] = 0;
+//	in_element->local_M[104] = det_J*rho / 3;
+//	in_element->local_M[105] = 0;
+//	in_element->local_M[106] = 0;
+//	in_element->local_M[107] = -det_J*rho / 3;
+//	in_element->local_M[108] = -det_J*rho / 3;
+//	in_element->local_M[109] = 0;
+//	in_element->local_M[110] = 0;
+//	in_element->local_M[111] = -det_J*rho / 3;
+//	in_element->local_M[112] = 0;
+//	in_element->local_M[113] = 0;
+//	in_element->local_M[114] = -det_J*rho / 3;
+//	in_element->local_M[115] = 0;
+//	in_element->local_M[116] = 0;
+//	in_element->local_M[117] = det_J*rho / 2;
+//	in_element->local_M[118] = 0;
+//	in_element->local_M[119] = 0;
+//	in_element->local_M[120] = 0;
+//	in_element->local_M[121] = -det_J*rho / 3;
+//	in_element->local_M[122] = 0;
+//	in_element->local_M[123] = 0;
+//	in_element->local_M[124] = -det_J*rho / 3;
+//	in_element->local_M[125] = 0;
+//	in_element->local_M[126] = 0;
+//	in_element->local_M[127] = -det_J*rho / 3;
+//	in_element->local_M[128] = 0;
+//	in_element->local_M[129] = 0;
+//	in_element->local_M[130] = det_J*rho / 2;
+//	in_element->local_M[131] = 0;
+//	in_element->local_M[132] = 0;
+//	in_element->local_M[133] = 0;
+//	in_element->local_M[134] = -det_J*rho / 3;
+//	in_element->local_M[135] = 0;
+//	in_element->local_M[136] = 0;
+//	in_element->local_M[137] = -det_J*rho / 3;
+//	in_element->local_M[138] = 0;
+//	in_element->local_M[139] = 0;
+//	in_element->local_M[140] = -det_J*rho / 3;
+//	in_element->local_M[141] = 0;
+//	in_element->local_M[142] = 0;
+//	in_element->local_M[143] = det_J*rho / 2;
+//}
+__device__ void find_Jacobian_localK_localM(AFEM::element *in_element,AFEM::position_3D *in_pos){
 
-__device__ void find_Jacobian_and_localK(AFEM::element *in_element){
-
-	float x14 = in_element->position_info[0].x - in_element->position_info[3].x;
+	/*float x14 = in_element->position_info[0].x - in_element->position_info[3].x;
 	float x24 = in_element->position_info[1].x - in_element->position_info[3].x;
-	float x34 = in_element->position_info[2].x - in_element->position_info[3].x;
-	float y14 = in_element->position_info[0].y - in_element->position_info[3].y;
-	float y24 = in_element->position_info[1].y - in_element->position_info[3].y;
-	float y34 = in_element->position_info[2].y - in_element->position_info[3].y;
-	float z14 = in_element->position_info[0].z - in_element->position_info[3].z;
-	float z24 = in_element->position_info[1].z - in_element->position_info[3].z;
-	float z34 = in_element->position_info[2].z - in_element->position_info[3].z;
+	float x34 = in_element->position_info[2].x - in_element->position_info[3].x;*/
+	
+	//four node positions
+	AFEM::position_3D n1, n2, n3, n4;
+	n1 = in_pos[in_element->nodes_in_elem[0]];
+	n2 = in_pos[in_element->nodes_in_elem[1]];
+	n3 = in_pos[in_element->nodes_in_elem[2]];
+	n4 = in_pos[in_element->nodes_in_elem[3]];
+
+
+	float x14 = n1.x - n4.x;
+	float x24 = n2.x - n4.x;
+	float x34 = n3.x - n4.x;
+
+	float y14 = n1.y - n4.y;
+	float y24 = n2.y - n4.y;
+	float y34 = n3.y - n4.y;
+
+
+	float z14 = n1.z - n4.z;
+	float z24 = n2.z - n4.z;
+	float z34 = n3.z - n4.z;
+
+
 
 	//std::cout << x14*(y24*z34 - y34*z24) - y14*(x24*z34 - z24 * 34) + z14*(x24*y34 - y24*x34) << std::endl;
 	float det_J = (x14*(y24*z34 - y34*z24) - y14*(x24*z34 - z24 * x34) + z14*(x24*y34 - y24*x34));
@@ -65,10 +229,10 @@ __device__ void find_Jacobian_and_localK(AFEM::element *in_element){
 
 	in_element->Jacobian = det_J;
 
+	//in_element->volume = (1.0 / (2.0*det_J));
 
-
-	float E = 100000.0;
-	float nu = 0.49;
+	float E = 500000.0;
+	float nu = 0.44;
 
 
 	in_element->local_K[0] = 0.166666666666667*E*J_bar11*J_bar11 * det_J*(-nu + 1.0) / (-2 * nu*nu - nu + 1) + 0.166666666666667*E*J_bar21*J_bar21 * det_J*(-0.5*nu + 0.5) / (-2 * nu*nu - nu + 1) + 0.166666666666667*E*J_bar31*J_bar31 * det_J*(-0.5*nu + 0.5) / (-2 * nu*nu - nu + 1);
@@ -217,16 +381,163 @@ __device__ void find_Jacobian_and_localK(AFEM::element *in_element){
 	in_element->local_K[142] = 0.166666666666667*E*J_star2*J_star3*det_J*nu / (-2 * nu*nu - nu + 1) + 0.166666666666667*E*J_star2*J_star3*det_J*(-0.5*nu + 0.5) / (-2 * nu*nu - nu + 1);
 	in_element->local_K[143] = 0.166666666666667*E*J_star1*J_star1 * det_J*(-0.5*nu + 0.5) / (-2 * nu*nu - nu + 1) + 0.166666666666667*E*J_star2*J_star2 * det_J*(-0.5*nu + 0.5) / (-2 * nu*nu - nu + 1) + 0.166666666666667*E*J_star3*J_star3 * det_J*(-nu + 1.0) / (-2 * nu*nu - nu + 1);
 
+	float rho = 1000.0;
+	in_element->local_M[0] = 0.166666666666667*det_J*(J_bar11*J_bar11*rho + J_bar21*J_bar21*rho + J_bar31*J_bar31*rho);
+	in_element->local_M[1] = 0.166666666666667*J_bar11*J_bar21*det_J*rho;
+	in_element->local_M[2] = 0.166666666666667*J_bar11*J_bar31*det_J*rho;
+	in_element->local_M[3] = 0.166666666666667*det_J*(J_bar11*J_bar12*rho + J_bar21*J_bar22*rho + J_bar31*J_bar32*rho);
+	in_element->local_M[4] = 0.166666666666667*J_bar12*J_bar21*det_J*rho;
+	in_element->local_M[5] = 0.166666666666667*J_bar12*J_bar31*det_J*rho;
+	in_element->local_M[6] = 0.166666666666667*det_J*(J_bar11*J_bar13*rho + J_bar21*J_bar23*rho + J_bar31*J_bar33*rho);
+	in_element->local_M[7] = 0.166666666666667*J_bar13*J_bar21*det_J*rho;
+	in_element->local_M[8] = 0.166666666666667*J_bar13*J_bar31*det_J*rho;
+	in_element->local_M[9] = 0.166666666666667*det_J*(J_bar11*J_star1*rho + J_bar21*J_star2*rho + J_bar31*J_star3*rho);
+	in_element->local_M[10] = 0.166666666666667*J_bar21*J_star1*det_J*rho;
+	in_element->local_M[11] = 0.166666666666667*J_bar31*J_star1*det_J*rho;
+	in_element->local_M[12] = 0.166666666666667*J_bar11*J_bar21*det_J*rho;
+	in_element->local_M[13] = 0.166666666666667*det_J*(J_bar11*J_bar11*rho + J_bar21*J_bar21*rho + J_bar31*J_bar31*rho);
+	in_element->local_M[14] = 0.166666666666667*J_bar21*J_bar31*det_J*rho;
+	in_element->local_M[15] = 0.166666666666667*J_bar11*J_bar22*det_J*rho;
+	in_element->local_M[16] = 0.166666666666667*det_J*(J_bar11*J_bar12*rho + J_bar21*J_bar22*rho + J_bar31*J_bar32*rho);
+	in_element->local_M[17] = 0.166666666666667*J_bar22*J_bar31*det_J*rho;
+	in_element->local_M[18] = 0.166666666666667*J_bar11*J_bar23*det_J*rho;
+	in_element->local_M[19] = 0.166666666666667*det_J*(J_bar11*J_bar13*rho + J_bar21*J_bar23*rho + J_bar31*J_bar33*rho);
+	in_element->local_M[20] = 0.166666666666667*J_bar23*J_bar31*det_J*rho;
+	in_element->local_M[21] = 0.166666666666667*J_bar11*J_star2*det_J*rho;
+	in_element->local_M[22] = 0.166666666666667*det_J*(J_bar11*J_star1*rho + J_bar21*J_star2*rho + J_bar31*J_star3*rho);
+	in_element->local_M[23] = 0.166666666666667*J_bar31*J_star2*det_J*rho;
+	in_element->local_M[24] = 0.166666666666667*J_bar11*J_bar31*det_J*rho;
+	in_element->local_M[25] = 0.166666666666667*J_bar21*J_bar31*det_J*rho;
+	in_element->local_M[26] = 0.166666666666667*det_J*(J_bar11*J_bar11*rho + J_bar21*J_bar21*rho + J_bar31*J_bar31*rho);
+	in_element->local_M[27] = 0.166666666666667*J_bar11*J_bar32*det_J*rho;
+	in_element->local_M[28] = 0.166666666666667*J_bar21*J_bar32*det_J*rho;
+	in_element->local_M[29] = 0.166666666666667*det_J*(J_bar11*J_bar12*rho + J_bar21*J_bar22*rho + J_bar31*J_bar32*rho);
+	in_element->local_M[30] = 0.166666666666667*J_bar11*J_bar33*det_J*rho;
+	in_element->local_M[31] = 0.166666666666667*J_bar21*J_bar33*det_J*rho;
+	in_element->local_M[32] = 0.166666666666667*det_J*(J_bar11*J_bar13*rho + J_bar21*J_bar23*rho + J_bar31*J_bar33*rho);
+	in_element->local_M[33] = 0.166666666666667*J_bar11*J_star3*det_J*rho;
+	in_element->local_M[34] = 0.166666666666667*J_bar21*J_star3*det_J*rho;
+	in_element->local_M[35] = 0.166666666666667*det_J*(J_bar11*J_star1*rho + J_bar21*J_star2*rho + J_bar31*J_star3*rho);
+	in_element->local_M[36] = 0.166666666666667*det_J*(J_bar11*J_bar12*rho + J_bar21*J_bar22*rho + J_bar31*J_bar32*rho);
+	in_element->local_M[37] = 0.166666666666667*J_bar11*J_bar22*det_J*rho;
+	in_element->local_M[38] = 0.166666666666667*J_bar11*J_bar32*det_J*rho;
+	in_element->local_M[39] = 0.166666666666667*det_J*(J_bar13*J_bar12*rho + J_bar22*J_bar22*rho + J_bar32*J_bar32*rho);
+	in_element->local_M[40] = 0.166666666666667*J_bar12*J_bar22*det_J*rho;
+	in_element->local_M[41] = 0.166666666666667*J_bar12*J_bar32*det_J*rho;
+	in_element->local_M[42] = 0.166666666666667*det_J*(J_bar12*J_bar13*rho + J_bar22*J_bar23*rho + J_bar32*J_bar33*rho);
+	in_element->local_M[43] = 0.166666666666667*J_bar13*J_bar22*det_J*rho;
+	in_element->local_M[44] = 0.166666666666667*J_bar13*J_bar32*det_J*rho;
+	in_element->local_M[45] = 0.166666666666667*det_J*(J_bar12*J_star1*rho + J_bar22*J_star2*rho + J_bar32*J_star3*rho);
+	in_element->local_M[46] = 0.166666666666667*J_bar22*J_star1*det_J*rho;
+	in_element->local_M[47] = 0.166666666666667*J_bar32*J_star1*det_J*rho;
+	in_element->local_M[48] = 0.166666666666667*J_bar12*J_bar21*det_J*rho;
+	in_element->local_M[49] = 0.166666666666667*det_J*(J_bar11*J_bar12*rho + J_bar21*J_bar22*rho + J_bar31*J_bar32*rho);
+	in_element->local_M[50] = 0.166666666666667*J_bar21*J_bar32*det_J*rho;
+	in_element->local_M[51] = 0.166666666666667*J_bar12*J_bar22*det_J*rho;
+	in_element->local_M[52] = 0.166666666666667*det_J*(J_bar13*J_bar12*rho + J_bar22*J_bar22*rho + J_bar32*J_bar32*rho);
+	in_element->local_M[53] = 0.166666666666667*J_bar22*J_bar32*det_J*rho;
+	in_element->local_M[54] = 0.166666666666667*J_bar12*J_bar23*det_J*rho;
+	in_element->local_M[55] = 0.166666666666667*det_J*(J_bar12*J_bar13*rho + J_bar22*J_bar23*rho + J_bar32*J_bar33*rho);
+	in_element->local_M[56] = 0.166666666666667*J_bar23*J_bar32*det_J*rho;
+	in_element->local_M[57] = 0.166666666666667*J_bar12*J_star2*det_J*rho;
+	in_element->local_M[58] = 0.166666666666667*det_J*(J_bar12*J_star1*rho + J_bar22*J_star2*rho + J_bar32*J_star3*rho);
+	in_element->local_M[59] = 0.166666666666667*J_bar32*J_star2*det_J*rho;
+	in_element->local_M[60] = 0.166666666666667*J_bar12*J_bar31*det_J*rho;
+	in_element->local_M[61] = 0.166666666666667*J_bar22*J_bar31*det_J*rho;
+	in_element->local_M[62] = 0.166666666666667*det_J*(J_bar11*J_bar12*rho + J_bar21*J_bar22*rho + J_bar31*J_bar32*rho);
+	in_element->local_M[63] = 0.166666666666667*J_bar12*J_bar32*det_J*rho;
+	in_element->local_M[64] = 0.166666666666667*J_bar22*J_bar32*det_J*rho;
+	in_element->local_M[65] = 0.166666666666667*det_J*(J_bar13*J_bar12*rho + J_bar22*J_bar22*rho + J_bar32*J_bar32*rho);
+	in_element->local_M[66] = 0.166666666666667*J_bar12*J_bar33*det_J*rho;
+	in_element->local_M[67] = 0.166666666666667*J_bar22*J_bar33*det_J*rho;
+	in_element->local_M[68] = 0.166666666666667*det_J*(J_bar12*J_bar13*rho + J_bar22*J_bar23*rho + J_bar32*J_bar33*rho);
+	in_element->local_M[69] = 0.166666666666667*J_bar12*J_star3*det_J*rho;
+	in_element->local_M[70] = 0.166666666666667*J_bar22*J_star3*det_J*rho;
+	in_element->local_M[71] = 0.166666666666667*det_J*(J_bar12*J_star1*rho + J_bar22*J_star2*rho + J_bar32*J_star3*rho);
+	in_element->local_M[72] = 0.166666666666667*det_J*(J_bar11*J_bar13*rho + J_bar21*J_bar23*rho + J_bar31*J_bar33*rho);
+	in_element->local_M[73] = 0.166666666666667*J_bar11*J_bar23*det_J*rho;
+	in_element->local_M[74] = 0.166666666666667*J_bar11*J_bar33*det_J*rho;
+	in_element->local_M[75] = 0.166666666666667*det_J*(J_bar12*J_bar13*rho + J_bar22*J_bar23*rho + J_bar32*J_bar33*rho);
+	in_element->local_M[76] = 0.166666666666667*J_bar12*J_bar23*det_J*rho;
+	in_element->local_M[77] = 0.166666666666667*J_bar12*J_bar33*det_J*rho;
+	in_element->local_M[78] = 0.166666666666667*det_J*(J_bar13*J_bar13*rho + J_bar23*J_bar23*rho + J_bar33*J_bar33*rho);
+	in_element->local_M[79] = 0.166666666666667*J_bar13*J_bar23*det_J*rho;
+	in_element->local_M[80] = 0.166666666666667*J_bar13*J_bar33*det_J*rho;
+	in_element->local_M[81] = 0.166666666666667*det_J*(J_bar13*J_star1*rho + J_bar23*J_star2*rho + J_bar33*J_star3*rho);
+	in_element->local_M[82] = 0.166666666666667*J_bar23*J_star1*det_J*rho;
+	in_element->local_M[83] = 0.166666666666667*J_bar33*J_star1*det_J*rho;
+	in_element->local_M[84] = 0.166666666666667*J_bar13*J_bar21*det_J*rho;
+	in_element->local_M[85] = 0.166666666666667*det_J*(J_bar11*J_bar13*rho + J_bar21*J_bar23*rho + J_bar31*J_bar33*rho);
+	in_element->local_M[86] = 0.166666666666667*J_bar21*J_bar33*det_J*rho;
+	in_element->local_M[87] = 0.166666666666667*J_bar13*J_bar22*det_J*rho;
+	in_element->local_M[88] = 0.166666666666667*det_J*(J_bar12*J_bar13*rho + J_bar22*J_bar23*rho + J_bar32*J_bar33*rho);
+	in_element->local_M[89] = 0.166666666666667*J_bar22*J_bar33*det_J*rho;
+	in_element->local_M[90] = 0.166666666666667*J_bar13*J_bar23*det_J*rho;
+	in_element->local_M[91] = 0.166666666666667*det_J*(J_bar13*J_bar13*rho + J_bar23*J_bar23*rho + J_bar33*J_bar33*rho);
+	in_element->local_M[92] = 0.166666666666667*J_bar23*J_bar33*det_J*rho;
+	in_element->local_M[93] = 0.166666666666667*J_bar13*J_star2*det_J*rho;
+	in_element->local_M[94] = 0.166666666666667*det_J*(J_bar13*J_star1*rho + J_bar23*J_star2*rho + J_bar33*J_star3*rho);
+	in_element->local_M[95] = 0.166666666666667*J_bar33*J_star2*det_J*rho;
+	in_element->local_M[96] = 0.166666666666667*J_bar13*J_bar31*det_J*rho;
+	in_element->local_M[97] = 0.166666666666667*J_bar23*J_bar31*det_J*rho;
+	in_element->local_M[98] = 0.166666666666667*det_J*(J_bar11*J_bar13*rho + J_bar21*J_bar23*rho + J_bar31*J_bar33*rho);
+	in_element->local_M[99] = 0.166666666666667*J_bar13*J_bar32*det_J*rho;
+	in_element->local_M[100] = 0.166666666666667*J_bar23*J_bar32*det_J*rho;
+	in_element->local_M[101] = 0.166666666666667*det_J*(J_bar12*J_bar13*rho + J_bar22*J_bar23*rho + J_bar32*J_bar33*rho);
+	in_element->local_M[102] = 0.166666666666667*J_bar13*J_bar33*det_J*rho;
+	in_element->local_M[103] = 0.166666666666667*J_bar23*J_bar33*det_J*rho;
+	in_element->local_M[104] = 0.166666666666667*det_J*(J_bar13*J_bar13*rho + J_bar23*J_bar23*rho + J_bar33*J_bar33*rho);
+	in_element->local_M[105] = 0.166666666666667*J_bar13*J_star3*det_J*rho;
+	in_element->local_M[106] = 0.166666666666667*J_bar23*J_star3*det_J*rho;
+	in_element->local_M[107] = 0.166666666666667*det_J*(J_bar13*J_star1*rho + J_bar23*J_star2*rho + J_bar33*J_star3*rho);
+	in_element->local_M[108] = 0.166666666666667*det_J*(J_bar11*J_star1*rho + J_bar21*J_star2*rho + J_bar31*J_star3*rho);
+	in_element->local_M[109] = 0.166666666666667*J_bar11*J_star2*det_J*rho;
+	in_element->local_M[110] = 0.166666666666667*J_bar11*J_star3*det_J*rho;
+	in_element->local_M[111] = 0.166666666666667*det_J*(J_bar12*J_star1*rho + J_bar22*J_star2*rho + J_bar32*J_star3*rho);
+	in_element->local_M[112] = 0.166666666666667*J_bar12*J_star2*det_J*rho;
+	in_element->local_M[113] = 0.166666666666667*J_bar12*J_star3*det_J*rho;
+	in_element->local_M[114] = 0.166666666666667*det_J*(J_bar13*J_star1*rho + J_bar23*J_star2*rho + J_bar33*J_star3*rho);
+	in_element->local_M[115] = 0.166666666666667*J_bar13*J_star2*det_J*rho;
+	in_element->local_M[116] = 0.166666666666667*J_bar13*J_star3*det_J*rho;
+	in_element->local_M[117] = 0.166666666666667*det_J*(J_star1*J_star1*rho + J_star2*J_star2*rho + J_star3*J_star3*rho);
+	in_element->local_M[118] = 0.166666666666667*J_star1*J_star2*det_J*rho;
+	in_element->local_M[119] = 0.166666666666667*J_star1*J_star3*det_J*rho;
+	in_element->local_M[120] = 0.166666666666667*J_bar21*J_star1*det_J*rho;
+	in_element->local_M[121] = 0.166666666666667*det_J*(J_bar11*J_star1*rho + J_bar21*J_star2*rho + J_bar31*J_star3*rho);
+	in_element->local_M[122] = 0.166666666666667*J_bar21*J_star3*det_J*rho;
+	in_element->local_M[123] = 0.166666666666667*J_bar22*J_star1*det_J*rho;
+	in_element->local_M[124] = 0.166666666666667*det_J*(J_bar12*J_star1*rho + J_bar22*J_star2*rho + J_bar32*J_star3*rho);
+	in_element->local_M[125] = 0.166666666666667*J_bar22*J_star3*det_J*rho;
+	in_element->local_M[126] = 0.166666666666667*J_bar23*J_star1*det_J*rho;
+	in_element->local_M[127] = 0.166666666666667*det_J*(J_bar13*J_star1*rho + J_bar23*J_star2*rho + J_bar33*J_star3*rho);
+	in_element->local_M[128] = 0.166666666666667*J_bar23*J_star3*det_J*rho;
+	in_element->local_M[129] = 0.166666666666667*J_star1*J_star2*det_J*rho;
+	in_element->local_M[130] = 0.166666666666667*det_J*(J_star1*J_star1*rho + J_star2*J_star2*rho + J_star3*J_star3*rho);
+	in_element->local_M[131] = 0.166666666666667*J_star2*J_star3*det_J*rho;
+	in_element->local_M[132] = 0.166666666666667*J_bar31*J_star1*det_J*rho;
+	in_element->local_M[133] = 0.166666666666667*J_bar31*J_star2*det_J*rho;
+	in_element->local_M[134] = 0.166666666666667*det_J*(J_bar11*J_star1*rho + J_bar21*J_star2*rho + J_bar31*J_star3*rho);
+	in_element->local_M[135] = 0.166666666666667*J_bar32*J_star1*det_J*rho;
+	in_element->local_M[136] = 0.166666666666667*J_bar32*J_star2*det_J*rho;
+	in_element->local_M[137] = 0.166666666666667*det_J*(J_bar12*J_star1*rho + J_bar22*J_star2*rho + J_bar32*J_star3*rho);
+	in_element->local_M[138] = 0.166666666666667*J_bar33*J_star1*det_J*rho;
+	in_element->local_M[139] = 0.166666666666667*J_bar33*J_star2*det_J*rho;
+	in_element->local_M[140] = 0.166666666666667*det_J*(J_bar13*J_star1*rho + J_bar23*J_star2*rho + J_bar33*J_star3*rho);
+	in_element->local_M[141] = 0.166666666666667*J_star1*J_star3*det_J*rho;
+	in_element->local_M[142] = 0.166666666666667*J_star2*J_star3*det_J*rho;
+	in_element->local_M[143] = 0.166666666666667*det_J*(J_star1*J_star1*rho + J_star2*J_star2*rho + J_star3*J_star3*rho);
 	//return (x14*(y24*z34 - y34*z24) - y14*(x24*z34 - z24 * x34) + z14*(x24*y34 - y24*x34));
 }
 
-__global__ void gpu_make_K(	AFEM::element *in_vec,	int numElem,	int numNodes, 	float *K_d	)
+
+
+__global__ void gpu_make_K(	AFEM::element *in_vec,AFEM::position_3D *in_pos,	int numElem,	int numNodes, 	float *K_d	,float *M_d)
 {
 
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
 	if (x < numElem){
-		find_Jacobian_and_localK(&in_vec[x]);
-
+		find_Jacobian_localK_localM(&in_vec[x], in_pos);
+		//find_localM(&in_vec[x]);
 		//K_d[x] = (in_vec[x]).local_K[0];
 		int DOF[12];
 		int counter = 0;
@@ -245,6 +556,7 @@ __global__ void gpu_make_K(	AFEM::element *in_vec,	int numElem,	int numNodes, 	f
 
 				//d_A_dense[IDX2C(DOF[c], DOF[r], 3000)] = d_A_dense[IDX2C(DOF[c], DOF[r], 3000)] + E_vector[offset * 144 + c*12+r];
 				atomicAdda(&(K_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]),in_vec[x].local_K[c*12+r]);
+				atomicAdda(&(M_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]), in_vec[x].local_M[c * 12 + r]);
 				//IDX2C(DOF[c], DOF[r], 3000)
 				//K[IDX2C(DOF[r], DOF[c], numP*dim)] = K[IDX2C(DOF[r], DOF[c], numP*dim)] + E[k][r][c];
 			}
@@ -256,21 +568,30 @@ __global__ void gpu_make_K(	AFEM::element *in_vec,	int numElem,	int numNodes, 	f
 
 
 //Resets the K matrix to zero
-__global__ void reset_K_GPU(float *K_d, int numNodes, int dim){
+__global__ void reset_K_GPU(float *K_d,float *M_d, int numNodes, int dim){
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
 
 	if (x < numNodes*dim*numNodes*dim){
 		K_d[x] = 0;
+		M_d[x] = 0;
 	}
 }
+__global__ void update_position_vector(AFEM::position_3D *pos_in, float *u_dot_in, float dt,int numNodes, int dim){
+	int x = threadIdx.x + blockIdx.x *blockDim.x;
 
-__global__ void update_Geo_CUDA(AFEM::element *in_vec, float *x_solution,int numElem){
+	if (x < numNodes){
+		pos_in[x].x += dt*u_dot_in[pos_in[x].displacement_index[0]];
+		pos_in[x].y += dt*u_dot_in[pos_in[x].displacement_index[1]];
+		pos_in[x].z += dt*u_dot_in[pos_in[x].displacement_index[2]];
+	}
+}
+__global__ void update_Geo_CUDA(AFEM::element *in_vec, AFEM::position_3D *pos_in,float *x_solution,int numElem){
 
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
 	if (x < numElem){
 		for (int npe = 0; npe < 4; npe++){
 			//dummy_node = nodesInElem[nodesinelemX(npe, offset, 4)]; // The row of the matrix we looking at will be k_th element and npe (nodes per element) 	
-			for (int dof = 0; dof < 3; dof++){
+			/*for (int dof = 0; dof < 3; dof++){
 				if (dof == 0){
 					in_vec[x].position_info[npe].x += x_solution[in_vec[x].position_info[npe].displacement_index[dof]];
 				}
@@ -280,7 +601,9 @@ __global__ void update_Geo_CUDA(AFEM::element *in_vec, float *x_solution,int num
 				else if (dof == 2){
 					in_vec[x].position_info[npe].z += x_solution[in_vec[x].position_info[npe].displacement_index[dof]];
 				}
-			}
+			}*/
+
+			//in_vec[npe].position_info
 		}
 
 	}
@@ -288,9 +611,103 @@ __global__ void update_Geo_CUDA(AFEM::element *in_vec, float *x_solution,int num
 
 }
 
+//Change the K_d matrix and the f matrix so that they have the necessary BC
+
+__global__ void gpu_stationary_BC(float *K_d,float *f_d, AFEM::stationary *stat_d, int numstationary,int numnodes,int dim){
+	int x = threadIdx.x + blockIdx.x * blockDim.x;
+
+	if (x < numstationary){
+
+		
+
+		for (int i = 0; i < 3; i++){
+
+			for (int n = 0; n < numnodes*dim; n++){
+				K_d[IDX2C(n, stat_d[x].displacement_index[i], 3 * (numnodes))] = 0.0f;
+			}
+			K_d[IDX2C(stat_d[x].displacement_index[i], stat_d[x].displacement_index[i], 3 * (numnodes))] = 1.0f;
+			f_d[stat_d[x].displacement_index[i]] = 0.0f;
+		}
+		
+	}
+}
+
+
+__global__ void gpu_make_f(float *f_d, int numnodes, AFEM::position_3D *pos_info,int dim){
+	
+	int x = threadIdx.x + blockIdx.x * blockDim.x;
+	if (x < numnodes*dim){
+		f_d[pos_info[x].displacement_index[1]] += 0.00000000001;
+	}
+}
+
+__global__ void find_dx(float *dx_in, AFEM::position_3D *initial_pos, AFEM::position_3D *new_pos,int numnodes){
+	int x = threadIdx.x + blockIdx.x *blockDim.x;
+
+	if (x < numnodes){
+		
+		dx_in[new_pos[x].displacement_index[0]] = new_pos[x].x - initial_pos[x].x;
+		dx_in[new_pos[x].displacement_index[1]] = new_pos[x].y - initial_pos[x].y;
+		dx_in[new_pos[x].displacement_index[2]] = new_pos[x].z - initial_pos[x].z;
+
+	}
+}
+
+//find the vector value of dt*f_ext - dt*K*(u(t)-u(0))+dt*dt K*u_dot(t)
+//In the code I have set:
+//a= dt*f_ext
+//b= dt*K*(u(t)-u(0))
+//c= dt*dt K*u_dot(t)
+//so RHS = a-b+c
+//And LHS: = M-dt*dt* K
+__global__ void find_A_b_dynamic(float *K_in, float *dx_in,float *u_dot, float *f_ext,float *RHS,float *M_in,float *LHS,int num_nodes, float dt, int dim){
+	int x = threadIdx.x + blockIdx.x *blockDim.x;
+	float a, b, c;
+	if (x < num_nodes*dim){
+		b = c = 0;
+		a = f_ext[x];
+		for (int i = 0; i < num_nodes*dim; i++){
+			
+			b =b+ K_in[IDX2C(i, x, 3 * (num_nodes))] * dx_in[i];
+			c = c + K_in[IDX2C(i, x, 3 * (num_nodes))] * u_dot[i];
+
+			LHS[IDX2C(i, x, 3 * (num_nodes))] = M_in[IDX2C(i, x, 3 * (num_nodes))]-dt*dt*K_in[IDX2C(i, x, 3 * (num_nodes))];
+		}
+		a *= dt;
+		b *= dt;
+		c *= dt*dt;
+
+		RHS[x] = a - b + c;
+		//RHS[x] = f_ext[x];
+	}
+}
+
+
+//updates the u_dot vector, so u_dot(t+dt) = u_dot(t)+du
+__global__ void update_u_dot_vector(float *u_dot_pre, float *u_dot_sln,int numNodes,int dim){
+	int x = threadIdx.x + blockIdx.x *blockDim.x;
+
+	if (x < numNodes*dim){
+		u_dot_pre[x] = u_dot_pre[x]+u_dot_sln[x];
+	}
+
+	
+}
+//
+//__global__ void find_A_dynamic(float *K_in, float *M_in, float *LHS, int numnodes, int dim){
+//	int x = threadIdx.x + blockIdx.x *blockDim.x;
+//
+//	if (x < numnodes*dim){
+//		for (int i = 0; i < numnodes*dim; i++){
+//			LHS
+//		}
+//
+//	}
+//}
+
 
 //Allocates the cpu and gpu memory, and then copy necessary data to them
-void cuda_tools::allocate_copy_CUDA_geometry_data(AFEM::element *in_array_elem,int *in_array_stationary,int numstationary, int num_elem, int num_nodes, int dim){
+void cuda_tools::allocate_copy_CUDA_geometry_data(AFEM::element *in_array_elem,AFEM::stationary *in_array_stationary,AFEM::position_3D *in_array_position,int numstationary, int num_elem, int num_nodes, int dim){
 	//cpu allocation of memeory
 	//K matrix
 	K_h = (float*)malloc( sizeof(*K_h)*dim*num_nodes*dim*num_nodes);
@@ -298,31 +715,60 @@ void cuda_tools::allocate_copy_CUDA_geometry_data(AFEM::element *in_array_elem,i
 
 	//cuda allocation of memory
 	elem_array_h = in_array_elem;
+	position_array_h = in_array_position;
 	cudaMalloc((void**)&elem_array_d, sizeof(AFEM::element) *num_elem); //element array
+	//cudaMalloc((void**)&element_array_initial_d, sizeof(AFEM::element) *num_elem); //initial orientation of the element array
 	cudaMalloc((void**)&K_d, sizeof(*K_d)*dim*num_nodes*dim*num_nodes); //final global K matrix container
+	cudaMalloc((void**)&M_d, sizeof(*M_d)*dim*num_nodes*dim*num_nodes); //Global mass M matrix container
 	cudaMalloc((void**)&stationary_array_d, sizeof(*stationary_array_d)*numstationary); //stationary vector
+	cudaMalloc((void**)&f_d, sizeof(*f_d)*dim*num_nodes); //force vector 
+	cudaMalloc((void**)&position_array_d, sizeof(AFEM::position_3D)*num_nodes);// the position vector with indicy information
+	cudaMalloc((void**)&position_array_initial_d, sizeof(AFEM::position_3D)*num_nodes);//initial position vector with indice 
+	cudaMalloc((void**)&dx_d, sizeof(*dx_d)*num_nodes*dim); // vector for u(t)-u(0)
+	cudaMalloc((void**)&Kdx_d, sizeof(*Kdx_d)*num_nodes*dim); //result vector of Kdx_d
+	cudaMalloc((void**)&u_dot_d, sizeof(*u_dot_d)*num_nodes*dim); //velocity of the displacement field
+	cudaMalloc((void**)&RHS, sizeof(*RHS)*num_nodes*dim); // allocating the vector for the RHS
+	cudaMalloc((void**)&LHS, sizeof(*LHS)*num_nodes*dim*num_nodes*dim);
 
 	//cuda copy of memory from host to device
 	cudaMemcpy(elem_array_d, in_array_elem, sizeof(AFEM::element) *num_elem, cudaMemcpyHostToDevice);
-	cudaMemcpy(stationary_array_d, in_array_stationary, sizeof(*stationary_array_d)*numstationary, cudaMemcpyHostToDevice);
-	//initialize the vector K_d to zero
-	cudaMemset(K_d, 0, sizeof(*K_d)*dim*num_nodes*dim*num_nodes); 
+	//cudaMemcpy(element_array_initial_d, in_array_elem, sizeof(AFEM::element) *num_elem, cudaMemcpyHostToDevice);
+	cudaMemcpy(stationary_array_d, in_array_stationary, sizeof(AFEM::stationary)*numstationary, cudaMemcpyHostToDevice);
+	cudaMemcpy(position_array_d, in_array_position, sizeof(AFEM::position_3D)*num_nodes, cudaMemcpyHostToDevice);
+	cudaMemcpy(position_array_initial_d, in_array_position, sizeof(AFEM::position_3D)*num_nodes, cudaMemcpyHostToDevice);
+	//initialize the global matricies to zero
+	cudaMemset(K_d, 0.0, sizeof(*K_d)*dim*num_nodes*dim*num_nodes); 
+	cudaMemset(M_d, 0.0, sizeof(*M_d)*dim*num_nodes*dim*num_nodes);
+	cudaMemset(LHS, 0.0, sizeof(*LHS)*dim*num_nodes*dim*num_nodes);
+
+
+	//initialize the force to be 0
+	cudaMemset(f_d, 0.0, sizeof(*f_d)*dim*num_nodes);
+	
+	//initialize x(t)-x(0) to be 0
+	cudaMemset(dx_d, 0.0, sizeof(*dx_d)*dim*num_nodes);
+
+	//initialize u_dot to be 0
+	cudaMemset(u_dot_d, 0.0, sizeof(*u_dot_d)*dim*num_nodes);
+	
 	
 
 
 	//Allocating num nodes and num elem information into the class
 	Nnodes = num_nodes;
 	Nelems = num_elem;
-	
+	Nstationary = numstationary;
 }
 
 
-void cuda_tools::copy_data_from_cuda(AFEM::element *elem_array_ptr){
+void cuda_tools::copy_data_from_cuda(AFEM::element *elem_array_ptr,AFEM::position_3D *pos_array_ptr){
 	cudaMemcpy(elem_array_h,elem_array_d, sizeof(AFEM::element) *Nelems, cudaMemcpyDeviceToHost);
+	cudaMemcpy(position_array_h, position_array_d, sizeof(AFEM::position_3D) *Nnodes, cudaMemcpyDeviceToHost);
 
-	std::cout << elem_array_h[0].position_info[0].x << std::endl;
+	//std::cout << elem_array_h[0].position_info[0].x << std::endl;
 
 	elem_array_ptr = elem_array_h;
+	pos_array_ptr = position_array_h;
 
 }
 
@@ -330,14 +776,14 @@ void cuda_tools::copy_data_from_cuda(AFEM::element *elem_array_ptr){
 void cuda_tools::make_K(int num_elem,int num_nodes){
 	int blocks, threads;
 	if (num_elem <= 256){
-		blocks = 16;
-		threads = 16;
+		blocks = 1;
+		threads = num_elem;
 	}
 	else {
 		blocks = (num_elem + 256) / 256;
 		threads = 256;
 	}
-	gpu_make_K << <blocks, threads >> > (elem_array_d, num_elem,num_nodes, K_d);
+	gpu_make_K << <blocks, threads >> > (elem_array_d, position_array_d,num_elem,num_nodes, K_d,M_d);
 	
 	//cudaMemset(K_d, 0, sizeof(*K_d)*dim*num_nodes*dim*num_nodes); //initialize the vector K_d to zero
 
@@ -347,38 +793,112 @@ void cuda_tools::make_K(int num_elem,int num_nodes){
 }
 
 
-void cuda_tools::stationary_BC(){
+void cuda_tools::make_f( int num_nodes,  int dim){
+	int blocks, threads;
+	if (num_nodes <= 256){
+		blocks = 1;
+		threads = num_nodes;
+	}
+	else {
+		blocks = (num_nodes + 256) / 256;
+		threads = 256;
+	}
 
+	gpu_make_f << <blocks, threads >> >( f_d, num_nodes,position_array_d, dim);
 
+}
+
+void cuda_tools::stationary_BC(int num_elem, int num_nodes,int num_stationary,int dim){
+	int blocks, threads;
+	if (num_stationary <= 256){
+		blocks = 1;
+		threads = num_stationary;
+	}
+	else {
+		blocks = (num_stationary + 256) / 256;
+		threads = 256;
+	}
+	gpu_stationary_BC << <blocks, threads >> >(LHS,RHS, stationary_array_d, num_stationary,num_nodes,dim);
 
 }
 void cuda_tools::reset_K(int num_elem,int num_nodes){
 	int blocks, threads;
 	if (num_elem <= 256){
-		blocks = 16;
-		threads = 16;
+		blocks = 1;
+		threads = num_elem;
 	}
 	else {
 		blocks = (num_elem +256) / 256;
 		threads = 256;
 	}
-	reset_K_GPU << <blocks, threads >> >(K_d, num_nodes, 3);
+	reset_K_GPU << <blocks, threads >> >(K_d,M_d, num_nodes, 3);
 }
 
 
-void cuda_tools::update_geometry(float *u_soln){
-	int blocks, threads;
+void cuda_tools::update_geometry(float *u_dot_sln){
+	int blocks_element, threads_element;
 	if (Nelems <= 256){
-		blocks = 16;
-		threads = 16;
+		blocks_element = 1;
+		threads_element = Nelems;
 	}
 	else {
-		blocks = (Nelems + 256) / 256;
-		threads = 256;
+		blocks_element = (Nelems + 256) / 256;
+		threads_element = 256;
 	}
-	update_Geo_CUDA << <blocks, threads >> >(elem_array_d, u_soln, Nelems);
+	int blocks_nodes, threads_nodes;
+	if (Nelems <= 256){
+		blocks_nodes = 1;
+		threads_nodes = Nelems;
+	}
+	else {
+		blocks_nodes = (Nelems + 256) / 256;
+		threads_nodes = 256;
+	}
+	update_u_dot_vector << <blocks_nodes, threads_nodes >> >(u_dot_d, u_dot_sln, Nnodes, 3);
+	float *h_y = (float *)malloc(Ncols* sizeof(float));
+	cudaMemcpy(h_y, u_dot_sln, Ncols* sizeof(float), cudaMemcpyDeviceToHost);
+
+	for (int i = 1; i < 12; i++){
+		std::cout << h_y[i] << " ";
+	}
+	free(h_y);
+	std::cout << std::endl;
+	update_position_vector << <blocks_nodes, threads_nodes >> >(position_array_d, u_dot_d, dt, Nnodes, 3);
+	//update_Geo_CUDA << <blocks_element, threads_element >> >(elem_array_d, position_array_d,u_soln, Nelems);
+}
+void cuda_tools::dynamic(){
+	int blocks_nodes, threads_nodes;
+	if (Nelems <= 256){
+		blocks_nodes = 1;
+		threads_nodes = Nelems;
+	}
+	else {
+		blocks_nodes = (Nelems + 256) / 256;
+		threads_nodes = 256;
+	}
+	//float *K_in, float *dx_in, float *u_dot, float *f_ext, float *RHS
+	find_dx << <blocks_nodes, threads_nodes >> >(dx_d, position_array_initial_d, position_array_d, Nnodes);
+
+
+	
+	find_A_b_dynamic << <blocks_nodes, threads_nodes >> >(K_d, dx_d, u_dot_d, f_d,RHS, M_d, LHS,Nnodes, dt, 3);
+
+	stationary_BC(Nelems, Nnodes, Nstationary, 3);
+
+
+	
+
+
 }
 
+
+
+void cuda_tools::set_RHS_LHS(){
+
+
+	/*LHS = M_d;
+	RHS = Kdx_d;*/
+}
 cuda_tools::cuda_tools(){
 	std::cout << "CUDA solver initialized " << std::endl;
 }

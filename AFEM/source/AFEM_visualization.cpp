@@ -220,12 +220,12 @@ void InitGL() {
 	// get ticks per second
 	QueryPerformanceFrequency(&frequency);
 
-	// start timer
-	QueryPerformanceCounter(&t1);
-	glEnable(GL_DEPTH_TEST);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glPointSize(5);
-	wglSwapIntervalEXT(0);
+// start timer
+QueryPerformanceCounter(&t1);
+glEnable(GL_DEPTH_TEST);
+glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//glPointSize(10);
+wglSwapIntervalEXT(0);
 
 
 
@@ -233,21 +233,21 @@ void InitGL() {
 }
 
 void OnReshape(int nw, int nh) {
-	glViewport(0,0,nw, nh);
+	glViewport(0, 0, nw, nh);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(zoom, (GLfloat)nw / (GLfloat)nh, 0.1f, 100.0f);
 
-	glGetIntegerv(GL_VIEWPORT, viewport); 
+	glGetIntegerv(GL_VIEWPORT, viewport);
 	glGetDoublev(GL_PROJECTION_MATRIX, P);
 
 	glMatrixMode(GL_MODELVIEW);
-} 
+}
 
-void OnRender() {		
-	size_t i=0;
-	float newTime = (float) glutGet(GLUT_ELAPSED_TIME);
-	frameTime = newTime-currentTime;
+void OnRender() {
+	size_t i = 0;
+	float newTime = (float)glutGet(GLUT_ELAPSED_TIME);
+	frameTime = newTime - currentTime;
 	currentTime = newTime;
 	//accumulator += frameTime;
 
@@ -255,25 +255,26 @@ void OnRender() {
 	QueryPerformanceCounter(&t2);
 	// compute and print the elapsed time in millisec
 	frameTimeQP = (t2.QuadPart - t1.QuadPart) * 1000.0f / frequency.QuadPart;
-	t1=t2;
+	t1 = t2;
 	accumulator += frameTimeQP;
 
 	++totalFrames;
-	if((newTime-startTime)>1000)
-	{		
-		float elapsedTime = (newTime-startTime);
-		fps = (totalFrames/ elapsedTime)*1000 ;
+	if ((newTime - startTime) > 1000)
+	{
+		float elapsedTime = (newTime - startTime);
+		fps = (totalFrames / elapsedTime) * 1000;
 		startTime = newTime;
-		totalFrames=0;
+		totalFrames = 0;
 	}
 
-	sprintf_s(info, "FPS: %3.2f, Frame time (GLUT): %3.4f msecs, Frame time (QP): %3.3f, Stiffness Warp: %s", fps, frameTime, frameTimeQP, bUseStiffnessWarping?"On":"Off");
+	sprintf_s(info, "FPS: %3.2f, Frame time (GLUT): %3.4f msecs, Frame time (QP): %3.3f, Stiffness Warp: %s", fps, frameTime, frameTimeQP, bUseStiffnessWarping ? "On" : "Off");
 	glutSetWindowTitle(info);
-	glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.2f, 1.0f, 1.0f, 0.0f);
 	glLoadIdentity();
-	glTranslatef(0,0,dist);
-	glRotatef(rX,1,0,0);
-	glRotatef(rY,0,1,0);
+	glTranslatef(0, 0, dist);
+	glRotatef(rX, 1, 0, 0);
+	glRotatef(rY, 0, 1, 0);
 
 	glGetDoublev(GL_MODELVIEW_MATRIX, MV);
 	viewDir.x = (float)-MV[2];
@@ -282,23 +283,26 @@ void OnRender() {
 	Right = glm::cross(viewDir, Up);
 
 
-	
+
 	global_ptr->run();
-	
+
 	//draw grid
 	DrawGrid();
- 
-	glColor3f(0.75,0.75,0.75);	
+
+	glColor3f(0.75, 0.75, 0.75);
 	glBegin(GL_LINES);
 
-	for (int i = 0; i<global_ptr->element_vec.size(); i++) {
-		
-		AFEM::position_3D p1= global_ptr->element_array[i].position_info[0];
-		AFEM::position_3D p2 = global_ptr->element_array[i].position_info[1];
-		AFEM::position_3D p3 = global_ptr->element_array[i].position_info[2];
-		AFEM::position_3D p4 = global_ptr->element_array[i].position_info[3];
+	for (int i = 0; i < global_ptr->element_vec.size(); i++) {
+		/*n1 = in_pos[in_element->nodes_in_elem[0]];
+		n2 = in_pos[in_element->nodes_in_elem[1]];
+		n3 = in_pos[in_element->nodes_in_elem[2]];
+		n4 = in_pos[in_element->nodes_in_elem[3]];*/
+		AFEM::position_3D p1 = global_ptr->pos_array[global_ptr->element_array[i].nodes_in_elem[0]];
+		AFEM::position_3D p2 = global_ptr->pos_array[global_ptr->element_array[i].nodes_in_elem[1]];
+		AFEM::position_3D p3 = global_ptr->pos_array[global_ptr->element_array[i].nodes_in_elem[2]];
+		AFEM::position_3D p4 = global_ptr->pos_array[global_ptr->element_array[i].nodes_in_elem[3]];
 
-		
+
 
 		glVertex3f(p4.x, p4.y, p4.z);		glVertex3f(p1.x, p1.y, p1.z);
 		glVertex3f(p4.x, p4.y, p4.z);		glVertex3f(p2.x, p2.y, p2.z);
@@ -313,25 +317,78 @@ void OnRender() {
 
 
 	//draw points	
+	
+	glEnable(GL_POINT_SMOOTH);
+	glPointSize((GLfloat)10.0);
 	glBegin(GL_POINTS);
 
+	
 
-
-	for (int i = 0; i<global_ptr->element_vec.size(); i++) {
+	for (int i = 0; i < global_ptr->element_vec.size(); i++) {
+	
 		glColor3f((float)!0, (float)1, (float)0);
-		AFEM::position_3D p1 = global_ptr->element_array[i].position_info[0];
-		AFEM::position_3D p2 = global_ptr->element_array[i].position_info[1];
-		AFEM::position_3D p3 = global_ptr->element_array[i].position_info[2];
-		AFEM::position_3D p4 = global_ptr->element_array[i].position_info[3];
 
 
+
+		AFEM::position_3D p1 = global_ptr->pos_array[global_ptr->element_array[i].nodes_in_elem[0]];
+		AFEM::position_3D p2 = global_ptr->pos_array[global_ptr->element_array[i].nodes_in_elem[1]];
+		AFEM::position_3D p3 = global_ptr->pos_array[global_ptr->element_array[i].nodes_in_elem[2]];
+		AFEM::position_3D p4 = global_ptr->pos_array[global_ptr->element_array[i].nodes_in_elem[3]];
+
+
+		
 
 		glVertex3f(p4.x, p4.y, p4.z);		
 		glVertex3f(p1.x, p1.y, p1.z);
 		glVertex3f(p3.x, p3.y, p3.z);
 		glVertex3f(p2.x, p2.y, p2.z);
+		
 
 	}
+
+
+
+
+	glEnd();
+
+	glPointSize((GLfloat)20.0);
+	//draw stat points
+	glBegin(GL_POINTS);
+
+	
+
+	for (int i = 0; i < global_ptr->element_vec.size(); i++) {
+		glColor3f((float)0.4, (float)1.0, (float)0.5);
+		for (int j = 0; j < global_ptr->stationary_vec.size(); j++){
+			for (int k = 0; k < 4; k++){
+				if (global_ptr->stationary_array[j].node_number == global_ptr->element_array[i].nodes_in_elem[k]){
+					glVertex3f(global_ptr->element_array[i].position_info[k].x, global_ptr->element_array[i].position_info[k].y, global_ptr->element_array[i].position_info[k].z);
+				}
+			}
+
+		}
+		
+
+
+
+
+		//AFEM::position_3D p1 = global_ptr->element_array[i].position_info[0];
+		//AFEM::position_3D p2 = global_ptr->element_array[i].position_info[1];
+		//AFEM::position_3D p3 = global_ptr->element_array[i].position_info[2];
+		//AFEM::position_3D p4 = global_ptr->element_array[i].position_info[3];
+
+
+
+		//glVertex3f(p4.x, p4.y, p4.z);
+		//glVertex3f(p1.x, p1.y, p1.z);
+		//glVertex3f(p3.x, p3.y, p3.z);
+		//glVertex3f(p2.x, p2.y, p2.z);
+
+	}
+
+
+
+
 	glEnd();
 
 	glutSwapBuffers(); 

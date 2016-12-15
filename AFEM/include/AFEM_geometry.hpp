@@ -52,17 +52,30 @@ namespace AFEM{
 		int nodes_in_elem[4]; // The node numbers that is in the geometry (currently supports only tetra elemnts)
 		//Make change so that we do not use t
 #if 1
-
+		float volume;
 		position_3D position_info[4];
 
 #endif // 0
 
 		//For used during simulation
-		double local_K[12 * 12];
+		float local_K[12 * 12];
 
-		double Jacobian;
+		//For used during simulation
+		float local_M[12 * 12];
+
+		//Jacobian of the element
+		float Jacobian;
+
+		//Density of the elemnt
+		float density;
 
 	
+	};
+
+	//For stationary BC we only need its dof indices
+	struct stationary{
+		int node_number;
+		int displacement_index[3];
 	};
 	class Geometry;
 	
@@ -79,7 +92,7 @@ class AFEM::Geometry{
 
 
 	//Vector of stationary nodes
-	std::vector<int> stationary_vector;
+	std::vector<stationary> stationary_vector;
 
 	//Dimensions
 	dimension dim;
@@ -123,7 +136,7 @@ public:
 	std::vector<element> return_element_vector(){ return element_vector; }
 
 	//return stationary
-	std::vector<int> return_stationary_vector(){ return stationary_vector; }
+	std::vector<stationary> return_stationary_vector(){ return stationary_vector; }
 
 };
 

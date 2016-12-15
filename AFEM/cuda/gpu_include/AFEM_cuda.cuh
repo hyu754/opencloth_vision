@@ -26,28 +26,56 @@ class cuda_tools{
 	//Device memory pointer for the element array
 	AFEM::element *elem_array_d;
 
+	
+
 	//Host memory pointer for the element array
 	AFEM::element *elem_array_h;
 	
-	//Host and device memory for stationary vector
-	int *stationary_array_d;
-	int *stationary_array_h;
+	//device pointer for stationary vector
+	AFEM::stationary *stationary_array_d;
 
-	//Device memory pointer for the global K matrix
+
+
+	//Device and host pointer for position vector
+	AFEM::position_3D *position_array_d;
+	AFEM::position_3D *position_array_h;
+	//Device pointer for the initial position vector
+	AFEM::position_3D *position_array_initial_d;
+	//int *stationary_array_h;
+
+	//Device and host memory pointer for the global K matrix
 	//This matrix will be numnodes*3*numNodes*3 = 9numNodes^2 
-	float *K_d;
+	float *K_d,*K_h;
 
+	//Device and host memory pointer for global M matrix
+	float *M_d, *M_h;
 
-	//Corresponding host memory pointers
-	float *K_h;
+	
+
+	//Device pointer for f vector
+	float *f_d;
+
+	//Device pointer for the difference in the nodal positions ie. (x(t)-x(0))
+	float *dx_d;
+
+	//Device pointer for the matrix multiplication result K*dx
+	float *Kdx_d;
+
+	//Device pointer velocity of displacements field
+	float *u_dot_d;
 
 	//for cuda solver
+	//RHS and LHS pointers for cholesky solver
+	float *RHS, *LHS;
 
+
+	//dt for dynamic
+	float dt = 1/600.0;
 	//cuda allocations
 	//----------------------------------------------------------------------------------
 	int Nrows;                        // --- Number of rows
 	int Ncols;                        // --- Number of columns
-	int Nelems,Nnodes;
+	int Nelems,Nnodes,Nstationary;
 	int N;
 	double duration_K;
 	cusparseHandle_t handle;
@@ -85,33 +113,45 @@ public:
 	//			numElem = number of elements	
 	//			numNodes = number of nodes
 	//			dim = dimension
-	void allocate_copy_CUDA_geometry_data(AFEM::element *, int *in_array_stationary, int numstationary,int num_elem, int num_nodes, int dim);
+	void allocate_copy_CUDA_geometry_data(AFEM::element *, AFEM::stationary *in_array_stationary, AFEM::position_3D *in_array_position, int numstationary, int num_elem, int num_nodes, int dim);
 
 	//Copy the data from the device memory to host
-	void copy_data_from_cuda(AFEM::element *elem_array_ptr);
+	void copy_data_from_cuda(AFEM::element *elem_array_ptr,AFEM::position_3D *pos_array_ptr);
 
 	
 	//A wrapper function that makes the K matrix on the GPU
 	void make_K(int num_elem,int num_nodes);
 
-
+	
 	//A wrapper function that resets the value of K (device) when for the next simulation
 	void reset_K(int num_elem,int num_nodes);
 
-	void stationary_BC(void);
+	//A wrapper function that modifies K and f w.r.t the BC
+	void stationary_BC(int num_elem, int num_nodes,int num_stationary,int dim);
 
-	
+	//Make f vector
+	void make_f(int num_nodes, int dim);
+
+
 	//place holder for host -> device
 	void host_to_device();
 
 
 
-	//QR solver
-	int QR_solver(void);
+
 
 	//before calling cholesky we need to initialize the gpu variables, only once needed.
 	void initialize_cholesky_variables(int numnodes,int numelem,int dim);
+
+	//Sets RHS and LHS memory pointers for cholesky solver
+	void set_RHS_LHS();
+
+
+	//Runs the cholesky solver.
 	void cholesky();
+
+	//Dynamic
+	void dynamic();
 
 	//after solving for cholesky, this function will update the geometry
 	void update_geometry( float *u_sln);
