@@ -6,7 +6,7 @@
 #include "AFEM_cuda.cuh"
 #include "cuda.h"
 #include <cuda_runtime.h>
-
+#include <fstream>
 
 
 #define nodesinelemX(node,el,nodesPerElem) (node + nodesPerElem*el) //the first entry is the element # the second entry would be the element number and the last one is the number of nodes/element
@@ -231,7 +231,7 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element,AFEM::posi
 
 	//in_element->volume = (1.0 / (2.0*det_J));
 
-	float E = 500000.0;
+	float E = 20000.0;
 	float nu = 0.44;
 
 
@@ -421,7 +421,7 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element,AFEM::posi
 	in_element->local_M[36] = 0.166666666666667*det_J*(J_bar11*J_bar12*rho + J_bar21*J_bar22*rho + J_bar31*J_bar32*rho);
 	in_element->local_M[37] = 0.166666666666667*J_bar11*J_bar22*det_J*rho;
 	in_element->local_M[38] = 0.166666666666667*J_bar11*J_bar32*det_J*rho;
-	in_element->local_M[39] = 0.166666666666667*det_J*(J_bar13*J_bar12*rho + J_bar22*J_bar22*rho + J_bar32*J_bar32*rho);
+	in_element->local_M[39] = 0.166666666666667*det_J*(J_bar12*J_bar12*rho + J_bar22*J_bar22*rho + J_bar32*J_bar32*rho);
 	in_element->local_M[40] = 0.166666666666667*J_bar12*J_bar22*det_J*rho;
 	in_element->local_M[41] = 0.166666666666667*J_bar12*J_bar32*det_J*rho;
 	in_element->local_M[42] = 0.166666666666667*det_J*(J_bar12*J_bar13*rho + J_bar22*J_bar23*rho + J_bar32*J_bar33*rho);
@@ -434,7 +434,7 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element,AFEM::posi
 	in_element->local_M[49] = 0.166666666666667*det_J*(J_bar11*J_bar12*rho + J_bar21*J_bar22*rho + J_bar31*J_bar32*rho);
 	in_element->local_M[50] = 0.166666666666667*J_bar21*J_bar32*det_J*rho;
 	in_element->local_M[51] = 0.166666666666667*J_bar12*J_bar22*det_J*rho;
-	in_element->local_M[52] = 0.166666666666667*det_J*(J_bar13*J_bar12*rho + J_bar22*J_bar22*rho + J_bar32*J_bar32*rho);
+	in_element->local_M[52] = 0.166666666666667*det_J*(J_bar12*J_bar12*rho + J_bar22*J_bar22*rho + J_bar32*J_bar32*rho);
 	in_element->local_M[53] = 0.166666666666667*J_bar22*J_bar32*det_J*rho;
 	in_element->local_M[54] = 0.166666666666667*J_bar12*J_bar23*det_J*rho;
 	in_element->local_M[55] = 0.166666666666667*det_J*(J_bar12*J_bar13*rho + J_bar22*J_bar23*rho + J_bar32*J_bar33*rho);
@@ -447,7 +447,7 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element,AFEM::posi
 	in_element->local_M[62] = 0.166666666666667*det_J*(J_bar11*J_bar12*rho + J_bar21*J_bar22*rho + J_bar31*J_bar32*rho);
 	in_element->local_M[63] = 0.166666666666667*J_bar12*J_bar32*det_J*rho;
 	in_element->local_M[64] = 0.166666666666667*J_bar22*J_bar32*det_J*rho;
-	in_element->local_M[65] = 0.166666666666667*det_J*(J_bar13*J_bar12*rho + J_bar22*J_bar22*rho + J_bar32*J_bar32*rho);
+	in_element->local_M[65] = 0.166666666666667*det_J*(J_bar12*J_bar12*rho + J_bar22*J_bar22*rho + J_bar32*J_bar32*rho);
 	in_element->local_M[66] = 0.166666666666667*J_bar12*J_bar33*det_J*rho;
 	in_element->local_M[67] = 0.166666666666667*J_bar22*J_bar33*det_J*rho;
 	in_element->local_M[68] = 0.166666666666667*det_J*(J_bar12*J_bar13*rho + J_bar22*J_bar23*rho + J_bar32*J_bar33*rho);
@@ -636,8 +636,8 @@ __global__ void gpu_stationary_BC(float *K_d,float *f_d, AFEM::stationary *stat_
 __global__ void gpu_make_f(float *f_d, int numnodes, AFEM::position_3D *pos_info,int dim){
 	
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
-	if (x < numnodes*dim){
-		f_d[pos_info[x].displacement_index[1]] += 0.00000000001;
+	if (x < numnodes){
+		f_d[pos_info[x].displacement_index[1]] += -0.2263/1000.0;
 	}
 }
 
@@ -660,24 +660,26 @@ __global__ void find_dx(float *dx_in, AFEM::position_3D *initial_pos, AFEM::posi
 //c= dt*dt K*u_dot(t)
 //so RHS = a-b+c
 //And LHS: = M-dt*dt* K
-__global__ void find_A_b_dynamic(float *K_in, float *dx_in,float *u_dot, float *f_ext,float *RHS,float *M_in,float *LHS,int num_nodes, float dt, int dim){
+__global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float *f_ext, float *RHS, float *M_in, float *LHS, int num_nodes, float dt, float rm, float rk, int dim){
 	int x = threadIdx.x + blockIdx.x *blockDim.x;
-	float a, b, c;
+
 	if (x < num_nodes*dim){
+		float a, b, c;
 		b = c = 0;
 		a = f_ext[x];
 		for (int i = 0; i < num_nodes*dim; i++){
 			
 			b =b+ K_in[IDX2C(i, x, 3 * (num_nodes))] * dx_in[i];
-			c = c + K_in[IDX2C(i, x, 3 * (num_nodes))] * u_dot[i];
-
-			LHS[IDX2C(i, x, 3 * (num_nodes))] = M_in[IDX2C(i, x, 3 * (num_nodes))]-dt*dt*K_in[IDX2C(i, x, 3 * (num_nodes))];
+			//c = c + K_in[IDX2C(i, x, 3 * (num_nodes))] * u_dot[i];
+			float c1 = dt*rm*M_in[IDX2C(i, x, 3 * num_nodes)] + (dt *rk-dt*dt)*K_in[IDX2C(i, x, 3 * num_nodes)];
+			c += c1*u_dot[i];
+			LHS[IDX2C(i, x, 3 * (num_nodes))] =  (1.0-dt*rm)*M_in[IDX2C(i, x, 3 * (num_nodes))] - (dt*rk+dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
 		}
 		a *= dt;
 		b *= dt;
-		c *= dt*dt;
+		
 
-		RHS[x] = a - b + c;
+		RHS[x] = a - b - c;
 		//RHS[x] = f_ext[x];
 	}
 }
@@ -823,12 +825,13 @@ void cuda_tools::stationary_BC(int num_elem, int num_nodes,int num_stationary,in
 }
 void cuda_tools::reset_K(int num_elem,int num_nodes){
 	int blocks, threads;
-	if (num_elem <= 256){
+	int total_size = Nnodes*Nnodes*9;
+	if (total_size <= 256){
 		blocks = 1;
-		threads = num_elem;
+		threads = total_size;
 	}
 	else {
-		blocks = (num_elem +256) / 256;
+		blocks = (total_size + 256) / 256;
 		threads = 256;
 	}
 	reset_K_GPU << <blocks, threads >> >(K_d,M_d, num_nodes, 3);
@@ -846,47 +849,104 @@ void cuda_tools::update_geometry(float *u_dot_sln){
 		threads_element = 256;
 	}
 	int blocks_nodes, threads_nodes;
-	if (Nelems <= 256){
+	if (Nnodes <= 256){
 		blocks_nodes = 1;
-		threads_nodes = Nelems;
+		threads_nodes = Nnodes;
 	}
 	else {
-		blocks_nodes = (Nelems + 256) / 256;
+		blocks_nodes = (Nnodes + 256) / 256;
 		threads_nodes = 256;
 	}
-	update_u_dot_vector << <blocks_nodes, threads_nodes >> >(u_dot_d, u_dot_sln, Nnodes, 3);
-	float *h_y = (float *)malloc(Ncols* sizeof(float));
+
+
+
+	
+	
+
+
+	update_u_dot_vector << <blocks_nodes*3, threads_nodes >> >(u_dot_d, u_dot_sln, Nnodes, 3);
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/*float *h_y = (float *)malloc(Ncols* sizeof(float));
 	cudaMemcpy(h_y, u_dot_sln, Ncols* sizeof(float), cudaMemcpyDeviceToHost);
 
 	for (int i = 1; i < 12; i++){
 		std::cout << h_y[i] << " ";
 	}
-	free(h_y);
-	std::cout << std::endl;
+	free(h_y);*/
+	//std::cout << std::endl;
 	update_position_vector << <blocks_nodes, threads_nodes >> >(position_array_d, u_dot_d, dt, Nnodes, 3);
 	//update_Geo_CUDA << <blocks_element, threads_element >> >(elem_array_d, position_array_d,u_soln, Nelems);
 }
 void cuda_tools::dynamic(){
-	int blocks_nodes, threads_nodes;
-	if (Nelems <= 256){
-		blocks_nodes = 1;
-		threads_nodes = Nelems;
+	int blocks_nodesdim, threads_nodesdim;
+	if (Nnodes * 3 <= 256){
+		blocks_nodesdim = 1;
+		threads_nodesdim = Nnodes * 3;
 	}
 	else {
-		blocks_nodes = (Nelems + 256) / 256;
+		blocks_nodesdim = (Nnodes * 3 + 256) / 256;
+		threads_nodesdim = 256;
+	}
+
+
+	int blocks_nodes, threads_nodes;
+	if (Nnodes<= 256){
+		blocks_nodes = 1;
+		threads_nodes = Nnodes;
+	}
+	else {
+		blocks_nodes = (Nnodes  + 256) / 256;
 		threads_nodes = 256;
 	}
+
+	
 	//float *K_in, float *dx_in, float *u_dot, float *f_ext, float *RHS
 	find_dx << <blocks_nodes, threads_nodes >> >(dx_d, position_array_initial_d, position_array_d, Nnodes);
 
+	/*float *sln_ptr = (float *)malloc(Ncols*sizeof(float));
+	cudaMemcpy(sln_ptr, u_dot_d, Ncols*sizeof(float), cudaMemcpyDeviceToHost);
+*/
 
+	/*std::ofstream output;
+	output.open("SLN.txt");
+
+	for (int i = 0; i < Ncols; i++){
+
+		output << sln_ptr[i];
+
+		std::cout << std::endl;
+		output << std::endl;
+	}
+
+	output.close();
+	free(sln_ptr);
+*/
 	
-	find_A_b_dynamic << <blocks_nodes, threads_nodes >> >(K_d, dx_d, u_dot_d, f_d,RHS, M_d, LHS,Nnodes, dt, 3);
+	find_A_b_dynamic << <blocks_nodesdim, threads_nodesdim >> >(K_d, dx_d, u_dot_d, f_d,RHS, M_d, LHS,Nnodes, dt,1.2,0.2, 3);
 
 	stationary_BC(Nelems, Nnodes, Nstationary, 3);
 
-
 	
+
 
 
 }

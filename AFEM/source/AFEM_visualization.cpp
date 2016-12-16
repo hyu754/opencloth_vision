@@ -270,7 +270,7 @@ void OnRender() {
 	sprintf_s(info, "FPS: %3.2f, Frame time (GLUT): %3.4f msecs, Frame time (QP): %3.3f, Stiffness Warp: %s", fps, frameTime, frameTimeQP, bUseStiffnessWarping ? "On" : "Off");
 	glutSetWindowTitle(info);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.2f, 1.0f, 1.0f, 0.0f);
+	glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
 	glLoadIdentity();
 	glTranslatef(0, 0, dist);
 	glRotatef(rX, 1, 0, 0);

@@ -70,7 +70,7 @@ class cuda_tools{
 
 
 	//dt for dynamic
-	float dt = 1/600.0;
+	float dt = 1/100.0;
 	//cuda allocations
 	//----------------------------------------------------------------------------------
 	int Nrows;                        // --- Number of rows

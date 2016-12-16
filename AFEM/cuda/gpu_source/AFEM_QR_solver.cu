@@ -5,6 +5,7 @@
 #include <iostream>
 #include "AFEM_cuda.cuh"
 #include "Utilities.cuh"
+#include <fstream>
 
 #define IDX2C(i,j,ld) (((j)*(ld))+( i )) 
 void printMatrix(int m, int n, const double*A, int lda, const char* name) { for (int row = 0; row < m; row++){ for (int col = 0; col < n; col++){ double Areg = A[row + col*lda]; printf("%s(%d,%d) = %f\n", name, row + 1, col + 1, Areg); } } }
@@ -74,8 +75,30 @@ void cuda_tools::cholesky()
 
 	// --- Descriptor for sparse matrix A
 
+#if 0
+	float *h_y = (float *)malloc(Ncols * Ncols*sizeof(float));
+	cudaMemcpy(h_y, u_dot_sln, Ncols * Ncols*sizeof(float), cudaMemcpyDeviceToHost);
 
 
+	std::ofstream output;
+	output.open("LHS.txt");
+
+	for (int i = 0; i < Ncols; i++){
+		for (int j = 0; j < Ncols; j++){
+			std::cout << h_y[IDX2C(j, i, Ncols)] << " ";
+			output << h_y[IDX2C(j, i, Ncols)] << " ";
+		}
+		std::cout << std::endl;
+		output << std::endl;
+	}
+
+	output.close();
+	free(h_y);
+
+
+#endif // 0
+
+	
 
 
 	// --- Device side number of nonzero elements per row
@@ -205,7 +228,7 @@ void cuda_tools::cholesky()
 	/* STEP 5: L' * y = z */
 	/**********************/
 	// --- Allocating the host and device side result vector
-	float *h_y = (float *)malloc(Ncols * sizeof(float));
+	
 	float *d_y;        gpuErrchk(cudaMalloc(&d_y, Ncols * sizeof(float)));
 
 	cusparseSafeCall(cusparseScsrsv2_solve(handle, CUSPARSE_OPERATION_TRANSPOSE, N, nnz, &alpha, descr_L, d_A, d_A_RowIndices, d_A_ColIndices, info_Lt, d_z, d_y, CUSPARSE_SOLVE_POLICY_USE_LEVEL, pBuffer));
@@ -214,17 +237,33 @@ void cuda_tools::cholesky()
 	/*for (int k = 0; k<20; k++) printf("dx[%i] = %f\n", k, h_x[k]);
 	for (int k = 0; k<20; k++) printf("xs[%i] = %f\n", k, x[k]);*/
 	
-	cudaMemcpy(h_y, LHS, Ncols * sizeof(float), cudaMemcpyDeviceToHost);
 
-	for (int i = 0; i < 4; i++){
-		for (int j = 0; j < 4; j++){
-			std::cout << h_y[IDX2C(j,i,Ncols)] << " ";
-		}
-		std::cout << std::endl;
-	}
-	
-	std::cout << std::endl;
-	
+	//std::cout << std::endl;
+	//
+
+	//float *rhs_output = (float *)malloc( Ncols*sizeof(float));
+	//
+	//cudaMemcpy(rhs_output, RHS, Ncols*sizeof(float), cudaMemcpyDeviceToHost);
+
+	//std::ofstream output_RHS;
+	//output_RHS.open("RHS.txt");
+
+	//for (int i = 0; i < Ncols; i++){
+	//	
+	//		//std::cout << h_y[IDX2C(j, i, Ncols)] << " ";
+	//	output_RHS << rhs_output[i] << std::endl;
+	//	
+	//	//std::cout << std::endl;
+	//	//output << std::endl;
+	//}
+
+	//output_RHS.close();
+
+
+
+
+
+
 	update_geometry(d_y);
 
 
@@ -234,7 +273,7 @@ void cuda_tools::cholesky()
 
 	cudaFree(d_z);
 	cudaFree(d_y);
-	free(h_y);
+	//free(h_y);
 	//free(h_x);
 
 
