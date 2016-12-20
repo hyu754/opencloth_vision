@@ -14,6 +14,7 @@
 #include <cusolverDn.h>
 #include <cusparse_v2.h>
 
+
 #ifndef AFEM_CUDA_H
 #define AFEM_CUDA_H
 
@@ -70,13 +71,13 @@ class cuda_tools{
 
 
 	//dt for dynamic
-	float dt = 1/100.0;
+	float dt = 1.0/60.0;
 	//cuda allocations
 	//----------------------------------------------------------------------------------
 	int Nrows;                        // --- Number of rows
 	int Ncols;                        // --- Number of columns
 	int Nelems,Nnodes,Nstationary;
-	int N;
+	//int N;
 	double duration_K;
 	cusparseHandle_t handle;
 	cusparseMatDescr_t descrA;
@@ -102,6 +103,23 @@ class cuda_tools{
 	float *d_A;
 	int *d_A_RowIndices;
 	int *d_A_ColIndices;
+
+	//for CG
+	//Variables to use
+	int M = 0, N = 0;// nz = 0, *I = NULL, *J = NULL;
+	float *val = NULL;
+	const float tol = 1e-5f;
+	const int max_iter = 1000;
+	float *x;
+	float *rhs;
+	float a, b, na, r0, r1;
+	int *d_col, *d_row;
+	float *d_val, *d_x, dot;
+	float *d_r, *d_p, *d_Ax;
+	int k;
+	float alpha, beta, alpham1;
+
+	cudaDeviceProp deviceProp;
 	
 public:
 	cuda_tools();
@@ -129,6 +147,10 @@ public:
 	//A wrapper function that modifies K and f w.r.t the BC
 	void stationary_BC(int num_elem, int num_nodes,int num_stationary,int dim);
 
+	//A wrapper function to have zero in the f vector corresponding to bc
+	//A wrapper function that modifies K and f w.r.t the BC
+	void stationary_BC_f(float *zero_u);
+
 	//Make f vector
 	void make_f(int num_nodes, int dim);
 
@@ -150,12 +172,19 @@ public:
 	//Runs the cholesky solver.
 	void cholesky();
 
+	//conjugate gradient
+	void cg();
+
 	//Dynamic
 	void dynamic();
 
 	//after solving for cholesky, this function will update the geometry
 	void update_geometry( float *u_sln);
 };
+
+
+
+
 
 
 #endif //AFEM_CUDA_H

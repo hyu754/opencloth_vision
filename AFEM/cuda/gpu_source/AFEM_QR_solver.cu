@@ -6,6 +6,7 @@
 #include "AFEM_cuda.cuh"
 #include "Utilities.cuh"
 #include <fstream>
+#include <ctime>
 
 #define IDX2C(i,j,ld) (((j)*(ld))+( i )) 
 void printMatrix(int m, int n, const double*A, int lda, const char* name) { for (int row = 0; row < m; row++){ for (int col = 0; col < n; col++){ double Areg = A[row + col*lda]; printf("%s(%d,%d) = %f\n", name, row + 1, col + 1, Areg); } } }
@@ -76,8 +77,8 @@ void cuda_tools::cholesky()
 	// --- Descriptor for sparse matrix A
 
 #if 0
-	float *h_y = (float *)malloc(Ncols * Ncols*sizeof(float));
-	cudaMemcpy(h_y, u_dot_sln, Ncols * Ncols*sizeof(float), cudaMemcpyDeviceToHost);
+	float *LHSOUT = (float *)malloc(Ncols * Ncols*sizeof(float));
+	cudaMemcpy(LHSOUT, LHS, Ncols * Ncols*sizeof(float), cudaMemcpyDeviceToHost);
 
 
 	std::ofstream output;
@@ -85,21 +86,40 @@ void cuda_tools::cholesky()
 
 	for (int i = 0; i < Ncols; i++){
 		for (int j = 0; j < Ncols; j++){
-			std::cout << h_y[IDX2C(j, i, Ncols)] << " ";
-			output << h_y[IDX2C(j, i, Ncols)] << " ";
+			//std::cout << LHSOUT[IDX2C(j, i, Ncols)] << " ";
+			output << LHSOUT[IDX2C(j, i, Ncols)] << " ";
 		}
-		std::cout << std::endl;
-		output << std::endl;
+		//std::cout << std::endl;
+		output << "\n";
 	}
 
 	output.close();
-	free(h_y);
+	free(LHSOUT);
+
+
+	float *RHSOUT = (float *)malloc( Ncols*sizeof(float));
+	cudaMemcpy(RHSOUT, RHS,  Ncols*sizeof(float), cudaMemcpyDeviceToHost);
+
+
+	std::ofstream RHSOUT_;
+	RHSOUT_.open("RHS.txt");
+
+	for (int i = 0; i < Ncols; i++){
+		
+			//std::cout << RHSOUT[IDX2C(j, i, Ncols)] << " ";
+			RHSOUT_ << RHSOUT[i] << " ";
+		
+		//std::cout << std::endl;
+		RHSOUT_ << std::endl;
+	}
+
+	RHSOUT_.close();
+	free(RHSOUT);
 
 
 #endif // 0
 
 	
-
 
 	// --- Device side number of nonzero elements per row
 
@@ -233,38 +253,42 @@ void cuda_tools::cholesky()
 
 	cusparseSafeCall(cusparseScsrsv2_solve(handle, CUSPARSE_OPERATION_TRANSPOSE, N, nnz, &alpha, descr_L, d_A, d_A_RowIndices, d_A_ColIndices, info_Lt, d_z, d_y, CUSPARSE_SOLVE_POLICY_USE_LEVEL, pBuffer));
 
+
+
 	//cudaMemcpy(h_x, d_y, N * sizeof(float), cudaMemcpyDeviceToHost);
-	/*for (int k = 0; k<20; k++) printf("dx[%i] = %f\n", k, h_x[k]);
-	for (int k = 0; k<20; k++) printf("xs[%i] = %f\n", k, x[k]);*/
-	
+	///*for (int k = 0; k<20; k++) printf("dx[%i] = %f\n", k, h_x[k]);
+	//for (int k = 0; k<20; k++) printf("xs[%i] = %f\n", k, x[k]);*/
+	//
 
 	//std::cout << std::endl;
 	//
 
-	//float *rhs_output = (float *)malloc( Ncols*sizeof(float));
-	//
-	//cudaMemcpy(rhs_output, RHS, Ncols*sizeof(float), cudaMemcpyDeviceToHost);
+	
 
-	//std::ofstream output_RHS;
-	//output_RHS.open("RHS.txt");
-
-	//for (int i = 0; i < Ncols; i++){
-	//	
-	//		//std::cout << h_y[IDX2C(j, i, Ncols)] << " ";
-	//	output_RHS << rhs_output[i] << std::endl;
-	//	
-	//	//std::cout << std::endl;
-	//	//output << std::endl;
-	//}
-
-	//output_RHS.close();
+	float *sln_ptr = (float *)malloc(Ncols*sizeof(float));
+	cudaMemcpy(sln_ptr, d_y, Ncols*sizeof(float), cudaMemcpyDeviceToHost);
 
 
+	std::ofstream outputSLN;
+	outputSLN.open("SLN.txt");
+
+	for (int i = 0; i < Ncols; i++){
+
+		outputSLN << sln_ptr[i];
+
+		//std::cout << std::endl;
+		outputSLN << std::endl;
+	}
+
+	outputSLN.close();
+	free(sln_ptr); 
 
 
+	outputSLN.close();
 
 
 	update_geometry(d_y);
+
 
 
 	cudaFree(d_A);
@@ -310,3 +334,182 @@ void cuda_tools::cholesky()
 #endif // 0
 
 }
+
+
+void cuda_tools::cg(void){
+
+
+		/*M = N = 10480076;
+		nz = (N - 2) * 3 + 4;
+		I = (int *)malloc(sizeof(int)*(N + 1));
+		J = (int *)malloc(sizeof(int)*nz);
+		val = (float *)malloc(sizeof(float)*nz);
+
+
+		x = (float *)malloc(sizeof(float)*N);
+		rhs = (float *)malloc(sizeof(float)*N);
+
+		for (int i = 0; i < N; i++)
+		{
+			rhs[i] = 1.0;
+			x[i] = 0.0;
+		}*/
+	N = Ncols;
+	/*x = (float *)malloc(sizeof(float)*N);
+	rhs = (float *)malloc(sizeof(float)*N);
+
+	for (int i = 0; i < N; i++)
+	{
+		rhs[i] = 1.0;
+		x[i] = 0.0;
+	}*/
+	
+	x = (float *)malloc(sizeof(float)*N);
+	for (int i = 0; i < N; i++)
+	{
+		
+		x[i] = 0.0;
+	}
+		/* Get handle to the CUBLAS context */
+		cublasHandle_t cublasHandle = 0;
+		cublasStatus_t cublasStatus;
+		cublasStatus = cublasCreate(&cublasHandle);
+
+
+
+		/* Get handle to the CUSPARSE context */
+		cusparseHandle_t cusparseHandle = 0;
+		cusparseStatus_t cusparseStatus;
+		cusparseStatus = cusparseCreate(&cusparseHandle);
+
+
+		cusparseMatDescr_t descr = 0;
+		cusparseStatus = cusparseCreateMatDescr(&descr);
+
+		cusparseSetMatType(descr, CUSPARSE_MATRIX_TYPE_GENERAL);
+		cusparseSetMatIndexBase(descr, CUSPARSE_INDEX_BASE_ZERO);
+
+		cusparseSafeCall(cusparseSnnz(cusparseHandle, CUSPARSE_DIRECTION_ROW, Nrows, Ncols, descr, LHS, lda, d_nnzPerVector, &nnz));
+		// --- Host side number of nonzero elements per row
+
+
+		gpuErrchk(cudaMemcpy(h_nnzPerVector, d_nnzPerVector, Nrows * sizeof(*h_nnzPerVector), cudaMemcpyDeviceToHost));
+
+		/*printf("Number of nonzero elements in dense matrix = %i\n\n", nnz);
+		for (int i = 0; i < 10; ++i) printf("Number of nonzero elements in row %i = %i \n", i, h_nnzPerVector[i]);
+		printf("\n");*/
+
+		// --- Device side dense matrix
+		gpuErrchk(cudaMalloc(&d_A, nnz * sizeof(*d_A)));
+		gpuErrchk(cudaMalloc(&d_A_ColIndices, nnz * sizeof(*d_A_ColIndices)));
+	
+		//cudaMalloc((void **)&d_Ax, N*sizeof(float));
+		cudaMalloc(&d_A_RowIndices, (Nrows + 1) * sizeof(*d_A_RowIndices));
+		cusparseSafeCall(cusparseSdense2csr(cusparseHandle, Nrows, Ncols, descr, LHS, lda, d_nnzPerVector, d_A, d_A_RowIndices, d_A_ColIndices));
+
+		//float *LHSOUT = (float *)malloc(Ncols *sizeof(float));
+		//cudaMemcpy(LHSOUT, RHS, Ncols *sizeof(float), cudaMemcpyDeviceToHost);
+
+
+		//std::ofstream output;
+		//output.open("LHS.txt");
+
+		//for (int i = 0; i < Ncols; i++){
+		//	
+		//		//std::cout << LHSOUT[IDX2C(j, i, Ncols)] << " ";
+		//		output << LHSOUT[i] << " ";
+		//	
+		//	//std::cout << std::endl;
+		//	output << "\n";
+		//}
+
+		//output.close();
+		//free(LHSOUT);
+	
+		(cudaMalloc((void **)&d_x, N*sizeof(float)));
+		(cudaMalloc((void **)&d_r, N*sizeof(float)));
+		(cudaMalloc((void **)&d_p, N*sizeof(float)));
+		(cudaMalloc((void **)&d_Ax, N*sizeof(float)));
+
+		alpha = 1.0;
+		alpham1 = -1.0;
+		beta = 0.0;
+		r0 = 0.;
+		cudaMemcpy(d_x, RHS, N*sizeof(float), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_r, RHS, N*sizeof(float), cudaMemcpyDeviceToDevice);
+	
+		cusparseScsrmv(cusparseHandle, CUSPARSE_OPERATION_NON_TRANSPOSE, Ncols, Ncols, nnz, &alpha, descr, d_A, d_A_RowIndices, d_A_ColIndices, d_x, &beta, d_Ax);
+
+		cublasSaxpy(cublasHandle, N, &alpham1, d_Ax, 1, d_r, 1);
+		cublasStatus = cublasSdot(cublasHandle, N, d_r, 1, d_r, 1, &r1);
+		//cudaMalloc((void **)&d_p, N*sizeof(float));
+		k = 1;
+		double start_time = std::clock();
+		while (r1 > tol*tol && k <= max_iter)
+		{
+			if (k > 1)
+			{
+				b = r1 / r0;
+				cublasStatus = cublasSscal(cublasHandle, N, &b, d_p, 1);
+				cublasStatus = cublasSaxpy(cublasHandle, N, &alpha, d_r, 1, d_p, 1);
+			}
+			else
+			{
+				cublasStatus = cublasScopy(cublasHandle, N, d_r, 1, d_p, 1);
+			}
+
+			cusparseScsrmv(cusparseHandle, CUSPARSE_OPERATION_NON_TRANSPOSE, N, N, nnz, &alpha, descr, d_A, d_A_RowIndices, d_A_ColIndices, d_p, &beta, d_Ax);
+			cublasStatus = cublasSdot(cublasHandle, N, d_p, 1, d_Ax, 1, &dot);
+			a = r1 / dot;
+			stationary_BC_f(d_x);
+			cublasStatus = cublasSaxpy(cublasHandle, N, &a, d_p, 1, d_x, 1);
+			
+			
+
+			na = -a;
+			cublasStatus = cublasSaxpy(cublasHandle, N, &na, d_Ax, 1, d_r, 1);
+
+			r0 = r1;
+			cublasStatus = cublasSdot(cublasHandle, N, d_r, 1, d_r, 1, &r1);
+		//	cudaThreadSynchronize();
+			//printf("iteration = %3d, residual = %e\n", k, sqrt(r1));
+			k++;
+		}
+		std::cout << (std::clock() - start_time) / CLOCKS_PER_SEC << std::endl;
+		//cudaMemcpy(x, d_x, N*sizeof(float), cudaMemcpyDeviceToHost);
+
+		/*float rsum, diff, err = 0.0;
+
+		for (int i = 0; i < N; i++)
+		{
+			rsum = 0.0;
+
+			for (int j = I[i]; j < I[i + 1]; j++)
+			{
+				rsum += val[j] * x[J[j]];
+			}
+
+			diff = fabs(rsum - rhs[i]);
+
+			if (diff > err)
+			{
+				err = diff;
+			}
+		}*/
+		update_geometry(d_x);
+		cusparseDestroy(cusparseHandle);
+		cublasDestroy(cublasHandle);
+		
+		/*free(I);
+		free(J);*/
+		free(val);
+		//free(x);
+		//free(rhs);
+		cudaFree(d_col);
+		cudaFree(d_row);
+		cudaFree(d_val);
+		cudaFree(d_x);
+		cudaFree(d_r);
+		cudaFree(d_p);
+		cudaFree(d_Ax);
+	}

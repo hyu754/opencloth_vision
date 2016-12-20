@@ -67,11 +67,11 @@ void AFEM::Simulation::run(){
 
 	double start = std::clock();
 	cuda_tools_class.make_K(element_vec.size(), pos_vec.size());
-	cuda_tools_class.make_f(pos_vec.size(), 3);
+	//cuda_tools_class.make_f(pos_vec.size(), 3);
 	
 	cuda_tools_class.dynamic();
 	//cuda_tools_class.set_RHS_LHS();
-	cuda_tools_class.cholesky();
+	cuda_tools_class.cg();
 
 
 

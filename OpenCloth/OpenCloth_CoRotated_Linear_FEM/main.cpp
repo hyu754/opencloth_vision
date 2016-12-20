@@ -68,7 +68,7 @@ struct Tetrahedron {
 vector<Tetrahedron> tetrahedra;
 
 float nu = 0.493f;			//Poisson ratio
-float Y = 500000.0f;		//Young modulus
+float Y = 50000.0f;		//Young modulus
 float density =1000.0f;
 float creep = 0.20f;
 float yield = 0.04f;
@@ -353,8 +353,8 @@ void GenerateBlocks(size_t xdim, size_t ydim, size_t zdim, float width, float he
 	//offset the tetrahedral mesh by 0.5 units on y axis
 	//and 0.5 of the depth in z axis
 	for(size_t i=0;i<total_points;i++) {
-		X[i].y += 0.5;		
-		X[i].z -= hzdim*depth; 
+		X[i].y += 1.5;		
+		X[i].z -= hzdim*depth +5.0; 
 	} 
 
 	for (size_t i = 0; i < xdim; ++i) {

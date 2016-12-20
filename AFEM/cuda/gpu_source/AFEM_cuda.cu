@@ -216,9 +216,11 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element,AFEM::posi
 	float J_bar11 = (y24*z34 - z24*y34) / det_J;
 	float J_bar12 = (z14*y34 - y14*z34) / det_J;
 	float J_bar13 = (y14*z24 - z14*y24) / det_J;
+
 	float J_bar21 = (z24*x34 - x24*z34) / det_J;
 	float J_bar22 = (x14*z34 - z14*x34) / det_J;
 	float J_bar23 = (z14*x24 - x14*z24) / det_J;
+
 	float J_bar31 = (x24*y34 - y24*x34) / det_J;
 	float J_bar32 = (y14*x34 - x14*y34) / det_J;
 	float J_bar33 = (x14*y24 - y14*x24) / det_J;
@@ -229,11 +231,12 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element,AFEM::posi
 
 	in_element->Jacobian = det_J;
 
-	//in_element->volume = (1.0 / (2.0*det_J));
+	in_element->volume = det_J / 6.0;
 
-	float E = 20000.0;
-	float nu = 0.44;
+	float E = 500000.0;
+	float nu = 0.49;
 
+#if 1
 
 	in_element->local_K[0] = 0.166666666666667*E*J_bar11*J_bar11 * det_J*(-nu + 1.0) / (-2 * nu*nu - nu + 1) + 0.166666666666667*E*J_bar21*J_bar21 * det_J*(-0.5*nu + 0.5) / (-2 * nu*nu - nu + 1) + 0.166666666666667*E*J_bar31*J_bar31 * det_J*(-0.5*nu + 0.5) / (-2 * nu*nu - nu + 1);
 	//in_element->local_K[0] = det_J;
@@ -381,8 +384,10 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element,AFEM::posi
 	in_element->local_K[142] = 0.166666666666667*E*J_star2*J_star3*det_J*nu / (-2 * nu*nu - nu + 1) + 0.166666666666667*E*J_star2*J_star3*det_J*(-0.5*nu + 0.5) / (-2 * nu*nu - nu + 1);
 	in_element->local_K[143] = 0.166666666666667*E*J_star1*J_star1 * det_J*(-0.5*nu + 0.5) / (-2 * nu*nu - nu + 1) + 0.166666666666667*E*J_star2*J_star2 * det_J*(-0.5*nu + 0.5) / (-2 * nu*nu - nu + 1) + 0.166666666666667*E*J_star3*J_star3 * det_J*(-nu + 1.0) / (-2 * nu*nu - nu + 1);
 
-	float rho = 1000.0;
-	in_element->local_M[0] = 0.166666666666667*det_J*(J_bar11*J_bar11*rho + J_bar21*J_bar21*rho + J_bar31*J_bar31*rho);
+
+#endif // 0
+		float rho = 1000.0;
+	/*in_element->local_M[0] = 0.166666666666667*det_J*(J_bar11*J_bar11*rho + J_bar21*J_bar21*rho + J_bar31*J_bar31*rho);
 	in_element->local_M[1] = 0.166666666666667*J_bar11*J_bar21*det_J*rho;
 	in_element->local_M[2] = 0.166666666666667*J_bar11*J_bar31*det_J*rho;
 	in_element->local_M[3] = 0.166666666666667*det_J*(J_bar11*J_bar12*rho + J_bar21*J_bar22*rho + J_bar31*J_bar32*rho);
@@ -525,13 +530,324 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element,AFEM::posi
 	in_element->local_M[140] = 0.166666666666667*det_J*(J_bar13*J_star1*rho + J_bar23*J_star2*rho + J_bar33*J_star3*rho);
 	in_element->local_M[141] = 0.166666666666667*J_star1*J_star3*det_J*rho;
 	in_element->local_M[142] = 0.166666666666667*J_star2*J_star3*det_J*rho;
-	in_element->local_M[143] = 0.166666666666667*det_J*(J_star1*J_star1*rho + J_star2*J_star2*rho + J_star3*J_star3*rho);
+	in_element->local_M[143] = 0.166666666666667*det_J*(J_star1*J_star1*rho + J_star2*J_star2*rho + J_star3*J_star3*rho);*/
+
+
+
+in_element->local_M[0] = det_J*rho / 3;
+in_element->local_M[1] = 0.0;
+in_element->local_M[2] = 0.0;
+in_element->local_M[3] = det_J*rho / 4;
+in_element->local_M[4] = 0.0;
+in_element->local_M[5] = 0.0;
+in_element->local_M[6] = det_J*rho / 4;
+in_element->local_M[7] = 0.0;
+in_element->local_M[8] = 0.0;
+in_element->local_M[9] = -det_J*rho / 3;
+in_element->local_M[10] = 0.0;
+in_element->local_M[11] = 0.0;
+in_element->local_M[12] = 0.0;
+in_element->local_M[13] = det_J*rho / 3;
+in_element->local_M[14] = 0.0;
+in_element->local_M[15] = 0.0;
+in_element->local_M[16] = det_J*rho / 4;
+in_element->local_M[17] = 0.0;
+in_element->local_M[18] = 0.0;
+in_element->local_M[19] = det_J*rho / 4;
+in_element->local_M[20] = 0.0;
+in_element->local_M[21] = 0.0;
+in_element->local_M[22] = -det_J*rho / 3;
+in_element->local_M[23] = 0.0;
+in_element->local_M[24] = 0.0;
+in_element->local_M[25] = 0.0;
+in_element->local_M[26] = det_J*rho / 3;
+in_element->local_M[27] = 0.0;
+in_element->local_M[28] = 0.0;
+in_element->local_M[29] = det_J*rho / 4;
+in_element->local_M[30] = 0.0;
+in_element->local_M[31] = 0.0;
+in_element->local_M[32] = det_J*rho / 4;
+in_element->local_M[33] = 0.0;
+in_element->local_M[34] = 0.0;
+in_element->local_M[35] = -det_J*rho / 3;
+in_element->local_M[36] = det_J*rho / 4;
+in_element->local_M[37] = 0.0;
+in_element->local_M[38] = 0.0;
+in_element->local_M[39] = det_J*rho / 3;
+in_element->local_M[40] = 0.0;
+in_element->local_M[41] = 0.0;
+in_element->local_M[42] = det_J*rho / 4;
+in_element->local_M[43] = 0.0;
+in_element->local_M[44] = 0.0;
+in_element->local_M[45] = -det_J*rho / 3;
+in_element->local_M[46] = 0.0;
+in_element->local_M[47] = 0.0;
+in_element->local_M[48] = 0.0;
+in_element->local_M[49] = det_J*rho / 4;
+in_element->local_M[50] = 0.0;
+in_element->local_M[51] = 0.0;
+in_element->local_M[52] = det_J*rho / 3;
+in_element->local_M[53] = 0.0;
+in_element->local_M[54] = 0.0;
+in_element->local_M[55] = det_J*rho / 4;
+in_element->local_M[56] = 0.0;
+in_element->local_M[57] = 0.0;
+in_element->local_M[58] = -det_J*rho / 3;
+in_element->local_M[59] = 0.0;
+in_element->local_M[60] = 0.0;
+in_element->local_M[61] = 0.0;
+in_element->local_M[62] = det_J*rho / 4;
+in_element->local_M[63] = 0.0;
+in_element->local_M[64] = 0.0;
+in_element->local_M[65] = det_J*rho / 3;
+in_element->local_M[66] = 0.0;
+in_element->local_M[67] = 0.0;
+in_element->local_M[68] = det_J*rho / 4;
+in_element->local_M[69] = 0.0;
+in_element->local_M[70] = 0.0;
+in_element->local_M[71] = -det_J*rho / 3;
+in_element->local_M[72] = det_J*rho / 4;
+in_element->local_M[73] = 0.0;
+in_element->local_M[74] = 0.0;
+in_element->local_M[75] = det_J*rho / 4;
+in_element->local_M[76] = 0.0;
+in_element->local_M[77] = 0.0;
+in_element->local_M[78] = det_J*rho / 3;
+in_element->local_M[79] = 0.0;
+in_element->local_M[80] = 0.0;
+in_element->local_M[81] = -det_J*rho / 3;
+in_element->local_M[82] = 0.0;
+in_element->local_M[83] = 0.0;
+in_element->local_M[84] = 0.0;
+in_element->local_M[85] = det_J*rho / 4;
+in_element->local_M[86] = 0.0;
+in_element->local_M[87] = 0.0;
+in_element->local_M[88] = det_J*rho / 4;
+in_element->local_M[89] = 0.0;
+in_element->local_M[90] = 0.0;
+in_element->local_M[91] = det_J*rho / 3;
+in_element->local_M[92] = 0.0;
+in_element->local_M[93] = 0.0;
+in_element->local_M[94] = -det_J*rho / 3;
+in_element->local_M[95] = 0.0;
+in_element->local_M[96] = 0.0;
+in_element->local_M[97] = 0.0;
+in_element->local_M[98] = det_J*rho / 4;
+in_element->local_M[99] = 0.0;
+in_element->local_M[100] = 0.0;
+in_element->local_M[101] = det_J*rho / 4;
+in_element->local_M[102] = 0.0;
+in_element->local_M[103] = 0.0;
+in_element->local_M[104] = det_J*rho / 3;
+in_element->local_M[105] = 0.0;
+in_element->local_M[106] = 0.0;
+in_element->local_M[107] = -det_J*rho / 3;
+in_element->local_M[108] = -det_J*rho / 3;
+in_element->local_M[109] = 0.0;
+in_element->local_M[110] = 0.0;
+in_element->local_M[111] = -det_J*rho / 3;
+in_element->local_M[112] = 0.0;
+in_element->local_M[113] = 0.0;
+in_element->local_M[114] = -det_J*rho / 3;
+in_element->local_M[115] = 0.0;
+in_element->local_M[116] = 0.0;
+in_element->local_M[117] = det_J*rho / 2;
+in_element->local_M[118] = 0.0;
+in_element->local_M[119] = 0.0;
+in_element->local_M[120] = 0.0;
+in_element->local_M[121] = -det_J*rho / 3;
+in_element->local_M[122] = 0.0;
+in_element->local_M[123] = 0.0;
+in_element->local_M[124] = -det_J*rho / 3;
+in_element->local_M[125] = 0.0;
+in_element->local_M[126] = 0.0;
+in_element->local_M[127] = -det_J*rho / 3;
+in_element->local_M[128] = 0.0;
+in_element->local_M[129] = 0.0;
+in_element->local_M[130] = det_J*rho / 2;
+in_element->local_M[131] = 0.0;
+in_element->local_M[132] = 0.0;
+in_element->local_M[133] = 0.0;
+in_element->local_M[134] = -det_J*rho / 3;
+in_element->local_M[135] = 0.0;
+in_element->local_M[136] = 0.0;
+in_element->local_M[137] = -det_J*rho / 3;
+in_element->local_M[138] = 0.0;
+in_element->local_M[139] = 0.0;
+in_element->local_M[140] = -det_J*rho / 3;
+in_element->local_M[141] = 0.0;
+in_element->local_M[142] = 0.0;
+in_element->local_M[143] = det_J*rho / 2;
+#if 0
+in_element->local_M[0] = det_J*rho / 6;
+in_element->local_M[1] = 0.0;
+in_element->local_M[2] = 0.0;
+in_element->local_M[3] = 0.0;
+in_element->local_M[4] = 0.0;
+in_element->local_M[5] = 0.0;
+in_element->local_M[6] = 0.0;
+in_element->local_M[7] = 0.0;
+in_element->local_M[8] = 0.0;
+in_element->local_M[9] = 0.0;
+in_element->local_M[10] = 0.0;
+in_element->local_M[11] = 0.0;
+in_element->local_M[12] = 0.0;
+in_element->local_M[13] = det_J*rho / 6;
+in_element->local_M[14] = 0.0;
+in_element->local_M[15] = 0.0;
+in_element->local_M[16] = 0.0;
+in_element->local_M[17] = 0.0;
+in_element->local_M[18] = 0.0;
+in_element->local_M[19] = 0.0;
+in_element->local_M[20] = 0.0;
+in_element->local_M[21] = 0.0;
+in_element->local_M[22] = 0.0;
+in_element->local_M[23] = 0.0;
+in_element->local_M[24] = 0.0;
+in_element->local_M[25] = 0.0;
+in_element->local_M[26] = det_J*rho / 6;
+in_element->local_M[27] = 0.0;
+in_element->local_M[28] = 0.0;
+in_element->local_M[29] = 0.0;
+in_element->local_M[30] = 0.0;
+in_element->local_M[31] = 0.0;
+in_element->local_M[32] = 0.0;
+in_element->local_M[33] = 0.0;
+in_element->local_M[34] = 0.0;
+in_element->local_M[35] = 0.0;
+in_element->local_M[36] = 0.0;
+in_element->local_M[37] = 0.0;
+in_element->local_M[38] = 0.0;
+in_element->local_M[39] = det_J*rho / 6;
+in_element->local_M[40] = 0.0;
+in_element->local_M[41] = 0.0;
+in_element->local_M[42] = 0.0;
+in_element->local_M[43] = 0.0;
+in_element->local_M[44] = 0.0;
+in_element->local_M[45] = 0.0;
+in_element->local_M[46] = 0.0;
+in_element->local_M[47] = 0.0;
+in_element->local_M[48] = 0.0;
+in_element->local_M[49] = 0.0;
+in_element->local_M[50] = 0.0;
+in_element->local_M[51] = 0.0;
+in_element->local_M[52] = det_J*rho / 6;
+in_element->local_M[53] = 0.0;
+in_element->local_M[54] = 0.0;
+in_element->local_M[55] = 0.0;
+in_element->local_M[56] = 0.0;
+in_element->local_M[57] = 0.0;
+in_element->local_M[58] = 0.0;
+in_element->local_M[59] = 0.0;
+in_element->local_M[60] = 0.0;
+in_element->local_M[61] = 0.0;
+in_element->local_M[62] = 0.0;
+in_element->local_M[63] = 0.0;
+in_element->local_M[64] = 0.0;
+in_element->local_M[65] = det_J*rho / 6;
+in_element->local_M[66] = 0.0;
+in_element->local_M[67] = 0.0;
+in_element->local_M[68] = 0.0;
+in_element->local_M[69] = 0.0;
+in_element->local_M[70] = 0.0;
+in_element->local_M[71] = 0.0;
+in_element->local_M[72] = 0.0;
+in_element->local_M[73] = 0.0;
+in_element->local_M[74] = 0.0;
+in_element->local_M[75] = 0.0;
+in_element->local_M[76] = 0.0;
+in_element->local_M[77] = 0.0;
+in_element->local_M[78] = det_J*rho / 6;
+in_element->local_M[79] = 0.0;
+in_element->local_M[80] = 0.0;
+in_element->local_M[81] = 0.0;
+in_element->local_M[82] = 0.0;
+in_element->local_M[83] = 0.0;
+in_element->local_M[84] = 0.0;
+in_element->local_M[85] = 0.0;
+in_element->local_M[86] = 0.0;
+in_element->local_M[87] = 0.0;
+in_element->local_M[88] = 0.0;
+in_element->local_M[89] = 0.0;
+in_element->local_M[90] = 0.0;
+in_element->local_M[91] = det_J*rho / 6;
+in_element->local_M[92] = 0.0;
+in_element->local_M[93] = 0.0;
+in_element->local_M[94] = 0.0;
+in_element->local_M[95] = 0.0;
+in_element->local_M[96] = 0.0;
+in_element->local_M[97] = 0.0;
+in_element->local_M[98] = 0.0;
+in_element->local_M[99] = 0.0;
+in_element->local_M[100] = 0.0;
+in_element->local_M[101] = 0.0;
+in_element->local_M[102] = 0.0;
+in_element->local_M[103] = 0.0;
+in_element->local_M[104] = det_J*rho / 6;
+in_element->local_M[105] = 0.0;
+in_element->local_M[106] = 0.0;
+in_element->local_M[107] = 0.0;
+in_element->local_M[108] = 0.0;
+in_element->local_M[109] = 0.0;
+in_element->local_M[110] = 0.0;
+in_element->local_M[111] = 0.0;
+in_element->local_M[112] = 0.0;
+in_element->local_M[113] = 0.0;
+in_element->local_M[114] = 0.0;
+in_element->local_M[115] = 0.0;
+in_element->local_M[116] = 0.0;
+in_element->local_M[117] = det_J*rho / 6;
+in_element->local_M[118] = 0.0;
+in_element->local_M[119] = 0.0;
+in_element->local_M[120] = 0.0;
+in_element->local_M[121] = 0.0;
+in_element->local_M[122] = 0.0;
+in_element->local_M[123] = 0.0;
+in_element->local_M[124] = 0.0;
+in_element->local_M[125] = 0.0;
+in_element->local_M[126] = 0.0;
+in_element->local_M[127] = 0.0;
+in_element->local_M[128] = 0.0;
+in_element->local_M[129] = 0.0;
+in_element->local_M[130] = det_J*rho / 6;
+in_element->local_M[131] = 0.0;
+in_element->local_M[132] = 0.0;
+in_element->local_M[133] = 0.0;
+in_element->local_M[134] = 0.0;
+in_element->local_M[135] = 0.0;
+in_element->local_M[136] = 0.0;
+in_element->local_M[137] = 0.0;
+in_element->local_M[138] = 0.0;
+in_element->local_M[139] = 0.0;
+in_element->local_M[140] = 0.0;
+in_element->local_M[141] = 0.0;
+in_element->local_M[142] = 0.0;
+in_element->local_M[143] = det_J*rho / 6;
+#endif // 0
+//for (int b = 0; b < 144; b++){
+//	in_element->local_M[b] = in_element->
+//}
 	//return (x14*(y24*z34 - y34*z24) - y14*(x24*z34 - z24 * x34) + z14*(x24*y34 - y24*x34));
+float b1 = 0.0;
+float b2 = -(9.81 * 16000.0);
+float b3 = 0.0;
+in_element->f_body[0] = b1*det_J / 2;
+in_element->f_body[1] = b2*det_J / 2;
+in_element->f_body[2] = b3*det_J / 2;
+in_element->f_body[3] = b1*det_J / 2;
+in_element->f_body[4] = b2*det_J / 2;
+in_element->f_body[5] = b3*det_J / 2;
+in_element->f_body[6] = b1*det_J / 2;
+in_element->f_body[7] = b2*det_J / 2;
+in_element->f_body[8] = b3*det_J / 2;
+in_element->f_body[9] = -b1*det_J / 2;
+in_element->f_body[10] = -b2*det_J / 2;
+in_element->f_body[11] = -b3*det_J / 2;
 }
 
 
 
-__global__ void gpu_make_K(	AFEM::element *in_vec,AFEM::position_3D *in_pos,	int numElem,	int numNodes, 	float *K_d	,float *M_d)
+__global__ void gpu_make_K(	AFEM::element *in_vec,AFEM::position_3D *in_pos,	int numElem,	int numNodes, 	float *K_d	,float *M_d,float *f_d)
 {
 
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
@@ -557,9 +873,15 @@ __global__ void gpu_make_K(	AFEM::element *in_vec,AFEM::position_3D *in_pos,	int
 				//d_A_dense[IDX2C(DOF[c], DOF[r], 3000)] = d_A_dense[IDX2C(DOF[c], DOF[r], 3000)] + E_vector[offset * 144 + c*12+r];
 				atomicAdda(&(K_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]),in_vec[x].local_K[c*12+r]);
 				atomicAdda(&(M_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]), in_vec[x].local_M[c * 12 + r]);
+				/*if (DOF[c] == DOF[r]){
+					atomicAdda(&(M_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]), in_vec[x].volume*1000.0/6.0);
+				} */
+
 				//IDX2C(DOF[c], DOF[r], 3000)
 				//K[IDX2C(DOF[r], DOF[c], numP*dim)] = K[IDX2C(DOF[r], DOF[c], numP*dim)] + E[k][r][c];
 			}
+			//atomicAdda(&(f_d[DOF[c]]), in_vec[x].f_body[c]);
+			atomicAdda(&(f_d[DOF[c]]), in_vec[x].f_body[c]);
 		}
 		//printf("hi");
 	}
@@ -574,6 +896,17 @@ __global__ void reset_K_GPU(float *K_d,float *M_d, int numNodes, int dim){
 	if (x < numNodes*dim*numNodes*dim){
 		K_d[x] = 0;
 		M_d[x] = 0;
+	}
+}
+
+//reset f external vector
+//Resets the K matrix to zero
+__global__ void reset_f_GPU(float *f_d, int numNodes, int dim){
+	int x = threadIdx.x + blockIdx.x * blockDim.x;
+
+	if (x < numNodes*dim){
+		f_d[x] = 0;
+		//M_d[x] = 0;
 	}
 }
 __global__ void update_position_vector(AFEM::position_3D *pos_in, float *u_dot_in, float dt,int numNodes, int dim){
@@ -630,14 +963,58 @@ __global__ void gpu_stationary_BC(float *K_d,float *f_d, AFEM::stationary *stat_
 		}
 		
 	}
+
+	/*if (x < numstationary){
+
+
+
+		for (int i = 0; i < 3; i++){
+
+			for (int n = 0; n < numnodes*dim; n++){
+				K_d[IDX2C(stat_d[x].displacement_index[i], n, 3 * (numnodes))] = 0.0f;
+			}
+			K_d[IDX2C(stat_d[x].displacement_index[i], stat_d[x].displacement_index[i], 3 * (numnodes))] = 1.0f;
+			f_d[stat_d[x].displacement_index[i]] = 0.0f;
+		}
+
+	}*/
+
+	//if (x < numstationary){
+
+
+
+	//	for (int i = 0; i < 3; i++){
+
+	//		/*for (int n = 0; n < numnodes*dim; n++){
+	//			K_d[IDX2C(n, stat_d[x].displacement_index[i], 3 * (numnodes))] = 0.0f;
+	//		}
+	//		K_d[IDX2C(stat_d[x].displacement_index[i], stat_d[x].displacement_index[i], 3 * (numnodes))] = 1.0f;*/
+	//		f_d[stat_d[x].displacement_index[i]] = 0.0f;
+	//	}
+
+	//}
+
+
 }
 
 
-__global__ void gpu_make_f(float *f_d, int numnodes, AFEM::position_3D *pos_info,int dim){
+
+
+
+__global__ void gpu_make_f(float *f_d, int numnodes, AFEM::position_3D *pos_info,int dim,int first){
 	
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
 	if (x < numnodes){
-		f_d[pos_info[x].displacement_index[1]] += -0.2263/1000.0;
+		if (first == 1){
+			f_d[pos_info[x].displacement_index[0]] += 0.0; //x
+			f_d[pos_info[x].displacement_index[1]] = -0.9 / 1.0; //y
+			f_d[pos_info[x].displacement_index[2]] += 0.0; //z
+		}
+		else{
+			f_d[pos_info[x].displacement_index[0]] += 0.0; //x
+			f_d[pos_info[x].displacement_index[1]] = -0.9 / 1.0; //y
+			f_d[pos_info[x].displacement_index[2]] += 0.0; //z
+		}
 	}
 }
 
@@ -649,6 +1026,10 @@ __global__ void find_dx(float *dx_in, AFEM::position_3D *initial_pos, AFEM::posi
 		dx_in[new_pos[x].displacement_index[0]] = new_pos[x].x - initial_pos[x].x;
 		dx_in[new_pos[x].displacement_index[1]] = new_pos[x].y - initial_pos[x].y;
 		dx_in[new_pos[x].displacement_index[2]] = new_pos[x].z - initial_pos[x].z;
+
+		/*initial_pos[x].x = new_pos[x].x;
+		initial_pos[x].y = new_pos[x].y;
+		initial_pos[x].z = new_pos[x].z;*/
 
 	}
 }
@@ -668,18 +1049,32 @@ __global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float 
 		b = c = 0;
 		a = f_ext[x];
 		for (int i = 0; i < num_nodes*dim; i++){
-			
+			/*if (i == x){
+				M_in[IDX2C(i, x, 3 * (num_nodes))] = 
+			}*/
 			b =b+ K_in[IDX2C(i, x, 3 * (num_nodes))] * dx_in[i];
-			//c = c + K_in[IDX2C(i, x, 3 * (num_nodes))] * u_dot[i];
-			float c1 = dt*rm*M_in[IDX2C(i, x, 3 * num_nodes)] + (dt *rk-dt*dt)*K_in[IDX2C(i, x, 3 * num_nodes)];
+			//c = c + K_in[IDX2C(i, x, 3 * (num_nodes))] * u_dot[i]; 
+			//origional
+			//float c1 = dt*rm*M_in[IDX2C(i, x, 3 * num_nodes)] + (dt *rk-dt*dt)*K_in[IDX2C(i, x, 3 * num_nodes)];
+			float c1 =M_in[IDX2C(i, x, 3 * num_nodes)];
 			c += c1*u_dot[i];
-			LHS[IDX2C(i, x, 3 * (num_nodes))] =  (1.0-dt*rm)*M_in[IDX2C(i, x, 3 * (num_nodes))] - (dt*rk+dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
+
+			//Origional
+			//LHS[IDX2C(i, x, 3 * (num_nodes))] = (1.0-dt*rm)*M_in[IDX2C(i, x, 3 * (num_nodes))] - (dt*rk+dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
+			LHS[IDX2C(i, x, 3 * (num_nodes))] = M_in[IDX2C(i, x, 3 * (num_nodes))] + (dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
+			/*if (i == x){
+				
+			}
+			else{
+				LHS[IDX2C(i, x, 3 * (num_nodes))] = (dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
+			}*/
+			
 		}
-		a *= dt;
-		b *= dt;
+		a = a*dt;
+		b = b*dt;
 		
 
-		RHS[x] = a - b - c;
+		RHS[x] = a-b+ c;
 		//RHS[x] = f_ext[x];
 	}
 }
@@ -690,7 +1085,7 @@ __global__ void update_u_dot_vector(float *u_dot_pre, float *u_dot_sln,int numNo
 	int x = threadIdx.x + blockIdx.x *blockDim.x;
 
 	if (x < numNodes*dim){
-		u_dot_pre[x] = u_dot_pre[x]+u_dot_sln[x];
+		u_dot_pre[x] = u_dot_sln[x];// LOL u_dot_pre[x]+
 	}
 
 	
@@ -785,7 +1180,7 @@ void cuda_tools::make_K(int num_elem,int num_nodes){
 		blocks = (num_elem + 256) / 256;
 		threads = 256;
 	}
-	gpu_make_K << <blocks, threads >> > (elem_array_d, position_array_d,num_elem,num_nodes, K_d,M_d);
+	gpu_make_K << <blocks, threads >> > (elem_array_d, position_array_d,num_elem,num_nodes, K_d,M_d,f_d);
 	
 	//cudaMemset(K_d, 0, sizeof(*K_d)*dim*num_nodes*dim*num_nodes); //initialize the vector K_d to zero
 
@@ -793,7 +1188,7 @@ void cuda_tools::make_K(int num_elem,int num_nodes){
 	//
 
 }
-
+int first = 1;
 
 void cuda_tools::make_f( int num_nodes,  int dim){
 	int blocks, threads;
@@ -805,8 +1200,15 @@ void cuda_tools::make_f( int num_nodes,  int dim){
 		blocks = (num_nodes + 256) / 256;
 		threads = 256;
 	}
+	if (first){
 
-	gpu_make_f << <blocks, threads >> >( f_d, num_nodes,position_array_d, dim);
+		gpu_make_f << <blocks, threads >> >(f_d, num_nodes, position_array_d, dim, first);
+		first = 0;
+	}
+	else {
+		gpu_make_f << <blocks, threads >> >(f_d, num_nodes, position_array_d, dim, 0);
+	}
+	
 
 }
 
@@ -823,6 +1225,23 @@ void cuda_tools::stationary_BC(int num_elem, int num_nodes,int num_stationary,in
 	gpu_stationary_BC << <blocks, threads >> >(LHS,RHS, stationary_array_d, num_stationary,num_nodes,dim);
 
 }
+
+
+void cuda_tools::stationary_BC_f(float *zero_vec){
+	int blocks, threads;
+	if (Nstationary <= 256){
+		blocks = 1;
+		threads = Nstationary;
+	}
+	else {
+		blocks = (Nstationary + 256) / 256;
+		threads = 256;
+	}
+	gpu_stationary_BC << <blocks, threads >> >(LHS, zero_vec, stationary_array_d, Nstationary, Nnodes, 3);
+
+	//stationary_BC( Nelems, Nnodes, Nstationary, 3);
+
+}
 void cuda_tools::reset_K(int num_elem,int num_nodes){
 	int blocks, threads;
 	int total_size = Nnodes*Nnodes*9;
@@ -834,7 +1253,21 @@ void cuda_tools::reset_K(int num_elem,int num_nodes){
 		blocks = (total_size + 256) / 256;
 		threads = 256;
 	}
+
+	int blocks2, threads2;
+	int total_size2 = Nnodes*3;
+	if (total_size2 <= 256){
+		blocks2 = 1;
+		threads2 = total_size;
+	}
+	else {
+		blocks2 = (total_size2 + 256) / 256;
+		threads2 = 256;
+	}
+
+
 	reset_K_GPU << <blocks, threads >> >(K_d,M_d, num_nodes, 3);
+	reset_f_GPU << <blocks2, threads2 >> >(f_d, num_nodes, 3);
 }
 
 
@@ -864,10 +1297,6 @@ void cuda_tools::update_geometry(float *u_dot_sln){
 	
 
 
-	update_u_dot_vector << <blocks_nodes*3, threads_nodes >> >(u_dot_d, u_dot_sln, Nnodes, 3);
-
-
-
 
 
 	
@@ -893,7 +1322,16 @@ void cuda_tools::update_geometry(float *u_dot_sln){
 	}
 	free(h_y);*/
 	//std::cout << std::endl;
-	update_position_vector << <blocks_nodes, threads_nodes >> >(position_array_d, u_dot_d, dt, Nnodes, 3);
+	//stationary_BC_u_dot(u_dot_sln, Nelems, Nnodes, Nstationary, 3);
+	update_position_vector << <blocks_nodes, threads_nodes >> >(position_array_d, u_dot_sln, dt, Nnodes, 3);
+
+
+	
+
+	update_u_dot_vector << <blocks_nodes * 3, threads_nodes >> >(u_dot_d, u_dot_sln, Nnodes, 3);
+
+
+
 	//update_Geo_CUDA << <blocks_element, threads_element >> >(elem_array_d, position_array_d,u_soln, Nelems);
 }
 void cuda_tools::dynamic(){
@@ -923,10 +1361,10 @@ void cuda_tools::dynamic(){
 	find_dx << <blocks_nodes, threads_nodes >> >(dx_d, position_array_initial_d, position_array_d, Nnodes);
 
 	/*float *sln_ptr = (float *)malloc(Ncols*sizeof(float));
-	cudaMemcpy(sln_ptr, u_dot_d, Ncols*sizeof(float), cudaMemcpyDeviceToHost);
-*/
+	cudaMemcpy(sln_ptr, f_d, Ncols*sizeof(float), cudaMemcpyDeviceToHost);
 
-	/*std::ofstream output;
+
+	std::ofstream output;
 	output.open("SLN.txt");
 
 	for (int i = 0; i < Ncols; i++){
@@ -938,12 +1376,41 @@ void cuda_tools::dynamic(){
 	}
 
 	output.close();
-	free(sln_ptr);
-*/
-	
-	find_A_b_dynamic << <blocks_nodesdim, threads_nodesdim >> >(K_d, dx_d, u_dot_d, f_d,RHS, M_d, LHS,Nnodes, dt,1.2,0.2, 3);
+	free(sln_ptr);*/
 
-	stationary_BC(Nelems, Nnodes, Nstationary, 3);
+	//stationary_BC_f(Nelems, Nnodes, Nstationary, 3);
+	//stationary_BC_f(f_d);
+	find_A_b_dynamic << <blocks_nodesdim, threads_nodesdim >> >(K_d, dx_d, u_dot_d, f_d,RHS, M_d, LHS,Nnodes, dt,1.02,0.002, 3);
+
+
+	//float *rhs_output = (float *)malloc(Ncols* Ncols*sizeof(float));
+
+	//cudaMemcpy(rhs_output, LHS, Ncols* Ncols*sizeof(float), cudaMemcpyDeviceToHost);
+
+	//std::ofstream output_RHS;
+	//output_RHS.open("RHS.txt");
+
+	//for (int i = 0; i < Ncols; i++){
+
+	//	//std::cout << h_y[IDX2C(j, i, Ncols)] << " ";
+	//	for (int j = 0; j < Ncols; j++){
+	//		output_RHS << rhs_output[IDX2C(j, i, Ncols)] << " ";
+	//	}
+	//	output_RHS << std::endl;
+
+
+	//	//output_RHS << rhs_output[i] << std::endl;
+
+	//	//std::cout << std::endl;
+	//	//output << std::endl;
+	//}
+
+	//output_RHS.close();
+
+
+	//update_geometry(d_y);
+	
+ stationary_BC(Nelems, Nnodes, Nstationary, 3);
 
 	
 
