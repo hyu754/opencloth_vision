@@ -319,7 +319,7 @@ void OnRender() {
 	//draw points	
 	
 	glEnable(GL_POINT_SMOOTH);
-	glPointSize((GLfloat)1.0);
+	glPointSize((GLfloat)5.0);
 	glBegin(GL_POINTS);
 
 	

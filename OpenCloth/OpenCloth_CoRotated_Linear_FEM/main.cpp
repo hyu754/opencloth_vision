@@ -68,7 +68,7 @@ struct Tetrahedron {
 vector<Tetrahedron> tetrahedra;
 
 float nu = 0.493f;			//Poisson ratio
-float Y = 50000.0f;		//Young modulus
+float Y = 500000.0f;		//Young modulus
 float density =1000.0f;
 float creep = 0.20f;
 float yield = 0.04f;
@@ -354,7 +354,7 @@ void GenerateBlocks(size_t xdim, size_t ydim, size_t zdim, float width, float he
 	//and 0.5 of the depth in z axis
 	for(size_t i=0;i<total_points;i++) {
 		X[i].y += 1.5;		
-		X[i].z -= hzdim*depth +5.0; 
+		X[i].z -= hzdim*depth ; 
 	} 
 
 	for (size_t i = 0; i < xdim; ++i) {
@@ -426,7 +426,7 @@ void ClearStiffnessAssembly() {
 }
 void InitGL() {  
 	 
-	GenerateBlocks(10,5,3,0.1f,0.1f,0.1f);
+	GenerateBlocks(25,5,5,0.2f/8.0,0.05f,0.05f);
 	total_tetrahedra = tetrahedra.size();	
  
 	total_points = X.size();

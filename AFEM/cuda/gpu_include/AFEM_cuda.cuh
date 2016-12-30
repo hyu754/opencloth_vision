@@ -71,7 +71,8 @@ class cuda_tools{
 
 
 	//dt for dynamic
-	float dt = 1.0/60.0;
+	float dt = 1.0/160.0;
+	//float dt = 1.0;
 	//cuda allocations
 	//----------------------------------------------------------------------------------
 	int Nrows;                        // --- Number of rows
@@ -108,8 +109,8 @@ class cuda_tools{
 	//Variables to use
 	int M = 0, N = 0;// nz = 0, *I = NULL, *J = NULL;
 	float *val = NULL;
-	const float tol = 1e-5f;
-	const int max_iter = 1000;
+	const float tol = 1e-8f;
+	const int max_iter =1150;
 	float *x;
 	float *rhs;
 	float a, b, na, r0, r1;
@@ -175,6 +176,8 @@ public:
 	//conjugate gradient
 	void cg();
 
+	//conjugate gradient with precondition
+	void cg_precond();
 	//Dynamic
 	void dynamic();
 
