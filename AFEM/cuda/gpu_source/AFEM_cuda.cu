@@ -986,12 +986,28 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element, AFEM::pos
 	float b2 = -(9.81 *1000.0)*(det_J / 6) / 4.0;
 	float b3 = 0.0;
 //	b1  = b2;
+	//in_element->f_body[0] = b1;
+	//in_element->f_body[1] =b2;// b2*det_J / 2;
+	//in_element->f_body[2] = b3;
+
+	//in_element->f_body[3] = b1;
+	//in_element->f_body[4] = b2;// b2*det_J / 2;
+	//in_element->f_body[5] = b3;
+
+	//in_element->f_body[6] = b1;
+	//in_element->f_body[7] = b2;// b2*det_J / 2;
+	//in_element->f_body[8] = b3;
+
+	//in_element->f_body[9] = b1;
+	//in_element->f_body[10] = b2;// *det_J / 2;
+	//in_element->f_body[11] = b3;
+
 	in_element->f_body[0] = b1;
 	in_element->f_body[1] =b2;// b2*det_J / 2;
 	in_element->f_body[2] = b3;
 
 	in_element->f_body[3] = b1;
-	in_element->f_body[4] =  b2;// b2*det_J / 2;
+	in_element->f_body[4] = b2;// b2*det_J / 2;
 	in_element->f_body[5] = b3;
 
 	in_element->f_body[6] = b1;
@@ -999,8 +1015,9 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element, AFEM::pos
 	in_element->f_body[8] = b3;
 
 	in_element->f_body[9] = b1;
-	in_element->f_body[10] =  b2;// *det_J / 2;
+	in_element->f_body[10] = b2;// *det_J / 2;
 	in_element->f_body[11] = b3;
+
 
 }
 
@@ -1022,7 +1039,7 @@ __global__ void gpu_make_K(AFEM::element *in_vec, AFEM::position_3D *in_pos, int
 			for (int dof = 0; dof < 3; dof++){
 
 				DOF[counter] = in_vec[x].position_info[npe].displacement_index[dof];
-				counter++;exit
+				counter++;
 
 			}
 		}
@@ -1233,7 +1250,7 @@ __global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float 
 
 			//Origional
 			//LHS[IDX2C(i, x, 3 * (num_nodes))] = (1.0-dt*rm)*M_in[IDX2C(i, x, 3 * (num_nodes))] - (dt*rk+dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
-			LHS[IDX2C(i, x, 3 * (num_nodes))] = (1.0 + 0.2 * dt)*M_in[IDX2C(i, x, 3 * (num_nodes))] + (dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
+			LHS[IDX2C(i, x, 3 * (num_nodes))] = (1.0 + 0.02 * dt)*M_in[IDX2C(i, x, 3 * (num_nodes))] + (dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
 			/*if (i == x){
 
 			}
