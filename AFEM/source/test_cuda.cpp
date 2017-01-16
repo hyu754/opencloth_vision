@@ -3,9 +3,20 @@
 #include "AFEM_simulation.hpp"
 #include "AFEM_visualization.hpp"
 //#include "AFEM_cuda.cuh"
+#include "AFEM_kinect_grabber.h"
 
 int main(void){
 	
+	AFEM_KINECT kinect_class;
+
+	/*kinect_class.initialize_kinect();
+	while (1){
+		kinect_class.acquire_color_frame_kinect(true);
+	}
+*/
+
+
+
 	AFEM::Geometry geo;
 	geo.set_dim(AFEM::THREE_DIMENSION);
 	geo.read_nodes("FEM_Nodes.txt");

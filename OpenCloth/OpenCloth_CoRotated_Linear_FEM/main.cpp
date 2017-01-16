@@ -44,7 +44,7 @@ const int width = 1024, height = 1024;
 #define EPSILON 0.001f
 #define EPS2  EPSILON*EPSILON
 size_t total_points=0;
-float timeStep =  1/60.0f;
+float timeStep =  1/160.0f;
 float currentTime = 0;
 float accumulator = timeStep;
 int selected_index = -1;
@@ -68,7 +68,7 @@ struct Tetrahedron {
 vector<Tetrahedron> tetrahedra;
 
 float nu = 0.493f;			//Poisson ratio
-float Y = 500000.0f;		//Young modulus
+float Y = 5000000.0f;		//Young modulus
 float density =1000.0f;
 float creep = 0.20f;
 float yield = 0.04f;

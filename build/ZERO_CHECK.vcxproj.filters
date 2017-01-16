@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\GitHub\opencloth_vision\build\CMakeFiles\559ef72c3ab5bd2a4d366b1c86df9b58\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{9E65B5CA-1588-3098-8F49-02DCADA0B366}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

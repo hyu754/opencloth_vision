@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{79EC35C6-1B9A-3D96-8AFB-9E334933E2D8}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>ALL_BUILD</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>D:\GitHub\opencloth_vision\include;D:\GitHub\opencloth_vision\include\kinect;D:\GitHub\opencloth_vision\AFEM\include;D:\GitHub\opencloth_vision\AFEM\cuda\gpu_include;D:\GitHub\opencloth_vision\Geometry;D:\Downloads\opencv\opencv\allbuild;D:\Downloads\opencv\opencv\sources\include;D:\Downloads\opencv\opencv\sources\include\opencv;D:\Downloads\opencv\opencv\sources\modules\cudev\include;D:\Downloads\opencv\opencv\sources\modules\core\include;D:\Downloads\opencv\opencv\sources\modules\cudaarithm\include;D:\Downloads\opencv\opencv\sources\modules\flann\include;D:\Downloads\opencv\opencv\sources\modules\imgproc\include;D:\Downloads\opencv\opencv\sources\modules\ml\include;D:\Downloads\opencv\opencv\sources\modules\video\include;D:\Downloads\opencv\opencv\sources\modules\cudabgsegm\include;D:\Downloads\opencv\opencv\sources\modules\cudafilters\include;D:\Downloads\opencv\opencv\sources\modules\cudaimgproc\include;D:\Downloads\opencv\opencv\sources\modules\cudawarping\include;D:\Downloads\opencv\opencv\sources\modules\imgcodecs\include;D:\Downloads\opencv\opencv\sources\modules\photo\include;D:\Downloads\opencv\opencv\sources\modules\shape\include;D:\Downloads\opencv\opencv\sources\modules\videoio\include;D:\Downloads\opencv\opencv\sources\modules\cudacodec\include;D:\Downloads\opencv\opencv\sources\modules\highgui\include;D:\Downloads\opencv\opencv\sources\modules\objdetect\include;D:\Downloads\opencv\opencv\sources\modules\ts\include;D:\Downloads\opencv\opencv\sources\modules\features2d\include;D:\Downloads\opencv\opencv\sources\modules\calib3d\include;D:\Downloads\opencv\opencv\sources\modules\cudafeatures2d\include;D:\Downloads\opencv\opencv\sources\modules\cudalegacy\include;D:\Downloads\opencv\opencv\sources\modules\cudaobjdetect\include;D:\Downloads\opencv\opencv\sources\modules\cudaoptflow\include;D:\Downloads\opencv\opencv\sources\modules\cudastereo\include;D:\Downloads\opencv\opencv\sources\modules\stitching\include;D:\Downloads\opencv\opencv\sources\modules\superres\include;D:\Downloads\opencv\opencv\sources\modules\videostab\include;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>D:\GitHub\opencloth_vision\include;D:\GitHub\opencloth_vision\include\kinect;D:\GitHub\opencloth_vision\AFEM\include;D:\GitHub\opencloth_vision\AFEM\cuda\gpu_include;D:\GitHub\opencloth_vision\Geometry;D:\Downloads\opencv\opencv\allbuild;D:\Downloads\opencv\opencv\sources\include;D:\Downloads\opencv\opencv\sources\include\opencv;D:\Downloads\opencv\opencv\sources\modules\cudev\include;D:\Downloads\opencv\opencv\sources\modules\core\include;D:\Downloads\opencv\opencv\sources\modules\cudaarithm\include;D:\Downloads\opencv\opencv\sources\modules\flann\include;D:\Downloads\opencv\opencv\sources\modules\imgproc\include;D:\Downloads\opencv\opencv\sources\modules\ml\include;D:\Downloads\opencv\opencv\sources\modules\video\include;D:\Downloads\opencv\opencv\sources\modules\cudabgsegm\include;D:\Downloads\opencv\opencv\sources\modules\cudafilters\include;D:\Downloads\opencv\opencv\sources\modules\cudaimgproc\include;D:\Downloads\opencv\opencv\sources\modules\cudawarping\include;D:\Downloads\opencv\opencv\sources\modules\imgcodecs\include;D:\Downloads\opencv\opencv\sources\modules\photo\include;D:\Downloads\opencv\opencv\sources\modules\shape\include;D:\Downloads\opencv\opencv\sources\modules\videoio\include;D:\Downloads\opencv\opencv\sources\modules\cudacodec\include;D:\Downloads\opencv\opencv\sources\modules\highgui\include;D:\Downloads\opencv\opencv\sources\modules\objdetect\include;D:\Downloads\opencv\opencv\sources\modules\ts\include;D:\Downloads\opencv\opencv\sources\modules\features2d\include;D:\Downloads\opencv\opencv\sources\modules\calib3d\include;D:\Downloads\opencv\opencv\sources\modules\cudafeatures2d\include;D:\Downloads\opencv\opencv\sources\modules\cudalegacy\include;D:\Downloads\opencv\opencv\sources\modules\cudaobjdetect\include;D:\Downloads\opencv\opencv\sources\modules\cudaoptflow\include;D:\Downloads\opencv\opencv\sources\modules\cudastereo\include;D:\Downloads\opencv\opencv\sources\modules\stitching\include;D:\Downloads\opencv\opencv\sources\modules\superres\include;D:\Downloads\opencv\opencv\sources\modules\videostab\include;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>D:\GitHub\opencloth_vision\include;D:\GitHub\opencloth_vision\include\kinect;D:\GitHub\opencloth_vision\AFEM\include;D:\GitHub\opencloth_vision\AFEM\cuda\gpu_include;D:\GitHub\opencloth_vision\Geometry;D:\Downloads\opencv\opencv\allbuild;D:\Downloads\opencv\opencv\sources\include;D:\Downloads\opencv\opencv\sources\include\opencv;D:\Downloads\opencv\opencv\sources\modules\cudev\include;D:\Downloads\opencv\opencv\sources\modules\core\include;D:\Downloads\opencv\opencv\sources\modules\cudaarithm\include;D:\Downloads\opencv\opencv\sources\modules\flann\include;D:\Downloads\opencv\opencv\sources\modules\imgproc\include;D:\Downloads\opencv\opencv\sources\modules\ml\include;D:\Downloads\opencv\opencv\sources\modules\video\include;D:\Downloads\opencv\opencv\sources\modules\cudabgsegm\include;D:\Downloads\opencv\opencv\sources\modules\cudafilters\include;D:\Downloads\opencv\opencv\sources\modules\cudaimgproc\include;D:\Downloads\opencv\opencv\sources\modules\cudawarping\include;D:\Downloads\opencv\opencv\sources\modules\imgcodecs\include;D:\Downloads\opencv\opencv\sources\modules\photo\include;D:\Downloads\opencv\opencv\sources\modules\shape\include;D:\Downloads\opencv\opencv\sources\modules\videoio\include;D:\Downloads\opencv\opencv\sources\modules\cudacodec\include;D:\Downloads\opencv\opencv\sources\modules\highgui\include;D:\Downloads\opencv\opencv\sources\modules\objdetect\include;D:\Downloads\opencv\opencv\sources\modules\ts\include;D:\Downloads\opencv\opencv\sources\modules\features2d\include;D:\Downloads\opencv\opencv\sources\modules\calib3d\include;D:\Downloads\opencv\opencv\sources\modules\cudafeatures2d\include;D:\Downloads\opencv\opencv\sources\modules\cudalegacy\include;D:\Downloads\opencv\opencv\sources\modules\cudaobjdetect\include;D:\Downloads\opencv\opencv\sources\modules\cudaoptflow\include;D:\Downloads\opencv\opencv\sources\modules\cudastereo\include;D:\Downloads\opencv\opencv\sources\modules\stitching\include;D:\Downloads\opencv\opencv\sources\modules\superres\include;D:\Downloads\opencv\opencv\sources\modules\videostab\include;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>D:\GitHub\opencloth_vision\include;D:\GitHub\opencloth_vision\include\kinect;D:\GitHub\opencloth_vision\AFEM\include;D:\GitHub\opencloth_vision\AFEM\cuda\gpu_include;D:\GitHub\opencloth_vision\Geometry;D:\Downloads\opencv\opencv\allbuild;D:\Downloads\opencv\opencv\sources\include;D:\Downloads\opencv\opencv\sources\include\opencv;D:\Downloads\opencv\opencv\sources\modules\cudev\include;D:\Downloads\opencv\opencv\sources\modules\core\include;D:\Downloads\opencv\opencv\sources\modules\cudaarithm\include;D:\Downloads\opencv\opencv\sources\modules\flann\include;D:\Downloads\opencv\opencv\sources\modules\imgproc\include;D:\Downloads\opencv\opencv\sources\modules\ml\include;D:\Downloads\opencv\opencv\sources\modules\video\include;D:\Downloads\opencv\opencv\sources\modules\cudabgsegm\include;D:\Downloads\opencv\opencv\sources\modules\cudafilters\include;D:\Downloads\opencv\opencv\sources\modules\cudaimgproc\include;D:\Downloads\opencv\opencv\sources\modules\cudawarping\include;D:\Downloads\opencv\opencv\sources\modules\imgcodecs\include;D:\Downloads\opencv\opencv\sources\modules\photo\include;D:\Downloads\opencv\opencv\sources\modules\shape\include;D:\Downloads\opencv\opencv\sources\modules\videoio\include;D:\Downloads\opencv\opencv\sources\modules\cudacodec\include;D:\Downloads\opencv\opencv\sources\modules\highgui\include;D:\Downloads\opencv\opencv\sources\modules\objdetect\include;D:\Downloads\opencv\opencv\sources\modules\ts\include;D:\Downloads\opencv\opencv\sources\modules\features2d\include;D:\Downloads\opencv\opencv\sources\modules\calib3d\include;D:\Downloads\opencv\opencv\sources\modules\cudafeatures2d\include;D:\Downloads\opencv\opencv\sources\modules\cudalegacy\include;D:\Downloads\opencv\opencv\sources\modules\cudaobjdetect\include;D:\Downloads\opencv\opencv\sources\modules\cudaoptflow\include;D:\Downloads\opencv\opencv\sources\modules\cudastereo\include;D:\Downloads\opencv\opencv\sources\modules\stitching\include;D:\Downloads\opencv\opencv\sources\modules\superres\include;D:\Downloads\opencv\opencv\sources\modules\videostab\include;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\GitHub\opencloth_vision\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule D:/GitHub/opencloth_vision/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"D:\Program Files\CMake\bin\cmake.exe" -HD:/GitHub/opencloth_vision -BD:/GitHub/opencloth_vision/build --check-stamp-file D:\GitHub\opencloth_vision\build\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/GitHub/opencloth_vision/CMakeLists.txt;D:\GitHub\opencloth_vision\CMakeLists.txt;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeSystem.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeSystemSpecificInitialize.cmake;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeCCompiler.cmake;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC.cmake;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeRCInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCXXInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCommonLanguageInclude.cmake;D:\Downloads\opencv\opencv\allbuild\OpenCVConfig-version.cmake;D:\Downloads\opencv\opencv\allbuild\OpenCVConfig.cmake;D:\Downloads\opencv\opencv\allbuild\OpenCVModules.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageMessage.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeParseArguments.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA\select_compute_arch.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageMessage.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeParseArguments.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA\select_compute_arch.cmake;D:\GitHub\opencloth_vision\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\GitHub\opencloth_vision\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/GitHub/opencloth_vision/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"D:\Program Files\CMake\bin\cmake.exe" -HD:/GitHub/opencloth_vision -BD:/GitHub/opencloth_vision/build --check-stamp-file D:\GitHub\opencloth_vision\build\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/GitHub/opencloth_vision/CMakeLists.txt;D:\GitHub\opencloth_vision\CMakeLists.txt;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeSystem.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeSystemSpecificInitialize.cmake;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeCCompiler.cmake;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC.cmake;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeRCInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCXXInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCommonLanguageInclude.cmake;D:\Downloads\opencv\opencv\allbuild\OpenCVConfig-version.cmake;D:\Downloads\opencv\opencv\allbuild\OpenCVConfig.cmake;D:\Downloads\opencv\opencv\allbuild\OpenCVModules.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageMessage.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeParseArguments.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA\select_compute_arch.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageMessage.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeParseArguments.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA\select_compute_arch.cmake;D:\GitHub\opencloth_vision\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\GitHub\opencloth_vision\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule D:/GitHub/opencloth_vision/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"D:\Program Files\CMake\bin\cmake.exe" -HD:/GitHub/opencloth_vision -BD:/GitHub/opencloth_vision/build --check-stamp-file D:\GitHub\opencloth_vision\build\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:/GitHub/opencloth_vision/CMakeLists.txt;D:\GitHub\opencloth_vision\CMakeLists.txt;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeSystem.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeSystemSpecificInitialize.cmake;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeCCompiler.cmake;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC.cmake;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeRCInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCXXInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCommonLanguageInclude.cmake;D:\Downloads\opencv\opencv\allbuild\OpenCVConfig-version.cmake;D:\Downloads\opencv\opencv\allbuild\OpenCVConfig.cmake;D:\Downloads\opencv\opencv\allbuild\OpenCVModules.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageMessage.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeParseArguments.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA\select_compute_arch.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageMessage.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeParseArguments.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA\select_compute_arch.cmake;D:\GitHub\opencloth_vision\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\GitHub\opencloth_vision\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule D:/GitHub/opencloth_vision/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"D:\Program Files\CMake\bin\cmake.exe" -HD:/GitHub/opencloth_vision -BD:/GitHub/opencloth_vision/build --check-stamp-file D:\GitHub\opencloth_vision\build\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:/GitHub/opencloth_vision/CMakeLists.txt;D:\GitHub\opencloth_vision\CMakeLists.txt;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeSystem.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeSystemSpecificInitialize.cmake;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeCCompiler.cmake;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeCXXCompiler.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC.cmake;D:\GitHub\opencloth_vision\build\CMakeFiles\3.7.0\CMakeRCCompiler.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeRCInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCXXInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeLanguageInformation.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\Platform\Windows-MSVC.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeCommonLanguageInclude.cmake;D:\Downloads\opencv\opencv\allbuild\OpenCVConfig-version.cmake;D:\Downloads\opencv\opencv\allbuild\OpenCVConfig.cmake;D:\Downloads\opencv\opencv\allbuild\OpenCVModules.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageMessage.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeParseArguments.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA\select_compute_arch.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindPackageMessage.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\CMakeParseArguments.cmake;D:\Program Files\CMake\share\cmake-3.7\Modules\FindCUDA\select_compute_arch.cmake;D:\GitHub\opencloth_vision\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\GitHub\opencloth_vision\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="D:/GitHub/opencloth_vision/build/ZERO_CHECK.vcxproj">
+      <Project>04C9F83C-0772-3AF9-9EB8-9B1C6986EED8</Project>
+    </ProjectReference>
+    <ProjectReference Include="D:/GitHub/opencloth_vision/build/AFEM.vcxproj">
+      <Project>14C68542-13AA-3057-A3E3-861BD4C156EB</Project>
+    </ProjectReference>
+    <ProjectReference Include="D:/GitHub/opencloth_vision/build/AFEM/cuda/AFEM_cuda_lib.vcxproj">
+      <Project>1DE1B951-D88A-3606-BFF2-4A6CE8789B59</Project>
+    </ProjectReference>
+    <ProjectReference Include="D:/GitHub/opencloth_vision/build/OpenCloth.vcxproj">
+      <Project>B3CF59F6-D681-37FD-94DD-40CBA72A9888</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

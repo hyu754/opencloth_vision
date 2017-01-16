@@ -241,8 +241,8 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element, AFEM::pos
 
 	in_element->volume = det_J / 6.0;
 
-	float E = 100000.0;
-	float nu = 0.41;
+	float E = 50000.0;
+	float nu = 0.49;
 
 #if 1
 
@@ -983,27 +983,11 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element, AFEM::pos
 	//}
 	//return (x14*(y24*z34 - y34*z24) - y14*(x24*z34 - z24 * x34) + z14*(x24*y34 - y24*x34));
 	float b1 = 0.0;
-	float b2 = -(9.81 *1000.0)*(det_J / 6) / 4.0;
+	float b2 = -(9.81 *1000.0)*(det_J / 6) ;
 	float b3 = 0.0;
 //	b1  = b2;
-	//in_element->f_body[0] = b1;
-	//in_element->f_body[1] =b2;// b2*det_J / 2;
-	//in_element->f_body[2] = b3;
-
-	//in_element->f_body[3] = b1;
-	//in_element->f_body[4] = b2;// b2*det_J / 2;
-	//in_element->f_body[5] = b3;
-
-	//in_element->f_body[6] = b1;
-	//in_element->f_body[7] = b2;// b2*det_J / 2;
-	//in_element->f_body[8] = b3;
-
-	//in_element->f_body[9] = b1;
-	//in_element->f_body[10] = b2;// *det_J / 2;
-	//in_element->f_body[11] = b3;
-
 	in_element->f_body[0] = b1;
-	in_element->f_body[1] =b2;// b2*det_J / 2;
+	in_element->f_body[1] = b2;// b2*det_J / 2;
 	in_element->f_body[2] = b3;
 
 	in_element->f_body[3] = b1;
@@ -1014,9 +998,25 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element, AFEM::pos
 	in_element->f_body[7] = b2;// b2*det_J / 2;
 	in_element->f_body[8] = b3;
 
-	in_element->f_body[9] = b1;
+	in_element->f_body[9] =  b1;
 	in_element->f_body[10] = b2;// *det_J / 2;
 	in_element->f_body[11] = b3;
+
+	//in_element->f_body[0] =0;
+	//in_element->f_body[1] =0.01;// b2*det_J / 2;
+	//in_element->f_body[2] = 0;
+
+	//in_element->f_body[3] = 0;
+	//in_element->f_body[4] = 0.01;// b2*det_J / 2;
+	//in_element->f_body[5] = 0;
+
+	//in_element->f_body[6] =0;
+	//in_element->f_body[7] = 0.01;// b2*det_J / 2;
+	//in_element->f_body[8] = 0;
+
+	//in_element->f_body[9] = 0;
+	//in_element->f_body[10] =- 0.01;// *det_J / 2;
+	//in_element->f_body[11] = 0;
 
 
 }
@@ -1053,7 +1053,8 @@ __global__ void gpu_make_K(AFEM::element *in_vec, AFEM::position_3D *in_pos, int
 				/*if (DOF[c] == DOF[r]){
 
 				} */
-				atomicAdda(&(M_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]), in_vec[x].local_M[c * 12 + r]);
+				//atomicAdda(&(M_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]), in_vec[x].local_M[c * 12 + r]);
+				atomicAdda(&(M_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]), in_vec[x].volume*1000.0 / 4.0);//
 				//IDX2C(DOF[c], DOF[r], 3000)
 				//K[IDX2C(DOF[r], DOF[c], numP*dim)] = K[IDX2C(DOF[r], DOF[c], numP*dim)] + E[k][r][c];
 				
@@ -1062,7 +1063,10 @@ __global__ void gpu_make_K(AFEM::element *in_vec, AFEM::position_3D *in_pos, int
 			/*if (x == 800){
 				atomicAdda(&(f_d[DOF[c]]), in_vec[x].f_body[c]);
 				}*/
+			//atomicAdda(&(f_d[DOF[c]]), in_vec[x].f_body[c]);
+			
 			atomicAdda(&(f_d[DOF[c]]), in_vec[x].f_body[c]);
+			
 		}
 		//printf("hi");
 	}
@@ -1148,7 +1152,7 @@ __global__ void gpu_stationary_BC(float *K_d, float *f_d, AFEM::stationary *stat
 				K_d[IDX2C(stat_d[x].displacement_index[i], n, 3 * (numnodes))] = 0.0f;
 			}
 			K_d[IDX2C(stat_d[x].displacement_index[i], stat_d[x].displacement_index[i], 3 * (numnodes))] = 1.0f;
-		 f_d[stat_d[x].displacement_index[i]] = 0.0f;
+		    f_d[stat_d[x].displacement_index[i]] = 0.0f;
 		}
 
 	}
@@ -1245,12 +1249,12 @@ __global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float 
 			//c = c + K_in[IDX2C(i, x, 3 * (num_nodes))] * u_dot[i]; 
 			//origional
 			//float c1 = dt*rm*M_in[IDX2C(i, x, 3 * num_nodes)] + (dt *rk-dt*dt)*K_in[IDX2C(i, x, 3 * num_nodes)];
-			float c1 = M_in[IDX2C(i, x, 3 * num_nodes)];
-			c += c1*u_dot[i];
+			
+			c=c+ M_in[IDX2C(i, x, 3 * num_nodes)] * u_dot[i];
 
 			//Origional
 			//LHS[IDX2C(i, x, 3 * (num_nodes))] = (1.0-dt*rm)*M_in[IDX2C(i, x, 3 * (num_nodes))] - (dt*rk+dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
-			LHS[IDX2C(i, x, 3 * (num_nodes))] = (1.0 + 0.02 * dt)*M_in[IDX2C(i, x, 3 * (num_nodes))] + (dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
+			LHS[IDX2C(i, x, 3 * (num_nodes))] = M_in[IDX2C(i, x, 3 * (num_nodes))] +(dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
 			/*if (i == x){
 
 			}
