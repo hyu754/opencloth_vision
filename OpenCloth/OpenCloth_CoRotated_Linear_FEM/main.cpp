@@ -426,7 +426,7 @@ void ClearStiffnessAssembly() {
 }
 void InitGL() {  
 	 
-	GenerateBlocks(25,5,5,0.2f/8.0,0.05f,0.05f);
+	GenerateBlocks(5,5,5,0.2f/2.0,0.05f,0.05f);
 	total_tetrahedra = tetrahedra.size();	
  
 	total_points = X.size();

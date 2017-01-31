@@ -86,7 +86,7 @@ void AFEM::Simulation::run(){
 	//cuda_tools_class.copy_data_from_cuda();
 
 	cuda_tools_class.reset_K(element_vec.size(), pos_vec.size());
-	std::cout << "FPS : " << 1.0 / ((std::clock() - start) / CLOCKS_PER_SEC) << std::endl;
+	//std::cout <<  1.0 / ((std::clock() - start) / CLOCKS_PER_SEC) << std::endl;
 
 
 }

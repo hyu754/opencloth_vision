@@ -8,12 +8,13 @@
 #include <cuda_runtime.h>
 #include <fstream>
 
-
+//#define DYNAMIC
 #define nodesinelemX(node,el,nodesPerElem) (node + nodesPerElem*el) //the first entry is the element # the second entry would be the element number and the last one is the number of nodes/element
 #define threeD21D(row_d,col_d,el_d,width_d,depth_d) (row_d+width_d*(col_d+depth_d*el_d)) //
 #define nodesDisplacementX(dof,node,dimension) (dof + node*dimension)
 #define IDX2C(i,j,ld) (((j)*(ld))+( i )) 
-
+__device__ float _dd_ = 10000;
+__device__ int node_max = 0;
 //Atomic add for global K matrix assembly
 __device__ inline float atomicAdda(float* address, double value)
 
@@ -182,7 +183,7 @@ __device__ inline float atomicAdda(float* address, double value)
 //	in_element->local_M[142] = 0;
 //	in_element->local_M[143] = det_J*rho / 2;
 //}
-__device__ void find_Jacobian_localK_localM(AFEM::element *in_element, AFEM::position_3D *in_pos){
+__device__ void find_Jacobian_localK_localM(AFEM::element *in_element, const AFEM::position_3D *in_pos){
 
 	/*float x14 = in_element->position_info[0].x - in_element->position_info[3].x;
 	float x24 = in_element->position_info[1].x - in_element->position_info[3].x;
@@ -685,7 +686,7 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element, AFEM::pos
 	in_element->local_M[141] = 0.166666666666667*J_star1*J_star3*det_J*rho;
 	in_element->local_M[142] = 0.166666666666667*J_star2*J_star3*det_J*rho;
 	in_element->local_M[143] = 0.166666666666667*det_J*(J_star1*J_star1*rho + J_star2*J_star2*rho + J_star3*J_star3*rho);*/
-
+	
 
 #if 1
 	in_element->local_M[0] = det_J*rho / 3;
@@ -999,7 +1000,7 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element, AFEM::pos
 	in_element->f_body[8] = b3;
 
 	in_element->f_body[9] =  b1;
-	in_element->f_body[10] = b2;// *det_J / 2;
+	in_element->f_body[10] = -b2;// *det_J / 2;
 	in_element->f_body[11] = b3;
 
 	//in_element->f_body[0] =0;
@@ -1023,7 +1024,7 @@ __device__ void find_Jacobian_localK_localM(AFEM::element *in_element, AFEM::pos
 
 
 
-__global__ void gpu_make_K(AFEM::element *in_vec, AFEM::position_3D *in_pos, int numElem, int numNodes, float *K_d, float *M_d, float *f_d)
+__global__ void gpu_make_K(AFEM::element *in_vec, const AFEM::position_3D *in_pos, int numElem, int numNodes, float *K_d, float *M_d, float *f_d)
 {
 
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
@@ -1074,6 +1075,70 @@ __global__ void gpu_make_K(AFEM::element *in_vec, AFEM::position_3D *in_pos, int
 }
 
 
+
+__global__ void gpu_make_K_new(AFEM::element *in_vec, AFEM::position_3D *in_pos, int numElem, int numNodes, float *K_d, float *M_d, float *f_d)
+{
+
+	int x = threadIdx.x + blockIdx.x * blockDim.x;
+	if (x < numElem){
+		find_Jacobian_localK_localM(&in_vec[x], in_pos);
+		//find_localM(&in_vec[x]);
+		//K_d[x] = (in_vec[x]).local_K[0];
+		int DOF[12];
+		int counter = 0;
+		//The two loops are responsible for finding the DOF (or q_i) for each element
+		for (int npe = 0; npe < 4; npe++){
+			//dummy_node = nodesInElem[nodesinelemX(npe, offset, 4)]; // The row of the matrix we looking at will be k_th element and npe (nodes per element) 	
+			for (int dof = 0; dof < 3; dof++){
+
+				DOF[counter] = in_vec[x].position_info[npe].displacement_index[dof];
+				counter++;
+
+			}
+		}
+
+		for (int c = 0; c < 12; c++){
+			for (int r = 0; r < 12; r++){
+
+				//d_A_dense[IDX2C(DOF[c], DOF[r], 3000)] = d_A_dense[IDX2C(DOF[c], DOF[r], 3000)] + E_vector[offset * 144 + c*12+r];
+				atomicAdda(&(K_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]), in_vec[x].local_K[c * 12 + r]);
+
+				/*if (DOF[c] == DOF[r]){
+
+				} */
+
+				//if ((DOF[c] == 2130) && (DOF[r] == 2130)){
+
+				//	atomicAdda(&(K_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]), -1);
+				//}
+				//else if ((DOF[c] == 2131) && (DOF[r] == 2131)) {
+				//	atomicAdda(&(K_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]), -1);
+				//}
+				//else if ((DOF[c] == 2132) && (DOF[r] == 2132)){
+				//	atomicAdda(&(K_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]), -1);
+
+				//}
+				//atomicAdda(&(M_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]), in_vec[x].local_M[c * 12 + r]);
+				atomicAdda(&(M_d[IDX2C(DOF[c], DOF[r], 3 * (numNodes))]), in_vec[x].volume*1000.0 / 4.0);//
+				//IDX2C(DOF[c], DOF[r], 3000)
+				//K[IDX2C(DOF[r], DOF[c], numP*dim)] = K[IDX2C(DOF[r], DOF[c], numP*dim)] + E[k][r][c];
+
+			}
+			//atomicAdda(&(f_d[DOF[c]]), in_vec[x].f_body[c]);
+			/*if (x == 800){
+			atomicAdda(&(f_d[DOF[c]]), in_vec[x].f_body[c]);
+			}*/
+			//atomicAdda(&(f_d[DOF[c]]), in_vec[x].f_body[c]);
+
+			atomicAdda(&(f_d[DOF[c]]), in_vec[x].f_body[c]);
+
+		}
+		//printf("hi");
+	}
+
+}
+
+
 //Resets the K matrix to zero
 __global__ void reset_K_GPU(float *K_d, float *M_d, int numNodes, int dim){
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
@@ -1101,10 +1166,23 @@ __global__ void update_position_vector(AFEM::position_3D *pos_in, float *u_dot_i
 		pos_in[x].x += dt*u_dot_in[pos_in[x].displacement_index[0]];
 		pos_in[x].y += dt*u_dot_in[pos_in[x].displacement_index[1]];
 		pos_in[x].z += dt*u_dot_in[pos_in[x].displacement_index[2]];
-		/*if (x == 100){
-			pos_in[x].x += 0.01;
+	
+	}
+}
 
-			}*/
+
+__global__ void update_position_vector_static(AFEM::position_3D *pos_in,const AFEM::position_3D *pos_initial,  float *u_dot_in, float dt, int numNodes, int dim){
+	int x = threadIdx.x + blockIdx.x *blockDim.x;
+
+	if (x < numNodes){
+		/*pos_in[x].x = pos_initial[x].x +u_dot_in[pos_in[x].displacement_index[0]];
+		pos_in[x].y = pos_initial[x].y+u_dot_in[pos_in[x].displacement_index[1]];
+		pos_in[x].z = pos_initial[x].z +u_dot_in[pos_in[x].displacement_index[2]];
+*/
+		pos_in[x].x = u_dot_in[pos_in[x].displacement_index[0]];
+		pos_in[x].y = u_dot_in[pos_in[x].displacement_index[1]];
+		pos_in[x].z =  u_dot_in[pos_in[x].displacement_index[2]];
+
 	}
 }
 __global__ void update_Geo_CUDA(AFEM::element *in_vec, AFEM::position_3D *pos_in, float *x_solution, int numElem){
@@ -1191,6 +1269,71 @@ __global__ void gpu_stationary_BC(float *K_d, float *f_d, AFEM::stationary *stat
 }
 
 
+__global__ void gpu_stationary_BC_new(float *K_d, float *f_d, AFEM::stationary *stat_d, AFEM::position_3D *initial_pos,int numstationary, int numnodes, int dim){
+	int x = threadIdx.x + blockIdx.x * blockDim.x;
+
+	if (x < numstationary){
+
+
+
+		for (int i = 0; i < 3; i++){
+
+			for (int n = 0; n < numnodes*dim; n++){
+				K_d[IDX2C(n, stat_d[x].displacement_index[i], 3 * (numnodes))] = 0.0f;
+			}
+
+			for (int n = 0; n < numnodes*dim; n++){
+				K_d[IDX2C(stat_d[x].displacement_index[i], n, 3 * (numnodes))] = 0.0f;
+			}
+			K_d[IDX2C(stat_d[x].displacement_index[i], stat_d[x].displacement_index[i], 3 * (numnodes))] = 1.0f;
+
+			if (i == 0){
+				f_d[stat_d[x].displacement_index[i]] = initial_pos[stat_d[x].node_number].x;
+			}
+			else if (i == 1){
+				f_d[stat_d[x].displacement_index[i]] = initial_pos[stat_d[x].node_number].y;
+			}
+			else if (i == 2){
+				f_d[stat_d[x].displacement_index[i]] = initial_pos[stat_d[x].node_number].z;
+			}
+
+		}
+
+	}
+
+	/*if (x < numstationary){
+
+
+
+	for (int i = 0; i < 3; i++){
+
+	for (int n = 0; n < numnodes*dim; n++){
+	K_d[IDX2C(stat_d[x].displacement_index[i], n, 3 * (numnodes))] = 0.0f;
+	}
+	K_d[IDX2C(stat_d[x].displacement_index[i], stat_d[x].displacement_index[i], 3 * (numnodes))] = 1.0f;
+	f_d[stat_d[x].displacement_index[i]] = 0.0f;
+	}
+
+	}*/
+
+	//if (x < numstationary){
+
+
+
+	//	for (int i = 0; i < 3; i++){
+
+	//		/*for (int n = 0; n < numnodes*dim; n++){
+	//			K_d[IDX2C(n, stat_d[x].displacement_index[i], 3 * (numnodes))] = 0.0f;
+	//		}
+	//		K_d[IDX2C(stat_d[x].displacement_index[i], stat_d[x].displacement_index[i], 3 * (numnodes))] = 1.0f;*/
+	//		f_d[stat_d[x].displacement_index[i]] = 0.0f;
+	//	}
+
+	//}
+
+
+}
+
 
 
 
@@ -1227,6 +1370,22 @@ __global__ void find_dx(float *dx_in, AFEM::position_3D *initial_pos, AFEM::posi
 	}
 }
 
+__global__ void find_dx_new(float *dx_in, AFEM::position_3D *initial_pos, AFEM::position_3D *new_pos, int numnodes){
+	int x = threadIdx.x + blockIdx.x *blockDim.x;
+
+	if (x < numnodes){
+
+		dx_in[new_pos[x].displacement_index[0]] = initial_pos[x].x;
+		dx_in[new_pos[x].displacement_index[1]] = initial_pos[x].y;
+		dx_in[new_pos[x].displacement_index[2]] = initial_pos[x].z;
+
+		/*initial_pos[x].x = new_pos[x].x;
+		initial_pos[x].y = new_pos[x].y;
+		initial_pos[x].z = new_pos[x].z;*/
+
+	}
+}
+
 //find the vector value of dt*f_ext - dt*K*(u(t)-u(0))+dt*dt K*u_dot(t)
 //In the code I have set:
 //a= dt*f_ext
@@ -1234,10 +1393,11 @@ __global__ void find_dx(float *dx_in, AFEM::position_3D *initial_pos, AFEM::posi
 //c= dt*dt K*u_dot(t)
 //so RHS = a-b+c
 //And LHS: = M-dt*dt* K
-__global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float *f_ext, float *RHS, float *M_in, float *LHS, int num_nodes, float dt, float rm, float rk, int dim){
+__global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float *f_ext, float *RHS, float *M_in, float *LHS, int num_nodes, float dt, float rm, float rk, int dim,AFEM::stationary *stationary, int num_station){
 	int x = threadIdx.x + blockIdx.x *blockDim.x;
 
 	if (x < num_nodes*dim){
+#ifdef DYNAMIC
 		float a, b, c;
 		b = c = 0;
 		a = f_ext[x];
@@ -1249,12 +1409,12 @@ __global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float 
 			//c = c + K_in[IDX2C(i, x, 3 * (num_nodes))] * u_dot[i]; 
 			//origional
 			//float c1 = dt*rm*M_in[IDX2C(i, x, 3 * num_nodes)] + (dt *rk-dt*dt)*K_in[IDX2C(i, x, 3 * num_nodes)];
-			
-			c=c+ M_in[IDX2C(i, x, 3 * num_nodes)] * u_dot[i];
+
+			c = c + M_in[IDX2C(i, x, 3 * num_nodes)] * u_dot[i];
 
 			//Origional
 			//LHS[IDX2C(i, x, 3 * (num_nodes))] = (1.0-dt*rm)*M_in[IDX2C(i, x, 3 * (num_nodes))] - (dt*rk+dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
-			LHS[IDX2C(i, x, 3 * (num_nodes))] = M_in[IDX2C(i, x, 3 * (num_nodes))] +(dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
+			LHS[IDX2C(i, x, 3 * (num_nodes))] = M_in[IDX2C(i, x, 3 * (num_nodes))] + (dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
 			/*if (i == x){
 
 			}
@@ -1267,9 +1427,166 @@ __global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float 
 		b = b*dt;
 
 
-		RHS[x] = a -b + c;
+		RHS[x] = a - b + c;
+		//RHS[x] = f_ext[x];  
+
+#else
+		float a,b;
+		b = 0;
+		//a = f_ext[x];
+		for (int i = 0; i < num_nodes*dim; i++){
+			/*if (i == x){
+			M_in[IDX2C(i, x, 3 * (num_nodes))] =
+			}*/
+
+			//Origional
+			//LHS[IDX2C(i, x, 3 * (num_nodes))] = (1.0-dt*rm)*M_in[IDX2C(i, x, 3 * (num_nodes))] - (dt*rk+dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
+			
+			b = b + K_in[IDX2C(i, x, 3 * (num_nodes))] * dx_in[i];
+
+
+			LHS[IDX2C(i, x, 3 * (num_nodes))] = K_in[IDX2C(i, x, 3 * (num_nodes))];
+			/*if ((i == 2130) &(x == 2130)){
+				LHS[IDX2C(i, x, 3 * (num_nodes))] = LHS[IDX2C(i, x, 3 * (num_nodes))] - 1;
+				RHS[i] = RHS[i] - dx_in[i] ;
+			}
+			else if ((i == 2131) &(x == 2131))
+			{
+				LHS[IDX2C(i, x, 3 * (num_nodes))] = LHS[IDX2C(i, x, 3 * (num_nodes))] - 1;
+				RHS[i] = RHS[i] - dx_in[i];
+			}
+			else if ((i == 2132) &(x == 2132)){
+				LHS[IDX2C(i, x, 3 * (num_nodes))] = LHS[IDX2C(i, x, 3 * (num_nodes))] - 1;
+				RHS[i] = RHS[i] - dx_in[i];
+			}*/
+			
+
+			/*if (x == i){
+				LHS[IDX2C(i, x, 3 * (num_nodes))] = LHS[IDX2C(i, x, 3 * (num_nodes))] - 1;
+				RHS[i] = RHS[i] - dx_in[i];
+			}*/
+			/*if (i == x){
+			
+			}
+			else{
+			LHS[IDX2C(i, x, 3 * (num_nodes))] = (dt*dt)*K_in[IDX2C(i, x, 3 * (num_nodes))];
+			}*/
+
+		}
+	
+
+		RHS[x] = b;
+		//RHS[x] = a ;
 		//RHS[x] = f_ext[x];
+
+	
+
+
+		/*	for (int nnn = 2131; nnn < 2131 + 1; nnn++){
+				if (nnn == x){
+					LHS[IDX2C(nnn, nnn, 3 * (num_nodes))] = LHS[IDX2C(nnn, nnn, 3 * (num_nodes))] + alpha;
+
+
+					RHS[nnn] = RHS[nnn] + alpha* (dx_in[nnn] + 0.05);
+				}
+			}
+
+
+			for (int nnn = 2134; nnn < 2134 + 1; nnn++){
+				if (nnn == x){
+					LHS[IDX2C(nnn, nnn, 3 * (num_nodes))] = LHS[IDX2C(nnn, nnn, 3 * (num_nodes))] + alpha;
+
+
+					RHS[nnn] = RHS[nnn] + alpha* (dx_in[nnn] + 0.05);
+				}
+			}*/
+
+		
+#endif // DYNAMIC
+
 	}
+	
+	if (x == 0){
+
+
+		float alpha = _dd_;
+		_dd_ += 100;
+		/*LHS[IDX2C(2130, 2130, 3 * (num_nodes))] = LHS[IDX2C(2130, 2130, 3 * (num_nodes))] + alpha;
+		LHS[IDX2C(2131, 2131, 3 * (num_nodes))] = LHS[IDX2C(2131, 2131, 3 * (num_nodes))] + alpha;
+		LHS[IDX2C(2132, 2132, 3 * (num_nodes))] = LHS[IDX2C(2132, 2132, 3 * (num_nodes))] + alpha;
+		RHS[2130] = RHS[2130] + alpha*dx_in[2130];
+		RHS[2131] = RHS[2131] + alpha*dx_in[2131];
+		RHS[2132] = RHS[2132] + alpha*dx_in[2132];
+		*/
+
+		/*for (int nnn = 0; nnn < 2; nnn++){
+			for (int i = 0; i < 3; i++){
+				int station_array = stationary[nnn].displacement_index[i];
+
+				LHS[IDX2C(station_array, station_array, 3 * (num_nodes))] = LHS[IDX2C(station_array, station_array, 3 * (num_nodes))] + alpha;
+
+
+				RHS[station_array] = RHS[station_array] + alpha* (dx_in[station_array]);
+
+
+
+			}
+		}*/
+		/*int station_array ;
+		
+		station_array = 463 * 3 + 1;
+		LHS[IDX2C(station_array, station_array, 3 * (num_nodes))] = LHS[IDX2C(station_array, station_array, 3 * (num_nodes))] + alpha;
+
+
+		RHS[station_array] = RHS[station_array] + alpha* (dx_in[station_array] + 0.01);
+
+		station_array = 464 *3 + 1;
+		LHS[IDX2C(station_array, station_array, 3 * (num_nodes))] = LHS[IDX2C(station_array, station_array, 3 * (num_nodes))] + alpha;
+		RHS[station_array] = RHS[station_array] + alpha* (dx_in[station_array] + 0.01 );
+
+		station_array = 465 * 3 + 1;
+		LHS[IDX2C(station_array, station_array, 3 * (num_nodes))] = LHS[IDX2C(station_array, station_array, 3 * (num_nodes))] + alpha;
+		RHS[station_array] = RHS[station_array] + alpha* (dx_in[station_array] + 0.01 );
+
+
+		station_array = 466 * 3 + 1;
+		LHS[IDX2C(station_array, station_array, 3 * (num_nodes))] = LHS[IDX2C(station_array, station_array, 3 * (num_nodes))] + alpha;
+		RHS[station_array] = RHS[station_array] + alpha* (dx_in[station_array] + 0.01 );
+
+		dd += 0.004;*/
+		for (int lll = 0; lll < 333; lll++){
+
+			int dof_counter = 0;
+			int node_num = lll;
+			for (int dof = node_num * 3; dof < ((node_num * 3) + 3); dof++){
+
+
+
+				LHS[IDX2C(dof, dof, 3 * (num_nodes))] = LHS[IDX2C(dof, dof, 3 * (num_nodes))] + alpha;
+
+				if (dof_counter == 0){
+					RHS[dof] = RHS[dof] + alpha* (dx_in[dof] );//sudo_force_vec[i].fx);
+				}
+				else if (dof_counter == 1){
+					RHS[dof] = RHS[dof] + alpha* (dx_in[dof]);//sudo_force_vec[i].fy);
+
+				}
+				else if (dof_counter == 2){
+
+					RHS[dof] = RHS[dof] + alpha* (dx_in[dof]);//sudo_force_vec[i].fz);
+				}
+
+
+
+				dof_counter++;
+
+			}
+		}
+
+		node_max++;
+
+	}
+
 }
 
 
@@ -1373,8 +1690,12 @@ void cuda_tools::make_K(int num_elem, int num_nodes){
 		blocks = (num_elem + 256) / 256;
 		threads = 256;
 	}
-	gpu_make_K << <blocks, threads >> > (elem_array_d, position_array_d, num_elem, num_nodes, K_d, M_d, f_d);
 
+#ifdef DYNAMIC
+	gpu_make_K << <blocks, threads >> > (elem_array_d, position_array_d, num_elem, num_nodes, K_d, M_d, f_d);
+#else
+	gpu_make_K << <blocks, threads >> > (elem_array_d, position_array_initial_d, num_elem, num_nodes, K_d, M_d, f_d);
+#endif
 	//cudaMemset(K_d, 0, sizeof(*K_d)*dim*num_nodes*dim*num_nodes); //initialize the vector K_d to zero
 
 	//std::cout << std::endl;
@@ -1415,8 +1736,14 @@ void cuda_tools::stationary_BC(int num_elem, int num_nodes, int num_stationary, 
 		blocks = (num_stationary + 256) / 256;
 		threads = 256;
 	}
+	//gpu_stationary_BC << <blocks, threads >> >(LHS, RHS, stationary_array_d, num_stationary, num_nodes, dim);
+
+#ifdef DYNAMIC
 	gpu_stationary_BC << <blocks, threads >> >(LHS, RHS, stationary_array_d, num_stationary, num_nodes, dim);
 
+#else
+	gpu_stationary_BC_new << <blocks, threads >> >(LHS, RHS, stationary_array_d, position_array_initial_d,num_stationary, num_nodes, dim);
+#endif
 }
 
 
@@ -1517,12 +1844,18 @@ void cuda_tools::update_geometry(float *u_dot_sln){
 	free(h_y);*/
 	//std::cout << std::endl;
 	//stationary_BC_f(u_dot_sln);
+#ifdef DYNAMIC
 	update_position_vector << <blocks_nodes, threads_nodes >> >(position_array_d, u_dot_sln, dt, Nnodes, 3);
-
-
-
-
 	update_u_dot_vector << <blocks_nodes2, threads_nodes2 >> >(u_dot_d, u_dot_sln, Nnodes, 3);
+#else
+
+	update_position_vector_static << <blocks_nodes, threads_nodes >> >(position_array_d, position_array_initial_d,u_dot_sln, dt, Nnodes, 3);
+	//update_u_dot_vector << <blocks_nodes2, threads_nodes2 >> >(u_dot_d, u_dot_sln, Nnodes, 3);
+#endif
+
+
+
+	
 
 
 
@@ -1552,8 +1885,13 @@ void cuda_tools::dynamic(){
 
 
 	//float *K_in, float *dx_in, float *u_dot, float *f_ext, float *RHS
+#ifdef DYNAMIC
 	find_dx << <blocks_nodes, threads_nodes >> >(dx_d, position_array_initial_d, position_array_d, Nnodes);
 
+#else 
+	find_dx_new << <blocks_nodes, threads_nodes >> >(dx_d, position_array_initial_d, position_array_d, Nnodes);
+
+#endif
 	/*float *sln_ptr = (float *)malloc(Ncols*sizeof(float));
 	cudaMemcpy(sln_ptr, f_d, Ncols*sizeof(float), cudaMemcpyDeviceToHost);
 
@@ -1574,9 +1912,9 @@ void cuda_tools::dynamic(){
 
 	//stationary_BC_f(Nelems, Nnodes, Nstationary, 3);
 	//stationary_BC_f(f_d);
-	find_A_b_dynamic << <blocks_nodesdim, threads_nodesdim >> >(K_d, dx_d, u_dot_d, f_d, RHS, M_d, LHS, Nnodes, dt, 1.02, 0.002, 3);
+	find_A_b_dynamic << <blocks_nodesdim, threads_nodesdim >> >(K_d, dx_d, u_dot_d, f_d, RHS, M_d, LHS, Nnodes, dt, 1.02, 0.002, 3, stationary_array_d, Nstationary);
 
-
+	
 	//float *rhs_output = (float *)malloc(Ncols* Ncols*sizeof(float));
 	
 	//cudaMemcpy(rhs_output, LHS, Ncols* Ncols*sizeof(float), cudaMemcpyDeviceToHost);
@@ -1603,10 +1941,7 @@ void cuda_tools::dynamic(){
 
 
 	//update_geometry(d_y);
-
-	stationary_BC(Nelems, Nnodes, Nstationary, 3);
-
-
+	//stationary_BC(Nelems, Nnodes, Nstationary, 3);
 
 
 

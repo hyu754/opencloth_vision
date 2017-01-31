@@ -1,1 +1,3 @@
-﻿
+﻿  Checking Build System
+  CMake does not need to re-run because D:/GitHub/opencloth_vision/build/CMakeFiles/generate.stamp is up-to-date.
+  CMake does not need to re-run because D:/GitHub/opencloth_vision/build/AFEM/cuda/CMakeFiles/generate.stamp is up-to-date.

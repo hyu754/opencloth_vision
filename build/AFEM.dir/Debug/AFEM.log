@@ -1,4 +1,1 @@
-﻿  test_cuda.cpp
-D:\GitHub\opencloth_vision\AFEM\include\AFEM_geometry.hpp(115): warning C4551: function call missing argument list
-D:\GitHub\opencloth_vision\AFEM\cuda\gpu_include\AFEM_cuda.cuh(74): warning C4305: 'initializing' : truncation from 'double' to 'float'
-  AFEM.vcxproj -> D:\GitHub\opencloth_vision\build\Debug\AFEM.exe
+﻿  AFEM.vcxproj -> D:\GitHub\opencloth_vision\build\Debug\AFEM.exe

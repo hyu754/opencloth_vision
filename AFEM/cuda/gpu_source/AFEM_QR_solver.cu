@@ -512,7 +512,9 @@ void cuda_tools::cg(void){
 			//printf("iteration = %3d, residual = %e\n", k, sqrt(r1));
 			k++;
 		}
-		std::cout << "iteration time"<< (std::clock() - start_time) / CLOCKS_PER_SEC << std::endl;
+		//std::cout << (std::clock() - start_time) / CLOCKS_PER_SEC << std::endl;
+		std::cout << r1 << std::endl;
+		
 		//cudaMemcpy(x, d_x, N*sizeof(float), cudaMemcpyDeviceToHost);
 
 		/*float rsum, diff, err = 0.0;

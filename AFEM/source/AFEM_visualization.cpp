@@ -354,14 +354,20 @@ void OnRender() {
 	glPointSize((GLfloat)20.0);
 	//draw stat points
 	glBegin(GL_POINTS);
-
-	
+	//int mmm = 700;
+	////glVertex3f(global_ptr->element_array[650].position_info[k].x, global_ptr->element_array[650].position_info[k].y, global_ptr->element_array[650].position_info[k].z);
+	//for (int k = 0; k < 4; k++){
+	//	glVertex3f(global_ptr->element_array[mmm].position_info[k].x, global_ptr->element_array[mmm].position_info[k].y, global_ptr->element_array[mmm].position_info[k].z);
+	//}
 
 	for (int i = 0; i < global_ptr->element_vec.size(); i++) {
 		glColor3f((float)0.4, (float)1.0, (float)0.5);
 		for (int j = 0; j < global_ptr->stationary_vec.size(); j++){
 			for (int k = 0; k < 4; k++){
 				if (global_ptr->stationary_array[j].node_number == global_ptr->element_array[i].nodes_in_elem[k]){
+					glVertex3f(global_ptr->element_array[i].position_info[k].x, global_ptr->element_array[i].position_info[k].y, global_ptr->element_array[i].position_info[k].z);
+				}
+				else if (global_ptr->element_array[i].nodes_in_elem[k]==710){
 					glVertex3f(global_ptr->element_array[i].position_info[k].x, global_ptr->element_array[i].position_info[k].y, global_ptr->element_array[i].position_info[k].z);
 				}
 			}
