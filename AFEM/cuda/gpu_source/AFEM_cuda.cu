@@ -1509,8 +1509,8 @@ __global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float 
 	if (x == 0){
 
 
-		float alpha = _dd_;
-		_dd_ += 100;
+		float alpha = 18000000;
+		//_dd_ += 1000;*/
 		/*LHS[IDX2C(2130, 2130, 3 * (num_nodes))] = LHS[IDX2C(2130, 2130, 3 * (num_nodes))] + alpha;
 		LHS[IDX2C(2131, 2131, 3 * (num_nodes))] = LHS[IDX2C(2131, 2131, 3 * (num_nodes))] + alpha;
 		LHS[IDX2C(2132, 2132, 3 * (num_nodes))] = LHS[IDX2C(2132, 2132, 3 * (num_nodes))] + alpha;
@@ -1519,7 +1519,7 @@ __global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float 
 		RHS[2132] = RHS[2132] + alpha*dx_in[2132];
 		*/
 
-		/*for (int nnn = 0; nnn < 2; nnn++){
+		for (int nnn = 0; nnn < num_station; nnn++){
 			for (int i = 0; i < 3; i++){
 				int station_array = stationary[nnn].displacement_index[i];
 
@@ -1531,7 +1531,7 @@ __global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float 
 
 
 			}
-		}*/
+		}
 		/*int station_array ;
 		
 		station_array = 463 * 3 + 1;
@@ -1553,11 +1553,11 @@ __global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float 
 		LHS[IDX2C(station_array, station_array, 3 * (num_nodes))] = LHS[IDX2C(station_array, station_array, 3 * (num_nodes))] + alpha;
 		RHS[station_array] = RHS[station_array] + alpha* (dx_in[station_array] + 0.01 );
 
-		dd += 0.004;*/
-		for (int lll = 0; lll < 333; lll++){
+		dd += 0.004;*/	
+		//for (int lll = 0; lll < num_station; lll++){
 
 			int dof_counter = 0;
-			int node_num = lll;
+			int node_num = 555;
 			for (int dof = node_num * 3; dof < ((node_num * 3) + 3); dof++){
 
 
@@ -1565,10 +1565,10 @@ __global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float 
 				LHS[IDX2C(dof, dof, 3 * (num_nodes))] = LHS[IDX2C(dof, dof, 3 * (num_nodes))] + alpha;
 
 				if (dof_counter == 0){
-					RHS[dof] = RHS[dof] + alpha* (dx_in[dof] );//sudo_force_vec[i].fx);
+					RHS[dof] = RHS[dof] + alpha* (dx_in[dof]);//sudo_force_vec[i].fx);
 				}
 				else if (dof_counter == 1){
-					RHS[dof] = RHS[dof] + alpha* (dx_in[dof]);//sudo_force_vec[i].fy);
+					RHS[dof] = RHS[dof] + alpha* (dx_in[dof]-0.151);//sudo_force_vec[i].fy);
 
 				}
 				else if (dof_counter == 2){
@@ -1581,7 +1581,7 @@ __global__ void find_A_b_dynamic(float *K_in, float *dx_in, float *u_dot, float 
 				dof_counter++;
 
 			}
-		}
+		//}
 
 		node_max++;
 

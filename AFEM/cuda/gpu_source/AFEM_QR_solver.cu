@@ -493,8 +493,8 @@ void cuda_tools::cg(void){
 
 			
 			cublasStatus = cublasSaxpy(cublasHandle, N, &a, d_p, 1, d_x, 1);
-	//	stationary_BC_f(d_x);
-		//	stationary_BC_f(d_Ax);
+			//	stationary_BC_f(d_x);
+			//	stationary_BC_f(d_Ax);
 
 			/*stationary_BC_f(d_r);
 						*/
@@ -512,8 +512,8 @@ void cuda_tools::cg(void){
 			//printf("iteration = %3d, residual = %e\n", k, sqrt(r1));
 			k++;
 		}
-		//std::cout << (std::clock() - start_time) / CLOCKS_PER_SEC << std::endl;
-		std::cout << r1 << std::endl;
+		std::cout << (std::clock() - start_time) / CLOCKS_PER_SEC << std::endl;
+		//std::cout << r1 << std::endl;
 		
 		//cudaMemcpy(x, d_x, N*sizeof(float), cudaMemcpyDeviceToHost);
 

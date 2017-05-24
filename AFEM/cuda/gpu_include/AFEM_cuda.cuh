@@ -109,8 +109,8 @@ class cuda_tools{
 	//Variables to use
 	int M = 0, N = 0;// nz = 0, *I = NULL, *J = NULL;
 	float *val = NULL;
-	const float tol = 1e-5f;
-	const int max_iter = 2000;
+	const float tol = 1e-7f;
+	const int max_iter = 1820;
 	float *x;
 	float *rhs;
 	float a, b, na, r0, r1;
