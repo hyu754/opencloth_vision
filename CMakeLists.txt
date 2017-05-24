@@ -10,8 +10,8 @@ include_directories(${CMAKE_SOURCE_DIR}/Geometry)
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 #link_libraries()
 #opencv
-find_package(OPENCV REQUIRED)
-include_directories( ${OpenCV_INCLUDE_DIRS} )
+#find_package(OPENCV REQUIRED)
+#include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 
 #cuda

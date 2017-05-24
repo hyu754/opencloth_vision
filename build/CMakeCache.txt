@@ -265,23 +265,6 @@ CUDA_nvcuvenc_LIBRARY:FILEPATH=CUDA_nvcuvenc_LIBRARY-NOTFOUND
 //"nvcuvid" library
 CUDA_nvcuvid_LIBRARY:FILEPATH=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/lib/x64/nvcuvid.lib
 
-//The directory containing a CMake configuration file for OPENCV.
-OPENCV_DIR:PATH=D:/Downloads/opencv/opencv/allbuild
-
-//Path where debug 3rdparty OpenCV dependencies are located
-OpenCV_3RDPARTY_LIB_DIR_DBG:PATH=
-
-//Path where release 3rdparty OpenCV dependencies are located
-OpenCV_3RDPARTY_LIB_DIR_OPT:PATH=
-
-OpenCV_CONFIG_PATH:FILEPATH=D:/Downloads/opencv/opencv/allbuild
-
-//Path where debug OpenCV libraries are located
-OpenCV_LIB_DIR_DBG:PATH=
-
-//Path where release OpenCV libraries are located
-OpenCV_LIB_DIR_OPT:PATH=
-
 //Value Computed by CMake
 OpenCloth_Co_rotation_BINARY_DIR:STATIC=D:/GitHub/opencloth_vision/build
 
@@ -487,14 +470,4 @@ CUDA_parse_cubin:INTERNAL=D:/Program Files/CMake/share/cmake-3.7/Modules/FindCUD
 CUDA_run_nvcc:INTERNAL=D:/Program Files/CMake/share/cmake-3.7/Modules/FindCUDA/run_nvcc.cmake
 //Details about finding CUDA
 FIND_PACKAGE_MESSAGE_DETAILS_CUDA:INTERNAL=[C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5][C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/bin/nvcc.exe][C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/include][C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/lib/x64/cudart_static.lib][v7.5()]
-//ADVANCED property for variable: OpenCV_3RDPARTY_LIB_DIR_DBG
-OpenCV_3RDPARTY_LIB_DIR_DBG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: OpenCV_3RDPARTY_LIB_DIR_OPT
-OpenCV_3RDPARTY_LIB_DIR_OPT-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: OpenCV_CONFIG_PATH
-OpenCV_CONFIG_PATH-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: OpenCV_LIB_DIR_DBG
-OpenCV_LIB_DIR_DBG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: OpenCV_LIB_DIR_OPT
-OpenCV_LIB_DIR_OPT-ADVANCED:INTERNAL=1
 

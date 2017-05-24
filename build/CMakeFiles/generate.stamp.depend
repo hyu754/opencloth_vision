@@ -21,14 +21,6 @@ D:/Program Files/CMake/share/cmake-3.7/Modules/Compiler/MSVC-CXX.cmake
 D:/Program Files/CMake/share/cmake-3.7/Modules/Platform/Windows-MSVC-CXX.cmake
 D:/Program Files/CMake/share/cmake-3.7/Modules/Platform/Windows-MSVC.cmake
 D:/Program Files/CMake/share/cmake-3.7/Modules/CMakeCommonLanguageInclude.cmake
-D:/Downloads/opencv/opencv/allbuild/OpenCVConfig-version.cmake
-D:/Downloads/opencv/opencv/allbuild/OpenCVConfig.cmake
-D:/Downloads/opencv/opencv/allbuild/OpenCVModules.cmake
-D:/Program Files/CMake/share/cmake-3.7/Modules/FindCUDA.cmake
-D:/Program Files/CMake/share/cmake-3.7/Modules/FindPackageHandleStandardArgs.cmake
-D:/Program Files/CMake/share/cmake-3.7/Modules/FindPackageMessage.cmake
-D:/Program Files/CMake/share/cmake-3.7/Modules/CMakeParseArguments.cmake
-D:/Program Files/CMake/share/cmake-3.7/Modules/FindCUDA/select_compute_arch.cmake
 D:/Program Files/CMake/share/cmake-3.7/Modules/FindCUDA.cmake
 D:/Program Files/CMake/share/cmake-3.7/Modules/FindPackageHandleStandardArgs.cmake
 D:/Program Files/CMake/share/cmake-3.7/Modules/FindPackageMessage.cmake
