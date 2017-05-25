@@ -114,7 +114,7 @@
     </Midl>
     <Link>
       <AdditionalOptions> /machine:x64 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;AFEM\cuda\Debug\AFEM_cuda_lib.lib;cudart.lib;freeglutd.lib;glew32d.lib;AFEM_kinect_lib.lib;Kinect20.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\x64\cudart_static.lib;cudart.lib;cublas.lib;cusparse.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;AFEM\cuda\Debug\AFEM_cuda_lib.lib;cudart.lib;freeglutd.lib;glew32d.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\x64\cudart_static.lib;cudart.lib;cublas.lib;cusparse.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:/GitHub/opencloth_vision/lib;D:/GitHub/opencloth_vision/lib/$(Configuration);C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -157,7 +157,7 @@
     </Midl>
     <Link>
       <AdditionalOptions> /machine:x64 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;AFEM\cuda\Release\AFEM_cuda_lib.lib;cudart.lib;freeglutd.lib;glew32d.lib;AFEM_kinect_lib.lib;Kinect20.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\x64\cudart_static.lib;cudart.lib;cublas.lib;cusparse.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;AFEM\cuda\Release\AFEM_cuda_lib.lib;cudart.lib;freeglutd.lib;glew32d.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\x64\cudart_static.lib;cudart.lib;cublas.lib;cusparse.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:/GitHub/opencloth_vision/lib;D:/GitHub/opencloth_vision/lib/$(Configuration);C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -200,7 +200,7 @@
     </Midl>
     <Link>
       <AdditionalOptions> /machine:x64 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;AFEM\cuda\MinSizeRel\AFEM_cuda_lib.lib;cudart.lib;freeglutd.lib;glew32d.lib;AFEM_kinect_lib.lib;Kinect20.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\x64\cudart_static.lib;cudart.lib;cublas.lib;cusparse.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;AFEM\cuda\MinSizeRel\AFEM_cuda_lib.lib;cudart.lib;freeglutd.lib;glew32d.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\x64\cudart_static.lib;cudart.lib;cublas.lib;cusparse.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:/GitHub/opencloth_vision/lib;D:/GitHub/opencloth_vision/lib/$(Configuration);C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -243,7 +243,7 @@
     </Midl>
     <Link>
       <AdditionalOptions> /machine:x64 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;AFEM\cuda\RelWithDebInfo\AFEM_cuda_lib.lib;cudart.lib;freeglutd.lib;glew32d.lib;AFEM_kinect_lib.lib;Kinect20.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\x64\cudart_static.lib;cudart.lib;cublas.lib;cusparse.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;AFEM\cuda\RelWithDebInfo\AFEM_cuda_lib.lib;cudart.lib;freeglutd.lib;glew32d.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\x64\cudart_static.lib;cudart.lib;cublas.lib;cusparse.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:/GitHub/opencloth_vision/lib;D:/GitHub/opencloth_vision/lib/$(Configuration);C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>

@@ -1,1 +1,30 @@
-﻿  AFEM.vcxproj -> D:\GitHub\opencloth_vision\build\Debug\AFEM.exe
+﻿  AFEM_geometry.cpp
+D:\GitHub\opencloth_vision\AFEM\include\AFEM_geometry.hpp(115): warning C4551: function call missing argument list
+  AFEM_simulation.cpp
+d:\github\opencloth_vision\afem\include\AFEM_geometry.hpp(115): warning C4551: function call missing argument list
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_simulation.cpp(18): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_simulation.cpp(52): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_simulation.cpp(55): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_simulation.cpp(69): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_simulation.cpp(88): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
+  AFEM_visualization.cpp
+d:\github\opencloth_vision\afem\include\AFEM_geometry.hpp(115): warning C4551: function call missing argument list
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(118): warning C4267: '=' : conversion from 'size_t' to 'int', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(307): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(308): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(309): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(311): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(312): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(314): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(341): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(342): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(343): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(344): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(368): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+D:\GitHub\opencloth_vision\AFEM\source\AFEM_visualization.cpp(371): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+  test_cuda.cpp
+D:\GitHub\opencloth_vision\AFEM\include\AFEM_geometry.hpp(115): warning C4551: function call missing argument list
+  Generating Code...
+d:\github\opencloth_vision\afem\source\afem_geometry.cpp(221): warning C4715: 'AFEM::Geometry::read_stationary' : not all control paths return a value
+d:\github\opencloth_vision\afem\source\afem_geometry.cpp(193): warning C4715: 'AFEM::Geometry::read_elem' : not all control paths return a value
+  AFEM.vcxproj -> D:\GitHub\opencloth_vision\build\Debug\AFEM.exe

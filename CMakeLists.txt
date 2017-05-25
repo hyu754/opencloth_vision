@@ -35,7 +35,7 @@ ADD_EXECUTABLE(AFEM ${SOURCES})
 
 target_link_libraries(OpenCloth freeglutd glew32d )
 #target_link_libraries( AFEM cudart cublas cuda cusparse)
-target_link_libraries( AFEM AFEM_cuda_lib cudart freeglutd glew32d AFEM_kinect_lib ${OpenCV_LIBS} Kinect20)
+target_link_libraries( AFEM AFEM_cuda_lib cudart freeglutd glew32d )
 
 
 

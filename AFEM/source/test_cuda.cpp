@@ -3,7 +3,7 @@
 #include "AFEM_simulation.hpp"
 #include "AFEM_visualization.hpp"
 //#include "AFEM_cuda.cuh"
-#include "AFEM_kinect_grabber.h"
+//#include "AFEM_kinect_grabber.h"
 
 int main(void){
 	

@@ -1,4 +1,61 @@
-﻿  Building NVCC (Device) object AFEM/cuda/CMakeFiles/AFEM_cuda_lib.dir/gpu_source/Debug/AFEM_cuda_lib_generated_AFEM_cuda.cu.obj
+﻿  Building NVCC (Device) object AFEM/cuda/CMakeFiles/AFEM_cuda_lib.dir/gpu_source/Debug/AFEM_cuda_lib_generated_AFEM_QR_solver.cu.obj
+  AFEM_QR_solver.cu
+  
+D:\GitHub\opencloth_vision\AFEM\include\AFEM_geometry.hpp(115): warning : expression has no effect
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_QR_solver.cu(375): warning : variable "cublasStatus" was set but never used
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_QR_solver.cu(382): warning : variable "cusparseStatus" was set but never used
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_QR_solver.cu(597): warning : variable "cublasStatus" was set but never used
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_QR_solver.cu(603): warning : variable "cusparseStatus" was set but never used
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_QR_solver.cu(716): warning : variable "dot" was declared but never referenced
+  
+  
+  
+D:\GitHub\opencloth_vision\AFEM\include\AFEM_geometry.hpp(115): warning : expression has no effect
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_QR_solver.cu(375): warning : variable "cublasStatus" was set but never used
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_QR_solver.cu(382): warning : variable "cusparseStatus" was set but never used
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_QR_solver.cu(597): warning : variable "cublasStatus" was set but never used
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_QR_solver.cu(603): warning : variable "cusparseStatus" was set but never used
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_QR_solver.cu(716): warning : variable "dot" was declared but never referenced
+  
+  
+  
+  AFEM_QR_solver.cu
+  
+D:\GitHub\opencloth_vision\AFEM\include\AFEM_geometry.hpp(115): warning C4551: function call missing argument list
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_QR_solver.cu(716): warning C4101: 'dot' : unreferenced local variable
+  
+  Building NVCC (Device) object AFEM/cuda/CMakeFiles/AFEM_cuda_lib.dir/gpu_source/Debug/AFEM_cuda_lib_generated_AFEM_cuda.cu.obj
   AFEM_cuda.cu
   
 D:\GitHub\opencloth_vision\AFEM\include\AFEM_geometry.hpp(115): warning : expression has no effect
@@ -66,5 +123,46 @@ D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_cuda.cu(1656): warning C424
 D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_cuda.cu(1659): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
   
 D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/AFEM_cuda.cu(1915): warning C4305: 'argument' : truncation from 'double' to 'float'
+  
+  Building NVCC (Device) object AFEM/cuda/CMakeFiles/AFEM_cuda_lib.dir/gpu_source/Debug/AFEM_cuda_lib_generated_Utilities.cu.obj
+  Utilities.cu
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/Utilities.cu(131): warning : unrecognized character escape sequence
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/Utilities.cu(131): warning : unrecognized character escape sequence
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/Utilities.cu(236): warning : unrecognized character escape sequence
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/Utilities.cu(236): warning : unrecognized character escape sequence
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/Utilities.cu(131): warning : unrecognized character escape sequence
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/Utilities.cu(131): warning : unrecognized character escape sequence
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/Utilities.cu(236): warning : unrecognized character escape sequence
+  
+  
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/Utilities.cu(236): warning : unrecognized character escape sequence
+  
+  
+  
+  Utilities.cu
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/Utilities.cu(131): warning C4313: 'fprintf'  : '%d' in format string conflicts with argument 4 of type 'const char *'
+  
+D:/GitHub/opencloth_vision/AFEM/cuda/gpu_source/Utilities.cu(236): warning C4313: 'fprintf'  : '%d' in format string conflicts with argument 4 of type 'const char *'
   
   AFEM_cuda_lib.vcxproj -> D:\GitHub\opencloth_vision\build\AFEM\cuda\Debug\AFEM_cuda_lib.lib
